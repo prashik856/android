@@ -1,12 +1,11 @@
 package com.prashik.scorer.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,12 +17,10 @@ import com.prashik.scorer.models.BowlingStats;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
-import com.prashik.scorer.models.Team;
-import com.prashik.scorer.util.Utils;
 
 import java.util.HashMap;
 
-public class NewMatchActivity extends AppCompatActivity {
+public class PlayersSelectActivity extends AppCompatActivity {
     HashMap<String, String> dataFilesMap;
     HashMap<String, Player> allPlayers;
     HashMap<String, BattingStats> allBattingStats;
@@ -31,64 +28,40 @@ public class NewMatchActivity extends AppCompatActivity {
     HashMap<String, MatchStats> allMatchesStats;
 
     Match match;
-    Team teamA;
-    Team teamB;
+
+    boolean[] selectedPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_new_match);
+        setContentView(R.layout.activity_player_select);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
         this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
         this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
         this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
         this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
+        this.match = (Match) getIntent().getSerializableExtra("match_object");
+
+        TextView textView = findViewById(R.id.select_playing_players);
+        selectedPlayers = new boolean[allPlayers.size()];
+
+        textView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PlayersSelectActivity.this);
+                builder.setTitle("Select Playing Players");
+                builder.setCancelable(false);
+//                builder.setMultiChoiceItems()
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-    }
-
-    public void handleTeamANameActivation(View view) {
-        EditText editText = findViewById(R.id.team_a_name);
-        editText.setText("");
-    }
-
-    public void handleTeamBNameActivation(View view) {
-        EditText editText = findViewById(R.id.team_b_name);
-        editText.setText("");
-    }
-
-    public void handleClickOnNext(View view) {
-        EditText editText = findViewById(R.id.team_a_name);
-        String teamAName = editText.getText().toString();
-
-        editText = findViewById(R.id.team_b_name);
-        String teamBName = editText.getText().toString();
-
-        if(teamAName.isEmpty() || teamBName.isEmpty()) {
-            Toast.makeText(this, "Team Name cannot be empty", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        teamA = new Team();
-        teamA.setName(teamAName);
-
-        teamB = new Team();
-        teamB.setName(teamBName);
-
-        match = new Match();
-        match.setTeamA(teamA);
-        match.setTeamB(teamB);
-
-        // Proceed to select players who are playing
-        Intent intent = new Intent(this, PlayersSelectActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
-        intent.putExtra("match_object", match);
-        startActivity(intent);
     }
 }

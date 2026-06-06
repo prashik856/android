@@ -8,6 +8,20 @@
     tools:context=".activities.NewMatchActivity">
 
     <TextView
+        android:id="@+id/player_info_heading6"
+        android:layout_width="177dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="cursive"
+        android:text="@string/new_match_string"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view4" />
+
+    <TextView
         android:id="@+id/scorer_text_view4"
         android:layout_width="214dp"
         android:layout_height="52dp"
@@ -21,4 +35,66 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/team_a_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-medium"
+        android:hint="@string/first_team_name"
+        android:inputType="text"
+        android:onClick="handleTeamANameActivation"
+        android:text="@string/team_a_text"
+        android:textAlignment="viewStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading6" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="cursive"
+        android:text="@string/versus_string"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/team_a_name" />
+
+    <EditText
+        android:id="@+id/team_b_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-medium"
+        android:hint="@string/second_team_name"
+        android:inputType="text"
+        android:onClick="handleTeamBNameActivation"
+        android:text="@string/team_b_text"
+        android:textAlignment="viewStart"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:onClick="handleClickOnNext"
+        android:text="@string/next_string"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/team_b_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

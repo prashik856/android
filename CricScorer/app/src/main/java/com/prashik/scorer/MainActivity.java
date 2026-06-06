@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handleNewMatchClick(View view) {
         Intent intent = new Intent(this, NewMatchActivity.class);
+        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
         startActivity(intent);
     }
 }

@@ -49,7 +49,7 @@ public class AddNewPlayerActivity extends AppCompatActivity {
         });
     }
 
-    public void handleSubmitClick(View view) throws IOException {
+    public void handleSubmitClick(View view) {
         EditText editText = findViewById(R.id.first_name_text);
         String firstName = editText.getText().toString();
         if (firstName.isEmpty()) {

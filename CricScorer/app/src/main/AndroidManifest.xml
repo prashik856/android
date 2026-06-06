@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scorer">
         <activity
+            android:name=".activities.PlayersSelectActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.EditPlayerActivity"
             android:exported="false" />
         <activity
