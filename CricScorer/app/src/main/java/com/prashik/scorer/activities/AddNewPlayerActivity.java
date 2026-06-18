@@ -86,7 +86,7 @@ public class AddNewPlayerActivity extends AppCompatActivity {
         // Add checks if player already exists
         if(Utils.playerAlreadyExists(allPlayers, player)) {
             Toast.makeText(this, "The Player with same information already exists.", Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "Email and Phone number of player needs to be unique.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Name, Email and Phone number of player needs to be unique.", Toast.LENGTH_LONG).show();
             return;
         }
 

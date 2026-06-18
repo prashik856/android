@@ -24,6 +24,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -232,5 +234,24 @@ public class Utils {
         return intent;
     }
 
+    public static HashMap<String, String> getPlayerNamesToIdMap(HashMap<String, Player> allPlayers) {
+        HashMap<String, String> nameToIdMap = new HashMap<>();
+        for(String key: allPlayers.keySet()) {
+            String firstName = allPlayers.get(key).getFirstName();
+            String lastName = allPlayers.get(key).getLastName();
+            String name = firstName + " " + lastName;
+            String id = allPlayers.get(key).getId();
+            nameToIdMap.put(name, id);
+        }
+        return nameToIdMap;
+    }
+
+    public static String[] getPlayersList(HashMap<String, String> allPlayers) {
+        ArrayList<String> players = new ArrayList<>();
+        for(String key: allPlayers.keySet()) {
+            players.add(key);
+        }
+        return players.toArray(new String[0]);
+    }
 
 }

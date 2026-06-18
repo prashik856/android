@@ -77,7 +77,10 @@ public class Player implements Serializable {
     }
 
     public boolean isPlayerSame(Player player2) {
+        String name1 = this.getFirstName() + " " + this.getLastName();
+        String name2 = player2.getFirstName() + " " + player2.getLastName();
         return Objects.equals(this.email, player2.getEmail())
-                && Objects.equals(this.phoneNumber, player2.getPhoneNumber());
+                && Objects.equals(this.phoneNumber, player2.getPhoneNumber())
+                && Objects.equals(name1, name2);
     }
 }

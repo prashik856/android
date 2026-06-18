@@ -8,7 +8,7 @@
       </SelectionState>
       <SelectionState runConfigName="MainActivity">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-06-03T11:41:15.664696900Z">
+        <DropdownSelection timestamp="2026-06-18T15:01:53.921617600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\prash\.android\avd\Pixel_4_Prashik.avd" />

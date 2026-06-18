@@ -36,23 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextTextMultiLine"
-        android:layout_width="279dp"
-        android:layout_height="123dp"
-        android:layout_marginTop="144dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="start|top"
-        android:hint="@string/playing_players_hint_string"
-        android:inputType="textMultiLine"
-        android:textAlignment="viewStart"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_playing_players" />
-
     <TextView
         android:id="@+id/select_playing_players"
         android:layout_width="287dp"
@@ -70,4 +53,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_info_heading7" />
+
+    <TextView
+        android:id="@+id/show_all_playing_players_sp"
+        android:layout_width="287dp"
+        android:layout_height="232dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="sans-serif-medium"
+        android:hint="@string/playing_players_hint_string"
+        android:textAlignment="viewStart"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_playing_players" />
+
+    <Button
+        android:id="@+id/next_button_sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/next_string"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/show_all_playing_players_sp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
