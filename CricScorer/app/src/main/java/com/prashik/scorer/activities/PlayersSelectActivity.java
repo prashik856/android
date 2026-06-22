@@ -1,10 +1,13 @@
 package com.prashik.scorer.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -21,6 +24,7 @@ import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,11 +32,7 @@ import java.util.HashMap;
 public class PlayersSelectActivity extends AppCompatActivity {
     HashMap<String, String> dataFilesMap;
     HashMap<String, Player> allPlayers;
-    HashMap<String, BattingStats> allBattingStats;
-    HashMap<String, BowlingStats> allBowlingStats;
-    HashMap<String, MatchStats> allMatchesStats;
     HashMap<String, String> nameToIdMap;
-
     Match match;
     boolean[] selectedPlayers;
     ArrayList<Integer> playersList = new ArrayList<>();
@@ -45,10 +45,15 @@ public class PlayersSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_select);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
-        this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
-        this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
-        this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
+        for(String s: dataFilesMap.keySet()) {
+            String dataFile = dataFilesMap.get(s);
+            Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
+            switch (s) {
+                case "players_data_file_location":
+                    this.allPlayers = Utils.readPlayersFile(dataFile);
+                    break;
+            }
+        }
         this.nameToIdMap = Utils.getPlayerNamesToIdMap(allPlayers);
         this.playersArray = Utils.getPlayersList(this.nameToIdMap);
         this.match = (Match) getIntent().getSerializableExtra("match_object");
@@ -66,51 +71,38 @@ public class PlayersSelectActivity extends AppCompatActivity {
                 builder.setCancelable(false);
 
                 // setup on click
-                builder.setMultiChoiceItems(playersArray, selectedPlayers, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        // Check condition
-                        if(isChecked) {
-                            // when this checkbox is selected, we will add this in our players list
-                            playersList.add(which);
-                            // we sort our array list
-                            Collections.sort(playersList);
-                        } else {
-                            // when unselected, remove position from our list
-                            playersList.remove(Integer.valueOf(which));
-                        }
+                builder.setMultiChoiceItems(playersArray, selectedPlayers,
+                        (dialog, which, isChecked) -> {
+                    // Check condition
+                    if(isChecked) {
+                        // when this checkbox is selected, we will add this in our players list
+                        playersList.add(which);
+                        // we sort our array list
+                        Collections.sort(playersList);
+                    } else {
+                        // when unselected, remove position from our list
+                        playersList.remove(Integer.valueOf(which));
                     }
                 });
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for(int i=0; i<playersList.size(); i++) {
-                            stringBuilder.append(playersArray[playersList.get(i)]);
-                            if(i != playersList.size() - 1) {
-                                stringBuilder.append(", ");
-                            }
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for(int i=0; i<playersList.size(); i++) {
+                        stringBuilder.append(playersArray[playersList.get(i)]);
+                        if(i != playersList.size() - 1) {
+                            stringBuilder.append(", ");
                         }
-                        showAllPlayersTextView.setText(stringBuilder.toString());
                     }
+                    showAllPlayersTextView.setText(stringBuilder.toString());
                 });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        for(int i=0; i<selectedPlayers.length; i++) {
-                            selectedPlayers[i] = false;
-                            playersList.clear();
-                            showAllPlayersTextView.setText("");
-                        }
+                builder.setNeutralButton("Clear All", (dialog, which) -> {
+                    for(int i=0; i<selectedPlayers.length; i++) {
+                        selectedPlayers[i] = false;
+                        playersList.clear();
+                        showAllPlayersTextView.setText("");
                     }
                 });
 
@@ -123,5 +115,35 @@ public class PlayersSelectActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void handleNextClick(View view) {
+        // all selected players are playersList (it contains indexes)
+        if(playersList.isEmpty()) {
+            Toast.makeText(this, "Players playing cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(playersList.size() < 2) {
+            Toast.makeText(this, "Players playing cannot be less than 2", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String[] matchPlayers = {};
+        ArrayList<String> temp = new ArrayList<>();
+        for(int i=0; i<playersList.size(); i++) {
+            // index is index of playersArray String
+            int index = playersList.get(i);
+            String playerName = playersArray[index];
+            temp.add(playerName);
+        }
+        matchPlayers = temp.toArray(new String[0]);
+        // Got my match players
+        Intent intent = new Intent(this, SelectCaptainsActivity.class);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
+        intent.putExtra("match_object", this.match);
+        intent.putExtra("match_players", matchPlayers);
+        intent.putExtra("name_to_id_map", this.nameToIdMap);
+        startActivity(intent);
     }
 }

@@ -220,6 +220,11 @@ public class Utils {
         return found;
     }
 
+    public static boolean isEven(int val) {
+        int ans = val % 2;
+        return ans == 0;
+    }
+
     public static Intent putDataFiles(Intent intent,
                                       HashMap<String, String> dataFilesMap,
                                       HashMap<String, Player> allPlayers,

@@ -29,4 +29,6 @@
     <string name="next_string">Next</string>
     <string name="players_playing_string">Select Playing Players</string>
     <string name="playing_players_hint_string">List of Active Players Playing this match will appear here</string>
+    <string name="select_captains_string">Select Captains</string>
+    <string name="select_captain_string">String Captain From Players</string>
 </resources>

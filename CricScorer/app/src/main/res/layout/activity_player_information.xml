@@ -7,6 +7,22 @@
     android:layout_height="match_parent"
     tools:context=".activities.PlayerInformationActivity">
 
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="cursive"
+        android:onClick="handleHomeClick"
+        android:text="Home"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading"
+        app:layout_constraintHorizontal_bias="0.676"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view5" />
+
     <TextView
         android:id="@+id/no_ball_text"
         android:layout_width="111dp"

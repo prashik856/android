@@ -25,10 +25,6 @@ import java.util.HashMap;
 
 public class NewMatchActivity extends AppCompatActivity {
     HashMap<String, String> dataFilesMap;
-    HashMap<String, Player> allPlayers;
-    HashMap<String, BattingStats> allBattingStats;
-    HashMap<String, BowlingStats> allBowlingStats;
-    HashMap<String, MatchStats> allMatchesStats;
 
     Match match;
     Team teamA;
@@ -41,10 +37,6 @@ public class NewMatchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_match);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
-        this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
-        this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
-        this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -84,10 +76,11 @@ public class NewMatchActivity extends AppCompatActivity {
         match = new Match();
         match.setTeamA(teamA);
         match.setTeamB(teamB);
+        match.setDate();
 
         // Proceed to select players who are playing
         Intent intent = new Intent(this, PlayersSelectActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         intent.putExtra("match_object", match);
         startActivity(intent);
     }

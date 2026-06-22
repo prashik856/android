@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.prashik.scorer.MainActivity;
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
@@ -43,10 +44,25 @@ public class PlayerInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_information);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
-        this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
-        this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
-        this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
+        for(String s: dataFilesMap.keySet()) {
+            String dataFile = dataFilesMap.get(s);
+            Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
+            switch (s) {
+                case "players_data_file_location":
+                    this.allPlayers = Utils.readPlayersFile(dataFile);
+                    break;
+                case "players_batting_data_file_location":
+                    this.allBattingStats = Utils.readBattingStatsFile(dataFile);
+                    break;
+                case "players_bowling_data_file_location":
+                    this.allBowlingStats = Utils.readBowlingStatsFile(dataFile);
+                    break;
+                case "players_matches_data_file_location":
+                    this.allMatchesStats = Utils.readMatchStatsFile(dataFile);
+                    break;
+            }
+        }
+
         this.playerId = getIntent().getStringExtra("player_id");
         this.player = this.allPlayers.get(this.playerId);
         this.battingStats = this.allBattingStats.get(this.playerId);
@@ -149,6 +165,11 @@ public class PlayerInformationActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditPlayerActivity.class);
         intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
         intent.putExtra("player_id", player.getId());
+        startActivity(intent);
+    }
+
+    public void handleHomeClick(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

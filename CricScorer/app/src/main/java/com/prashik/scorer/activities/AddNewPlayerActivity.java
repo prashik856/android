@@ -37,10 +37,24 @@ public class AddNewPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_player);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
-        this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
-        this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
-        this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
+        for(String s: dataFilesMap.keySet()) {
+            String dataFile = dataFilesMap.get(s);
+            Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
+            switch (s) {
+                case "players_data_file_location":
+                    this.allPlayers = Utils.readPlayersFile(dataFile);
+                    break;
+                case "players_batting_data_file_location":
+                    this.allBattingStats = Utils.readBattingStatsFile(dataFile);
+                    break;
+                case "players_bowling_data_file_location":
+                    this.allBowlingStats = Utils.readBowlingStatsFile(dataFile);
+                    break;
+                case "players_matches_data_file_location":
+                    this.allMatchesStats = Utils.readMatchStatsFile(dataFile);
+                    break;
+            }
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
