@@ -83,4 +83,8 @@ public class Player implements Serializable {
                 && Objects.equals(this.phoneNumber, player2.getPhoneNumber())
                 && Objects.equals(name1, name2);
     }
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }

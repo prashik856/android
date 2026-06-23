@@ -9,7 +9,8 @@ public class MatchPlayer implements Serializable {
     private BowlingStats bowlingStats;
     private MatchStats matchStats;
 
-    public MatchPlayer() {
+    public MatchPlayer(Player player) {
+        this.player = player;
     }
 
     public Player getPlayer() {

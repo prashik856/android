@@ -10,8 +10,6 @@ public class MatchStats implements Serializable {
     private int matchesPlayed = 0;
     private int catches = 0;
 
-    public MatchStats() {}
-
     public MatchStats(String playerId) {
         this.playerId = playerId;
     }

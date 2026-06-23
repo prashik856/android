@@ -30,5 +30,9 @@
     <string name="players_playing_string">Select Playing Players</string>
     <string name="playing_players_hint_string">List of Active Players Playing this match will appear here</string>
     <string name="select_captains_string">Select Captains</string>
-    <string name="select_captain_string">String Captain From Players</string>
+    <string name="select_captain_string">Select Captain From Players</string>
+    <string name="name_to_id_file_name">nameToId.dat</string>
+    <string name="first_batting_string">Select Team Batting First</string>
+    <string name="won_toss_string">Select Team Which Won Toss</string>
+    <string name="select_common_player_string">Select Common Player</string>
 </resources>

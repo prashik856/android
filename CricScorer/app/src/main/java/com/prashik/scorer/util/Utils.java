@@ -1,42 +1,23 @@
 package com.prashik.scorer.util;
 
 import android.content.Intent;
-import android.util.Base64;
-import android.util.Log;
 
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
+import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonBuilderFactory;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
-import jakarta.json.JsonValue;
-import jakarta.json.JsonWriter;
-
 
 public class Utils {
 
@@ -99,6 +80,17 @@ public class Utils {
         }
     }
 
+    public static void syncNameToIdMapData(String fileName, HashMap<String, String> hashMap) {
+        ObjectOutputStream objectOutputStream = writeFile(fileName);
+        try {
+            objectOutputStream.writeObject(hashMap);
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.printf("Error while writing %s file.%n", fileName);
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ObjectInputStream readFile(String fileName) {
         ObjectInputStream objectInputStream;
         try {
@@ -150,6 +142,17 @@ public class Utils {
         ObjectInputStream objectInputStream = readFile(fileName);
         try {
             hashMap = (HashMap<String, MatchStats>) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return hashMap;
+    }
+
+    public static HashMap<String, String> readNameToIdMapFile(String fileName) {
+        HashMap<String, String> hashMap;
+        ObjectInputStream objectInputStream = readFile(fileName);
+        try {
+            hashMap = (HashMap<String, String>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -257,6 +260,19 @@ public class Utils {
             players.add(key);
         }
         return players.toArray(new String[0]);
+    }
+
+    public static MatchPlayer getMatchPlayer(String name,
+                                             HashMap<String, String> map,
+                                             HashMap<String, Player> allPlayers) {
+        String id = map.get(name);
+        Player player = allPlayers.get(id);
+        MatchPlayer matchPlayer = new MatchPlayer(player);
+        assert player != null;
+        matchPlayer.setBattingStats(new BattingStats(player.getId()));
+        matchPlayer.setBowlingStats(new BowlingStats(player.getId()));
+        matchPlayer.setMatchStats(new MatchStats(player.getId()));
+        return matchPlayer;
     }
 
 }

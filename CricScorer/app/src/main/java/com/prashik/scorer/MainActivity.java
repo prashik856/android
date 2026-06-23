@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     HashMap<String, BattingStats> allBattingStats = new HashMap<>();
     HashMap<String, BowlingStats> allBowlingStats = new HashMap<>();
     HashMap<String, MatchStats> allMatchesStats = new HashMap<>();
+    HashMap<String, String> nameToIdMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 getFilesDir().toString() + "/" + getString(R.string.bowling_data_file));
         dataFilesMap.put("players_matches_data_file_location",
                 getFilesDir().toString() + "/" + getString(R.string.matches_data_file));
+        dataFilesMap.put("players_name_to_id_map_file_location",
+                getFilesDir().toString() + "/" + R.string.name_to_id_file_name);
 
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
             Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
-            boolean fileCreated = false;
+            boolean fileCreated;
             switch (s) {
                 case "players_data_file_location":
                     fileCreated = Utils.createFile(dataFile);
@@ -84,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
                         allMatchesStats = Utils.readMatchStatsFile(dataFile);
                     }
                     break;
+                case "players_name_to_id_map_file_location":
+                    fileCreated = Utils.createFile(dataFile);
+                    if(fileCreated) {
+                        Utils.syncNameToIdMapData(dataFile, nameToIdMap);
+                    } else {
+                        nameToIdMap = Utils.readNameToIdMapFile(dataFile);
+                    }
             }
         }
 

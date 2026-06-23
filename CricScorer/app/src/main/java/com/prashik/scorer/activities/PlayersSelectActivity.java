@@ -26,6 +26,7 @@ import com.prashik.scorer.util.Utils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -45,13 +46,12 @@ public class PlayersSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_select);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
+        assert dataFilesMap != null;
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
             Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
-            switch (s) {
-                case "players_data_file_location":
-                    this.allPlayers = Utils.readPlayersFile(dataFile);
-                    break;
+            if (s.equals("players_data_file_location")) {
+                this.allPlayers = Utils.readPlayersFile(dataFile);
             }
         }
         this.nameToIdMap = Utils.getPlayerNamesToIdMap(allPlayers);
@@ -137,7 +137,12 @@ public class PlayersSelectActivity extends AppCompatActivity {
             String playerName = playersArray[index];
             temp.add(playerName);
         }
+
+        this.match.setMatchPlayers(temp);
+        System.out.println("Match Players are: " + this.match.getMatchPlayers().toString());
+
         matchPlayers = temp.toArray(new String[0]);
+        System.out.println("Match Players: " + Arrays.toString(matchPlayers));
         // Got my match players
         Intent intent = new Intent(this, SelectCaptainsActivity.class);
         intent.putExtra("data_files_hashmap", dataFilesMap);
