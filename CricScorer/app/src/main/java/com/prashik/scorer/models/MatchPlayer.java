@@ -8,6 +8,7 @@ public class MatchPlayer implements Serializable {
     private BattingStats battingStats;
     private BowlingStats bowlingStats;
     private MatchStats matchStats;
+    boolean out = false;
 
     public MatchPlayer(Player player) {
         this.player = player;
@@ -43,5 +44,13 @@ public class MatchPlayer implements Serializable {
 
     public void setMatchStats(MatchStats matchStats) {
         this.matchStats = matchStats;
+    }
+
+    public boolean isOut() {
+        return out;
+    }
+
+    public void setOut(boolean out) {
+        this.out = out;
     }
 }

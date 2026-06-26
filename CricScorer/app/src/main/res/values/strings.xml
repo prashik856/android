@@ -35,4 +35,7 @@
     <string name="first_batting_string">Select Team Batting First</string>
     <string name="won_toss_string">Select Team Which Won Toss</string>
     <string name="select_common_player_string">Select Common Player</string>
+    <string name="match_properties_string">Match Properties</string>
+    <string name="overs_string">Overs</string>
+    <string name="default_overs_value">8</string>
 </resources>

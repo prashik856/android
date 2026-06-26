@@ -170,8 +170,19 @@ public class SelectCommonPlayerActivity extends AppCompatActivity {
         }
         System.out.println("Team B Players after adding captain player: " + this.match.getTeamB().getPlayerNames());
 
+        this.match.getTeamA().setTeamSize(this.match.getTeamA().getTeamPlayers().size());
+        this.match.getTeamB().setTeamSize(this.match.getTeamB().getTeamPlayers().size());
+
+        if(this.match.getTeamA().getTeamSize() != this.match.getTeamB().getTeamSize()) {
+            Toast.makeText(this, "Team size needs to be same.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        this.match.getTeamA().setMaxWickets(this.match.getTeamA().getTeamSize() - 1);
+        this.match.getTeamB().setMaxWickets(this.match.getTeamB().getTeamSize() - 1);
+
         Intent intent = new Intent(this, SelectTossWinningTeam.class);
-        intent.putExtra("data_files_hashmap", dataFilesMap);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", this.match);
         intent.putExtra("name_to_id_map", this.nameToIdMap);
         startActivity(intent);

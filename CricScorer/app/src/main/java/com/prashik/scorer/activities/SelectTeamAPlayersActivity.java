@@ -201,6 +201,17 @@ public class SelectTeamAPlayersActivity extends AppCompatActivity {
             System.out.println("Team A Players: " + this.match.getTeamA().getPlayerNames().toString());
             System.out.println("Team B Players: " + this.match.getTeamB().getPlayerNames().toString());
 
+            this.match.getTeamA().setTeamSize(this.match.getTeamA().getTeamPlayers().size());
+            this.match.getTeamB().setTeamSize(this.match.getTeamB().getTeamPlayers().size());
+
+            if(this.match.getTeamA().getTeamSize() != this.match.getTeamB().getTeamSize()) {
+                Toast.makeText(this, "Team size needs to be same.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            this.match.getTeamA().setMaxWickets(this.match.getTeamA().getTeamSize() - 1);
+            this.match.getTeamB().setMaxWickets(this.match.getTeamB().getTeamSize() - 1);
+
             Intent intent = new Intent(this, SelectTossWinningTeam.class);
             intent.putExtra("data_files_hashmap", dataFilesMap);
             intent.putExtra("match_object", this.match);

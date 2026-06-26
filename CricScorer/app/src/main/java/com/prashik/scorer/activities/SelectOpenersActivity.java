@@ -1,7 +1,11 @@
 package com.prashik.scorer.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,39 +18,49 @@ import com.prashik.scorer.models.Match;
 
 import java.util.HashMap;
 
-public class MatchScoreActivity extends AppCompatActivity {
+public class SelectOpenersActivity extends AppCompatActivity {
 
     HashMap<String, String> dataFilesMap;
     Match match;
-    HashMap<String, String> nameToIdMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_match_score);
+        setContentView(R.layout.activity_select_openers);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.nameToIdMap = (HashMap<String, String>) getIntent().getSerializableExtra("name_to_id_map");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
 
-        // With these properties, we will now create a new file and store our match object in it.
+        // Only select two
+        TextView textView = findViewById(R.id.select_opening_batsmen_so);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
-        TextView textView = findViewById(R.id.team_name_ms);
-        if(this.match.isTeamABatFirst()) {
-            textView.setText(this.match.getTeamA().getName());
+        // single choice
+        textView = findViewById(R.id.select_opening_bowler_so);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        } else {
-            textView.setText(this.match.getTeamB().getName());
-        }
-
-
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void handleNextClick(View view) {
+        Intent intent = new Intent(this, MatchScoreActivity.class);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+        intent.putExtra("match_object", this.match);
+        startActivity(intent);
     }
 }

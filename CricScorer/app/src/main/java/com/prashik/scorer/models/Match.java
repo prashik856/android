@@ -21,6 +21,7 @@ public class Match implements Serializable {
     boolean teamBBatFirst = false;
     String tossDecision = "";
     ArrayList<String> matchPlayers = new ArrayList<>();
+    int maxOvers;
 
     public Match(Team team1, Team team2) {
         this.teamA = team1;
@@ -102,5 +103,13 @@ public class Match implements Serializable {
 
     public void setMatchPlayers(ArrayList<String> matchPlayers) {
         this.matchPlayers = matchPlayers;
+    }
+
+    public int getMaxOvers() {
+        return maxOvers;
+    }
+
+    public void setMaxOvers(int maxOvers) {
+        this.maxOvers = maxOvers;
     }
 }

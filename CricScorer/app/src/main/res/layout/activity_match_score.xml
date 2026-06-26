@@ -8,7 +8,37 @@
     tools:context=".activities.MatchScoreActivity">
 
     <TextView
-        android:id="@+id/team_vs_team_names"
+        android:id="@+id/overs_value_ms"
+        android:layout_width="73dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="cursive"
+        android:text="@string/scorer_text_view"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/score_value_ms"
+        app:layout_constraintTop_toBottomOf="@+id/team_name_ms" />
+
+    <TextView
+        android:id="@+id/score_value_ms"
+        android:layout_width="137dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="cursive"
+        android:text="@string/scorer_text_view"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.336"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/team_name_ms" />
+
+    <TextView
+        android:id="@+id/team_name_ms"
         android:layout_width="377dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
