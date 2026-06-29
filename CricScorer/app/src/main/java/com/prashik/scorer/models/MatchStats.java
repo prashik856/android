@@ -2,6 +2,8 @@ package com.prashik.scorer.models;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class MatchStats implements Serializable {
@@ -9,6 +11,8 @@ public class MatchStats implements Serializable {
     private String playerId;
     private int matchesPlayed = 0;
     private int catches = 0;
+
+    private int runOuts = 0;
 
     public MatchStats(String playerId) {
         this.playerId = playerId;
@@ -41,5 +45,25 @@ public class MatchStats implements Serializable {
     @SuppressLint("DefaultLocale")
     public String toJson() {
         return "{\"playerId\":\"" + playerId + "\",\"matchesPlayed\":" + matchesPlayed + ",\"catches\":" + catches + "}";
+    }
+
+
+    public int getRunOuts() {
+        return runOuts;
+    }
+
+    public void setRunOuts(int runOuts) {
+        this.runOuts = runOuts;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "MatchStats{" +
+                "playerId='" + playerId + '\'' +
+                ", matchesPlayed=" + matchesPlayed +
+                ", catches=" + catches +
+                ", runOuts=" + runOuts +
+                '}';
     }
 }

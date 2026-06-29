@@ -21,6 +21,7 @@ import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
+import com.prashik.scorer.models.Team;
 import com.prashik.scorer.util.Utils;
 
 import java.util.ArrayList;
@@ -60,6 +61,9 @@ public class SelectCommonPlayerActivity extends AppCompatActivity {
         this.remainingPlayersList = (ArrayList<Integer>) getIntent().getSerializableExtra("remaining_players_list");
         this.matchPlayers = (String[]) getIntent().getSerializableExtra("match_players");
         this.playersWithoutCaptain = (String[]) getIntent().getSerializableExtra("players_without_captain");
+
+        System.out.println("Team A Players List: " + this.playerList);
+        System.out.println("Common to be chosen from these players: " + this.remainingPlayersList);
 
         ArrayList<String> temp = new ArrayList<>();
         for(int i=0; i<remainingPlayersList.size(); i++) {
@@ -113,73 +117,89 @@ public class SelectCommonPlayerActivity extends AppCompatActivity {
         }
 
         System.out.println("Common Player Selected: " + this.chosenAnswer);
+        System.out.println("Players without captain: " + Arrays.toString(this.playersWithoutCaptain));
+        System.out.println("Players list adding to team a: " + this.playerList.toString());
+
+        Team teamA = this.match.getTeamA();
+        Team teamB = this.match.getTeamB();
 
         // Add team a players
         for(int i=0; i<playerList.size(); i++) {
             String name = this.playersWithoutCaptain[playerList.get(i)];
+            System.out.println("Adding Name to team A- " + name);
             MatchPlayer matchPlayer = Utils.getMatchPlayer(name, this.nameToIdMap, this.allPlayers);
 
-            if(!this.match.getTeamA().getPlayerNames().contains(matchPlayer.getPlayer().getFullName())) {
-                match.getTeamA().getTeamPlayers().add(matchPlayer);
-                match.getTeamA().getPlayerNames().add(matchPlayer.getPlayer().getFullName());
+            if(!teamA.getPlayerNames().contains(matchPlayer.getPlayer().getFullName())) {
+                teamA.getTeamPlayers().add(matchPlayer);
+                teamA.getPlayerNames().add(matchPlayer.getPlayer().getFullName());
             }
         }
-
-        System.out.println("Team A Players after adding all normal players: " + this.match.getTeamA().getPlayerNames());
+        System.out.println("Team A Players after adding all normal players: " + teamA.getPlayerNames());
 
         // Add common player to team a
         MatchPlayer commonPlayer = Utils.getMatchPlayer(this.chosenAnswer, this.nameToIdMap, this.allPlayers);
-        if(!this.match.getTeamA().getPlayerNames().contains(commonPlayer.getPlayer().getFullName())) {
-            match.getTeamA().getTeamPlayers().add(commonPlayer);
-            match.getTeamA().getPlayerNames().add(commonPlayer.getPlayer().getFullName());
+        System.out.println("Adding Name to team A- " + this.chosenAnswer);
+        if(!teamA.getPlayerNames().contains(commonPlayer.getPlayer().getFullName())) {
+            teamA.getTeamPlayers().add(commonPlayer);
+            teamA.getPlayerNames().add(commonPlayer.getPlayer().getFullName());
         }
-        System.out.println("Team A Players after adding common player: " + this.match.getTeamA().getPlayerNames());
+        System.out.println("Team A Players after adding common player: " + teamA.getPlayerNames());
 
         // Add captain player to team a
-        MatchPlayer captainPlayer = Utils.getMatchPlayer(this.match.getTeamA().getCaptainName(), this.nameToIdMap, this.allPlayers);
-        if(!this.match.getTeamA().getPlayerNames().contains(captainPlayer.getPlayer().getFullName())) {
-            match.getTeamA().getTeamPlayers().add(captainPlayer);
-            match.getTeamA().getPlayerNames().add(captainPlayer.getPlayer().getFullName());
+        System.out.println("Adding Name to team A- " + teamA.getCaptainName());
+        MatchPlayer captainPlayer = Utils.getMatchPlayer(teamA.getCaptainName(), this.nameToIdMap, this.allPlayers);
+        if(!teamA.getPlayerNames().contains(captainPlayer.getPlayer().getFullName())) {
+            teamA.getTeamPlayers().add(captainPlayer);
+            teamA.getPlayerNames().add(captainPlayer.getPlayer().getFullName());
         }
-        System.out.println("Team A Players after adding captain player: " + this.match.getTeamA().getPlayerNames());
+        System.out.println("Team A Players after adding captain player: " + teamA.getPlayerNames());
 
+        System.out.println("Players list adding to team b: " + this.remainingPlayersList.toString());
         // Add players to team b
+        // Remaining players list already has common
         for(int i=0; i<remainingPlayersList.size(); i++) {
-            String name = this.matchPlayers[remainingPlayersList.get(i)];
+            String name = this.playersWithoutCaptain[remainingPlayersList.get(i)];
+            System.out.println("Adding Name to team b - " + name);
             MatchPlayer matchPlayer = Utils.getMatchPlayer(name, this.nameToIdMap, this.allPlayers);
 
-            if(!this.match.getTeamB().getPlayerNames().contains(matchPlayer.getPlayer().getFullName())) {
-                match.getTeamB().getTeamPlayers().add(matchPlayer);
-                match.getTeamB().getPlayerNames().add(matchPlayer.getPlayer().getFullName());
+            if(!teamB.getPlayerNames().contains(matchPlayer.getPlayer().getFullName())) {
+                teamB.getTeamPlayers().add(matchPlayer);
+                teamB.getPlayerNames().add(matchPlayer.getPlayer().getFullName());
             }
         }
-        System.out.println("Team B Players after adding normal players: " + this.match.getTeamB().getPlayerNames());
+        System.out.println("Team B Players after adding normal players: " + teamB.getPlayerNames());
 
         // Add common player to team b
-        if(!this.match.getTeamB().getPlayerNames().contains(commonPlayer.getPlayer().getFullName())) {
-            match.getTeamB().getTeamPlayers().add(commonPlayer);
-            match.getTeamB().getPlayerNames().add(commonPlayer.getPlayer().getFullName());
+        System.out.println("Adding Name to team b - " + commonPlayer.getPlayer().getFullName());
+        if(!teamB.getPlayerNames().contains(commonPlayer.getPlayer().getFullName())) {
+            teamB.getTeamPlayers().add(commonPlayer);
+            teamB.getPlayerNames().add(commonPlayer.getPlayer().getFullName());
         }
-        System.out.println("Team B Players after adding common player: " + this.match.getTeamB().getPlayerNames());
+        System.out.println("Team B Players after adding common player: " + teamB.getPlayerNames());
 
         // add captain player to team b
-        captainPlayer = Utils.getMatchPlayer(this.match.getTeamB().getCaptainName(), this.nameToIdMap, this.allPlayers);
-        if(!this.match.getTeamB().getPlayerNames().contains(captainPlayer.getPlayer().getFullName())) {
-            match.getTeamB().getTeamPlayers().add(captainPlayer);
-            match.getTeamB().getPlayerNames().add(captainPlayer.getPlayer().getFullName());
+        System.out.println("Adding Name to team b - " + teamB.getCaptainName());
+        captainPlayer = Utils.getMatchPlayer(teamB.getCaptainName(), this.nameToIdMap, this.allPlayers);
+        if(!teamB.getPlayerNames().contains(captainPlayer.getPlayer().getFullName())) {
+            teamB.getTeamPlayers().add(captainPlayer);
+            teamB.getPlayerNames().add(captainPlayer.getPlayer().getFullName());
         }
-        System.out.println("Team B Players after adding captain player: " + this.match.getTeamB().getPlayerNames());
+        System.out.println("Team B Players after adding captain player: " + teamB.getPlayerNames());
 
-        this.match.getTeamA().setTeamSize(this.match.getTeamA().getTeamPlayers().size());
-        this.match.getTeamB().setTeamSize(this.match.getTeamB().getTeamPlayers().size());
+        teamA.setTeamSize(teamA.getTeamPlayers().size());
+        teamB.setTeamSize(teamB.getTeamPlayers().size());
 
-        if(this.match.getTeamA().getTeamSize() != this.match.getTeamB().getTeamSize()) {
+        if(teamA.getTeamSize() != teamB.getTeamSize()) {
             Toast.makeText(this, "Team size needs to be same.", Toast.LENGTH_LONG).show();
             return;
         }
 
-        this.match.getTeamA().setMaxWickets(this.match.getTeamA().getTeamSize() - 1);
-        this.match.getTeamB().setMaxWickets(this.match.getTeamB().getTeamSize() - 1);
+        teamA.setMaxWickets(teamA.getTeamSize() - 1);
+        teamB.setMaxWickets(teamB.getTeamSize() - 1);
+
+        System.out.println("Update match object.");
+        this.match.setTeamA(teamA);
+        this.match.setTeamB(teamB);
 
         Intent intent = new Intent(this, SelectTossWinningTeam.class);
         intent.putExtra("data_files_hashmap", this.dataFilesMap);

@@ -1,0 +1,25 @@
+package com.prashik.scorer.adapters;
+
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class MatchAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder>{
+
+    @NonNull
+    @Override
+    public PlayersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull PlayersAdapter.ViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
+    }
+}

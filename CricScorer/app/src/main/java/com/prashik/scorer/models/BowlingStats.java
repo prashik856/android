@@ -134,4 +134,24 @@ public class BowlingStats implements Serializable {
     public void setNos(int nos) {
         this.nos = nos;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "BowlingStats{" +
+                "playerId='" + playerId + '\'' +
+                ", wickets=" + wickets +
+                ", economy=" + economy +
+                ", average=" + average +
+                ", bestBowling='" + bestBowling + '\'' +
+                ", twoFer=" + twoFer +
+                ", threeFer=" + threeFer +
+                ", fiveFer=" + fiveFer +
+                ", fours=" + fours +
+                ", dots=" + dots +
+                ", sixes=" + sixes +
+                ", wides=" + wides +
+                ", nos=" + nos +
+                '}';
+    }
 }

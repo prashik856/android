@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         dataFilesMap.put("players_matches_data_file_location",
                 getFilesDir().toString() + "/" + getString(R.string.matches_data_file));
         dataFilesMap.put("players_name_to_id_map_file_location",
-                getFilesDir().toString() + "/" + R.string.name_to_id_file_name);
+                getFilesDir().toString() + "/" + getString(R.string.name_to_id_file_name));
+        dataFilesMap.put("files_directory", getFilesDir().toString());
 
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handlePreviousMatchesClick(View view) {
         Intent intent = new Intent(this, PreviousMatchesActivity.class);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         startActivity(intent);
     }
 

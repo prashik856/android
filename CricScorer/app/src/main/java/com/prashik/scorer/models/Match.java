@@ -1,31 +1,37 @@
 package com.prashik.scorer.models;
 
+import androidx.annotation.NonNull;
+
+import com.prashik.scorer.util.Utils;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 public class Match implements Serializable {
     private static final long serialVersionUID = 2462471862401256640L;
-
-    Team teamA;
-    Team teamB;
-    String date;
-    boolean teamAToss = false;
-    boolean teamABatFirst = false;
-    boolean teamBToss = false;
-    boolean teamBBatFirst = false;
-    String tossDecision = "";
-    ArrayList<String> matchPlayers = new ArrayList<>();
-    int maxOvers;
+    private String id;
+    private Team teamA;
+    private Team teamB;
+    private String date;
+    private boolean teamAToss = false;
+    private boolean teamABatFirst = false;
+    private boolean teamBToss = false;
+    private boolean teamBBatFirst = false;
+    private String tossDecision = "";
+    private ArrayList<String> matchPlayers = new ArrayList<>();
+    private int maxOvers;
+    private String strikerBatsman = "";
+    private String nonStrikeBatsman = "";
+    private String currentBowler = "";
 
     public Match(Team team1, Team team2) {
         this.teamA = team1;
         this.teamB = team2;
+        this.id = UUID.randomUUID().toString();
     }
 
     public Team getTeamA() {
@@ -48,9 +54,7 @@ public class Match implements Serializable {
     }
     public void setDate() {
         Date temp = new Date();
-        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(temp);
-        dateString = dateString + "-" + String.valueOf( new Random().nextInt(1001));
-        this.date = dateString;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(temp);
     }
 
     public void setDate(String date) {
@@ -111,5 +115,73 @@ public class Match implements Serializable {
 
     public void setMaxOvers(int maxOvers) {
         this.maxOvers = maxOvers;
+    }
+
+    public String getCurrentBowler() {
+        return currentBowler;
+    }
+
+    public void setCurrentBowler(String currentBowler) {
+        this.currentBowler = currentBowler;
+    }
+
+    public String getStrikerBatsman() {
+        return strikerBatsman;
+    }
+
+    public void setStrikerBatsman(String strikerBatsman) {
+        this.strikerBatsman = strikerBatsman;
+    }
+
+    public String getNonStrikeBatsman() {
+        return nonStrikeBatsman;
+    }
+
+    public void setNonStrikeBatsman(String nonStrikeBatsman) {
+        this.nonStrikeBatsman = nonStrikeBatsman;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDataFileName(String dataFileName) {
+        return  dataFileName + "/" + "match_" + this.date
+                + "_" + this.id
+                + ".dat";
+    }
+
+    public boolean isEqual(Match match2) {
+        return this.date.equals(match2.getDate())
+                && Utils.equateArrayList(this.matchPlayers, match2.getMatchPlayers())
+                && this.teamA.getCaptainName().equals(match2.getTeamA().getCaptainName())
+                && this.teamB.getCaptainName().equals(match2.getTeamB().getCaptainName())
+                && Utils.equateArrayList(this.teamA.getPlayerNames(), match2.getTeamA().getPlayerNames())
+                && Utils.equateArrayList(this.teamB.getPlayerNames(), match2.getTeamB().getPlayerNames())
+                && this.maxOvers == match2.maxOvers;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Match{" +
+                "teamA=" + teamA +
+                ", teamB=" + teamB +
+                ", date='" + date + '\'' +
+                ", teamAToss=" + teamAToss +
+                ", teamABatFirst=" + teamABatFirst +
+                ", teamBToss=" + teamBToss +
+                ", teamBBatFirst=" + teamBBatFirst +
+                ", tossDecision='" + tossDecision + '\'' +
+                ", matchPlayers=" + matchPlayers +
+                ", maxOvers=" + maxOvers +
+                ", strikerBatsman='" + strikerBatsman + '\'' +
+                ", nonStrikeBatsman='" + nonStrikeBatsman + '\'' +
+                ", currentBowler='" + currentBowler + '\'' +
+                '}';
     }
 }

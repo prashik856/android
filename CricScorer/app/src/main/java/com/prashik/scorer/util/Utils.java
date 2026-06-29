@@ -4,9 +4,11 @@ import android.content.Intent;
 
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
+import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
+import com.prashik.scorer.models.Team;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,6 +93,17 @@ public class Utils {
         }
     }
 
+    public static void syncMatchData(String fileName, Match match) {
+        ObjectOutputStream objectOutputStream = writeFile(fileName);
+        try {
+            objectOutputStream.writeObject(match);
+            objectOutputStream.close();
+        } catch (IOException e) {
+            System.out.printf("Error while writing %s file.%n", fileName);
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ObjectInputStream readFile(String fileName) {
         ObjectInputStream objectInputStream;
         try {
@@ -157,6 +170,17 @@ public class Utils {
             throw new RuntimeException(e);
         }
         return hashMap;
+    }
+
+    public static Match readMatchFile(String fileName) {
+        Match match;
+        ObjectInputStream objectInputStream = readFile(fileName);
+        try {
+            match = (Match) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw  new RuntimeException(e);
+        }
+        return match;
     }
 
     public static boolean createFile(String fileName) {
@@ -269,10 +293,64 @@ public class Utils {
         Player player = allPlayers.get(id);
         MatchPlayer matchPlayer = new MatchPlayer(player);
         assert player != null;
-        matchPlayer.setBattingStats(new BattingStats(player.getId()));
-        matchPlayer.setBowlingStats(new BowlingStats(player.getId()));
-        matchPlayer.setMatchStats(new MatchStats(player.getId()));
         return matchPlayer;
     }
 
+
+    public static String getScore(Team team) {
+        return team.getRuns() +
+                "/" +
+                team.getWickets();
+    }
+
+    public static String getOvers(Team team, Match match) {
+        return team.getCurrentOver() +
+                "." +
+                team.getOvers().get(team.getCurrentOver()).getLegalDeliveries() +
+                "/" +
+                match.getMaxOvers();
+    }
+
+    public static String getOverDetails(Team team) {
+        return team.getOvers().get(team.getCurrentOver()).getOverSummary();
+    }
+
+    public static ArrayList<String> getAllFilesInDirectory(String directory) {
+        ArrayList<String> filesList = new ArrayList<>();
+        File folder = new File(directory);
+        for(File fileEntry : Objects.requireNonNull(folder.listFiles())) {
+            if(fileEntry.isDirectory()) {
+                continue;
+            }
+            if(fileEntry.isFile()) {
+                filesList.add(fileEntry.getName());
+            }
+        }
+        return filesList;
+    }
+
+    public static ArrayList<String> getMatchFiles(ArrayList<String> filesList) {
+        ArrayList<String> temp = new ArrayList<>();
+        for(String str: filesList) {
+            if(str.startsWith("match")) {
+                temp.add(str);
+            }
+        }
+        return temp;
+    }
+
+    public static boolean equateArrayList(ArrayList<String> arr1, ArrayList<String> arr2) {
+        boolean result = true;
+        if(arr1.size() != arr2.size()) {
+            return false;
+        }
+
+        for(int i=0; i<arr1.size(); i++) {
+            if(arr1.get(i).equals(arr2.get(i))) {
+                return false;
+            }
+        }
+
+        return result;
+    }
 }

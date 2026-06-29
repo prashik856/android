@@ -1,7 +1,8 @@
 package com.prashik.scorer.models;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Team implements Serializable {
@@ -10,15 +11,14 @@ public class Team implements Serializable {
     private String name = "";
     private String captainName = "";
     private String commonName = "";
-    ArrayList<MatchPlayer> teamPlayers = new ArrayList<>();
-    ArrayList<String> playerNames = new ArrayList<>();
-
-    int runs;
-    int wickets;
-    int maxWickets;
-    ArrayList<Over> overs = new ArrayList<>();
-
-    int teamSize;
+    private ArrayList<MatchPlayer> teamPlayers = new ArrayList<>();
+    private ArrayList<String> playerNames = new ArrayList<>();
+    private int runs = 0;
+    private int wickets = 0;
+    private int maxWickets;
+    private ArrayList<Over> overs = new ArrayList<>();
+    private int currentOver = 0;
+    private int teamSize;
 
     public Team(String name) {
         this.name = name;
@@ -85,13 +85,15 @@ public class Team implements Serializable {
     }
 
     // Initialize overs
-    public void setOvers(int overs) {
-        ArrayList<Over> newOvers = new ArrayList<>(overs);
-        for(int i=0; i<newOvers.size(); i++) {
+    public void setOvers(int maxOvers) {
+        System.out.println("Setting max overs.");
+        ArrayList<Over> newOvers = new ArrayList<>();
+        for(int i=0; i<maxOvers; i++) {
             Over over = new Over(i);
-            newOvers.set(i, over);
+            newOvers.add(over);
         }
         this.overs = newOvers;
+        System.out.println("Overs array after set: " + this.overs);
     }
 
     public int getMaxWickets() {
@@ -108,5 +110,44 @@ public class Team implements Serializable {
 
     public void setTeamSize(int teamSize) {
         this.teamSize = teamSize;
+    }
+
+    public void setOvers(ArrayList<Over> overs) {
+        this.overs = overs;
+    }
+
+    public int getCurrentOver() {
+        return currentOver;
+    }
+
+    public void setCurrentOver(int currentOver) {
+        this.currentOver = currentOver;
+    }
+
+    public MatchPlayer getMatchPlayerFromName(String playerName) {
+        for(MatchPlayer matchPlayer : this.teamPlayers) {
+            if(matchPlayer.getPlayerName().equals(playerName)) {
+                return matchPlayer;
+            }
+        }
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Team{" +
+                "name='" + name + '\'' +
+                ", captainName='" + captainName + '\'' +
+                ", commonName='" + commonName + '\'' +
+                ", teamPlayers=" + teamPlayers +
+                ", playerNames=" + playerNames +
+                ", runs=" + runs +
+                ", wickets=" + wickets +
+                ", maxWickets=" + maxWickets +
+                ", overs=" + overs +
+                ", currentOver=" + currentOver +
+                ", teamSize=" + teamSize +
+                '}';
     }
 }

@@ -115,7 +115,7 @@ public class SelectTossWinningTeam extends AppCompatActivity {
                 System.out.println("Team A Bat First: " + this.match.isTeamABatFirst());
                 System.out.println("Team B Bat First " + this.match.isTeamBBatFirst());
 
-                Intent intent = new Intent(this, MatchScoreActivity.class);
+                Intent intent = new Intent(this, MatchPropertiesActivity.class);
                 intent.putExtra("data_files_hashmap", dataFilesMap);
                 intent.putExtra("match_object", this.match);
                 startActivity(intent);

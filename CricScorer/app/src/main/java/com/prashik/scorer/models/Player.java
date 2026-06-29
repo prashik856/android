@@ -1,5 +1,7 @@
 package com.prashik.scorer.models;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -86,5 +88,17 @@ public class Player implements Serializable {
 
     public String getFullName() {
         return this.firstName + " " + this.lastName;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }

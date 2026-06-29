@@ -71,7 +71,6 @@
         android:ems="10"
         android:fontFamily="casual"
         android:inputType="number"
-        android:onClick="handleOnOversActivate"
         android:text="@string/default_overs_value"
         android:textAlignment="center"
         android:textSize="24sp"

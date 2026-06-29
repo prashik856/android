@@ -38,11 +38,6 @@ public class MatchPropertiesActivity extends AppCompatActivity {
         });
     }
 
-    public void handleOnOversActivate(View view) {
-        EditText editText = (EditText) view;
-        editText.setText(0);
-    }
-
     public void handleNextClick(View view) {
         EditText maxOversText = findViewById(R.id.max_overs_mp);
         int maxOvers = Integer.parseInt(maxOversText.getText().toString());
@@ -55,12 +50,19 @@ public class MatchPropertiesActivity extends AppCompatActivity {
             Toast.makeText(this, "Max overs cannot be greater than 20.", Toast.LENGTH_LONG).show();
             return;
         }
+        System.out.println("Max overs value: " + maxOvers);
 
         // Set match properties
         this.match.setMaxOvers(maxOvers);
         this.match.getTeamA().setOvers(maxOvers);
         this.match.getTeamB().setOvers(maxOvers);
 
+        System.out.println("Both team objects after setting max overs: ");
+        System.out.println("Team 1 : " + this.match.getTeamA().toString());
+        System.out.println("Team 2 : " + this.match.getTeamB().toString());
+        System.out.println("Match object after setting max overs: " + this.match.toString());
+
+        System.out.println("Opening Select Openers Activity");
         Intent intent = new Intent(this, SelectOpenersActivity.class);
         intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", this.match);

@@ -2,6 +2,8 @@ package com.prashik.scorer.models;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class BattingStats implements Serializable {
@@ -125,5 +127,24 @@ public class BattingStats implements Serializable {
 
     public void setTwenties(int twenties) {
         this.twenties = twenties;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "BattingStats{" +
+                "playerId='" + playerId + '\'' +
+                ", runs=" + runs +
+                ", battingAverage=" + battingAverage +
+                ", strikeRate=" + strikeRate +
+                ", inningsPlayed=" + inningsPlayed +
+                ", fours=" + fours +
+                ", sixes=" + sixes +
+                ", dots=" + dots +
+                ", bestScore=" + bestScore +
+                ", twenties=" + twenties +
+                ", thirties=" + thirties +
+                ", fifties=" + fifties +
+                '}';
     }
 }

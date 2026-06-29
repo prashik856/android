@@ -51,7 +51,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.single_player_text);
+            textView = view.findViewById(R.id.single_match_text);
         }
 
         public TextView getTextView() {
