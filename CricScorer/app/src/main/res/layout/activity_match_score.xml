@@ -155,6 +155,7 @@
         android:layout_width="98dp"
         android:layout_height="48dp"
         android:layout_marginTop="40dp"
+        android:onClick="handleHomeClick"
         android:text="Home"
         app:layout_constraintEnd_toStartOf="@+id/scorer_text_view12"
         app:layout_constraintHorizontal_bias="0.358"

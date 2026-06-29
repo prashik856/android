@@ -7,11 +7,41 @@
     android:layout_height="match_parent"
     tools:context=".activities.MatchInformationActivity">
 
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="cursive"
+        android:onClick="handleHomeClick"
+        android:text="Home"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading10"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view3" />
+
+    <TextView
+        android:id="@+id/player_info_heading10"
+        android:layout_width="177dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="cursive"
+        android:text="Match Information"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view3" />
+
     <TextView
         android:id="@+id/scorer_text_view3"
         android:layout_width="214dp"
         android:layout_height="52dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="cursive"
         android:text="@string/scorer_text_view"
         android:textAlignment="center"

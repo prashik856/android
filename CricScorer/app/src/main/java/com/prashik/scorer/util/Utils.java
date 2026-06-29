@@ -339,6 +339,23 @@ public class Utils {
         return temp;
     }
 
+    public static boolean isMatchAlreadyExists(String directory, Match match) {
+        ArrayList<String> matchFiles = getMatchFiles(getAllFilesInDirectory(directory));
+        System.out.println("Match Files: " + matchFiles);
+        for(String matchfile: matchFiles) {
+            String fileToRead = directory + "/" + matchfile;
+            System.out.println("File to read: " + fileToRead);
+            Match previousMatch = readMatchFile(fileToRead);
+            if(previousMatch.isEqual(match)) {
+                System.out.println("Match - " + previousMatch.getId() + " matches with new match.");
+                System.out.println("Previous Match: " + previousMatch);
+                System.out.println("New Match: " + match);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean equateArrayList(ArrayList<String> arr1, ArrayList<String> arr2) {
         boolean result = true;
         if(arr1.size() != arr2.size()) {

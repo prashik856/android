@@ -38,16 +38,18 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
         this.filesDirectory = this.dataFilesMap.get("files_directory");
-        // store match object in a file
-        assert this.match != null;
-        String matchDataFile = this.match.getDataFileName(this.filesDirectory);
-        System.out.println("Match Data File Name: " + matchDataFile);
-        if(Utils.createFile(matchDataFile)) {
-            System.out.printf("New file %s created.%n", matchDataFile);
-        } else {
+
+        // Check if this match already exists
+        boolean alreadyExists = Utils.isMatchAlreadyExists(this.filesDirectory, this.match);
+        if(alreadyExists) {
             Toast.makeText(this, "The match with similar details already exists. Please edit the existing match or delete that match first.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        } else {
+            String matchDataFile = this.match.getDataFileName(this.filesDirectory);
+            System.out.println("Match Data File Name: " + matchDataFile);
+            // match file name is always going to be unique due to uuid
+            Utils.createFile(matchDataFile);
         }
 
         for(String s: dataFilesMap.keySet()) {

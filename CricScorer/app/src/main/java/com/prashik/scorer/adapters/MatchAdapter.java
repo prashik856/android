@@ -1,25 +1,66 @@
 package com.prashik.scorer.adapters;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MatchAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder>{
+import com.prashik.scorer.R;
+
+public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder>{
+
+    String[] dates;
+    String[] teams;
+    String[] statuses;
+    String[] captains;
+    String[] ids;
 
     @NonNull
     @Override
-    public PlayersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public MatchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.text_row_item_match, viewGroup, false);
+        return new MatchAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlayersAdapter.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull MatchAdapter.ViewHolder viewHolder, int position) {
+        viewHolder.getTextView().setText(String.format("%s  |  %s  |  %s  \n%s",
+                dates[position],
+                teams[position],
+                statuses[position],
+                captains[position]));
+        viewHolder.getTextView().setContentDescription(ids[position]);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return ids.length;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView textView;
+
+        public ViewHolder(View view) {
+            super(view);
+            textView = view.findViewById(R.id.single_match_text);
+        }
+
+        public TextView getTextView() {
+            return textView;
+        }
+    }
+
+    public MatchAdapter(String[] datesArray, String[] teamsArray, String[] matchStatusArray,
+                        String[] captainsArray, String[] idsArray) {
+        System.out.println("Creating match adapter object.");
+        this.dates = datesArray;
+        this.teams = teamsArray;
+        this.statuses = matchStatusArray;
+        this.captains = captainsArray;
+        this.ids = idsArray;
     }
 }

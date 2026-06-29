@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 
 public class Match implements Serializable {
@@ -27,6 +26,7 @@ public class Match implements Serializable {
     private String strikerBatsman = "";
     private String nonStrikeBatsman = "";
     private String currentBowler = "";
+    private boolean completed = false;
 
     public Match(Team team1, Team team2) {
         this.teamA = team1;
@@ -149,6 +149,14 @@ public class Match implements Serializable {
         this.id = id;
     }
 
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
     public String getDataFileName(String dataFileName) {
         return  dataFileName + "/" + "match_" + this.date
                 + "_" + this.id
@@ -169,7 +177,8 @@ public class Match implements Serializable {
     @Override
     public String toString() {
         return "Match{" +
-                "teamA=" + teamA +
+                "id='" + id + '\'' +
+                ", teamA=" + teamA +
                 ", teamB=" + teamB +
                 ", date='" + date + '\'' +
                 ", teamAToss=" + teamAToss +
@@ -182,6 +191,7 @@ public class Match implements Serializable {
                 ", strikerBatsman='" + strikerBatsman + '\'' +
                 ", nonStrikeBatsman='" + nonStrikeBatsman + '\'' +
                 ", currentBowler='" + currentBowler + '\'' +
+                ", completed=" + completed +
                 '}';
     }
 }
