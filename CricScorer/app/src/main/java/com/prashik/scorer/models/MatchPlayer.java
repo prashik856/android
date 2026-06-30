@@ -18,6 +18,7 @@ public class MatchPlayer implements Serializable {
     private boolean twenty = false;
     private boolean thirty = false;
     private boolean fifty = false;
+    private boolean out = false;
 
     // Bowling
     private boolean bowled = false;
@@ -32,10 +33,12 @@ public class MatchPlayer implements Serializable {
     private int wideBalls = 0;
     private int noBalls = 0;
     private int noOfOvers = 0;
+    private int extras = 0;
+    private int runsConceded = 0;
+
     // Just for stats that we can view
     private int noOfCatches = 0;
     private int noOfRunOuts = 0;
-    private boolean out = false;
 
     public MatchPlayer(Player player) {
         this.player = player;
@@ -249,6 +252,22 @@ public class MatchPlayer implements Serializable {
         this.playerName = playerName;
     }
 
+    public int getExtras() {
+        return extras;
+    }
+
+    public void setExtras(int extras) {
+        this.extras = extras;
+    }
+
+    public int getRunsConceded() {
+        return runsConceded;
+    }
+
+    public void setRunsConceded(int runsConceded) {
+        this.runsConceded = runsConceded;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -264,6 +283,7 @@ public class MatchPlayer implements Serializable {
                 ", twenty=" + twenty +
                 ", thirty=" + thirty +
                 ", fifty=" + fifty +
+                ", out=" + out +
                 ", bowled=" + bowled +
                 ", wickets=" + wickets +
                 ", economy=" + economy +
@@ -276,9 +296,10 @@ public class MatchPlayer implements Serializable {
                 ", wideBalls=" + wideBalls +
                 ", noBalls=" + noBalls +
                 ", noOfOvers=" + noOfOvers +
+                ", extras=" + extras +
+                ", runsConceded=" + runsConceded +
                 ", noOfCatches=" + noOfCatches +
                 ", noOfRunOuts=" + noOfRunOuts +
-                ", out=" + out +
                 '}';
     }
 }

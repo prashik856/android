@@ -125,4 +125,81 @@ public class MatchScoreActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void handleZeroClick(View view) {
+        // Add zero to over
+
+    }
+
+    public void handleOneClick(View view) {
+
+    }
+
+    public void handleTwoClick(View view) {
+
+    }
+
+    public void handleRotateStrikeClick(View view) {
+
+    }
+
+    public void handleThreeClick(View view) {
+
+    }
+
+    public void handleFourClick(View view) {
+
+    }
+
+    public void handleFiveClick(View view) {
+
+    }
+
+    public void handleUndoClick(View view) {
+
+    }
+
+    public void handleSixClick(View view) {
+
+    }
+
+    public void handleWideBallClick(View view) {
+
+    }
+
+    public void handleNoBallClick(View view) {
+
+    }
+
+    public void handleEditOversClick(View view) {
+
+    }
+
+    public void handleByeClick(View view) {
+
+    }
+
+    public void handleBowledClick(View view) {
+
+    }
+
+    public void handleCaughtClick(View view) {
+
+    }
+
+    public void handleEditPlayersClick(View view) {
+
+    }
+
+    public void handleRunOutClick(View view) {
+
+    }
+
+    public void handleHitWicketClick(View view) {
+
+    }
+
+    public void handleInningsEndClick(View view) {
+
+    }
 }
