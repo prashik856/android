@@ -5,9 +5,11 @@ import androidx.annotation.NonNull;
 import com.prashik.scorer.util.Utils;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Match implements Serializable {
@@ -24,9 +26,15 @@ public class Match implements Serializable {
     private ArrayList<String> matchPlayers = new ArrayList<>();
     private int maxOvers;
     private String strikerBatsman = "";
+    private int strikerBatsmanIndex = -1;
     private String nonStrikeBatsman = "";
+    private int nonStrikerBatsmanIndex = -1;
     private String currentBowler = "";
+    private int currentBowlerIndex = -1;
     private boolean completed = false;
+    private int innings = -1;
+    private String battingTeamName = "";
+    private String bowlingTeamName = "";
 
     public Match(Team team1, Team team2) {
         this.teamA = team1;
@@ -157,6 +165,102 @@ public class Match implements Serializable {
         this.completed = completed;
     }
 
+    public int getStrikerBatsmanIndex() {
+        return strikerBatsmanIndex;
+    }
+
+    public void setStrikerBatsmanIndex(int strikerBatsmanIndex) {
+        this.strikerBatsmanIndex = strikerBatsmanIndex;
+    }
+
+    public int getNonStrikerBatsmanIndex() {
+        return nonStrikerBatsmanIndex;
+    }
+
+    public void setNonStrikerBatsmanIndex(int nonStrikerBatsmanIndex) {
+        this.nonStrikerBatsmanIndex = nonStrikerBatsmanIndex;
+    }
+
+    public int getCurrentBowlerIndex() {
+        return currentBowlerIndex;
+    }
+
+    public void setCurrentBowlerIndex(int currentBowlerIndex) {
+        this.currentBowlerIndex = currentBowlerIndex;
+    }
+
+    public int getInnings() {
+        return innings;
+    }
+
+    public void setInnings(int innings) {
+        this.innings = innings;
+    }
+
+    public String getBattingTeamName() {
+        return battingTeamName;
+    }
+
+    public void setBattingTeamName(String battingTeamName) {
+        this.battingTeamName = battingTeamName;
+    }
+
+    public String getBowlingTeamName() {
+        return bowlingTeamName;
+    }
+
+    public void setBowlingTeamName(String bowlingTeamName) {
+        this.bowlingTeamName = bowlingTeamName;
+    }
+
+    public void setBattingAndBowlingTeamNames() {
+        if(this.getInnings() == 1) {
+            // first innings
+            if(this.isTeamABatFirst()) {
+                // team A is batting
+                this.battingTeamName = this.teamA.getName();
+                this.bowlingTeamName = this.teamB.getName();
+            } else {
+                // team B is batting
+                this.battingTeamName = this.teamB.getName();
+                this.bowlingTeamName = this.teamA.getName();
+            }
+        } else {
+            // second innings
+            if(this.isTeamABatFirst()) {
+                // team B is batting
+                this.battingTeamName = this.teamB.getName();
+                this.bowlingTeamName = this.teamA.getName();
+            } else {
+                // team A is batting
+                this.battingTeamName = this.teamA.getName();
+                this.bowlingTeamName = this.teamB.getName();
+            }
+        }
+    }
+
+    public ArrayList<Team> getBattingAndBowlingTeams() {
+        ArrayList<Team> teams = new ArrayList<>();
+        if(this.teamA.getName().equals(this.battingTeamName)) {
+            // team a is batting
+            teams.add(this.teamA);
+            teams.add(this.teamB);
+        } else {
+            // team b is batting
+            teams.add(this.teamB);
+            teams.add(this.teamA);
+        }
+        return teams;
+    }
+
+    public Team getBattingTeam() {
+        return getBattingAndBowlingTeams().get(0);
+    }
+
+    public Team getBowlingTeam() {
+        return getBattingAndBowlingTeams().get(1);
+    }
+
     public String getDataFileName(String dataFileName) {
         return  dataFileName + "/" + "match_" + this.date
                 + "_" + this.id
@@ -174,6 +278,7 @@ public class Match implements Serializable {
     }
 
     @NonNull
+
     @Override
     public String toString() {
         return "Match{" +
@@ -189,9 +294,13 @@ public class Match implements Serializable {
                 ", matchPlayers=" + matchPlayers +
                 ", maxOvers=" + maxOvers +
                 ", strikerBatsman='" + strikerBatsman + '\'' +
+                ", strikerBatsmanIndex=" + strikerBatsmanIndex +
                 ", nonStrikeBatsman='" + nonStrikeBatsman + '\'' +
+                ", nonStrikerBatsmanIndex=" + nonStrikerBatsmanIndex +
                 ", currentBowler='" + currentBowler + '\'' +
+                ", currentBowlerIndex=" + currentBowlerIndex +
                 ", completed=" + completed +
+                ", innings=" + innings +
                 '}';
     }
 }

@@ -7,6 +7,7 @@ import com.prashik.scorer.models.BowlingStats;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
+import com.prashik.scorer.models.Over;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.models.Team;
 
@@ -303,16 +304,16 @@ public class Utils {
                 team.getWickets();
     }
 
-    public static String getOvers(Team team, Match match) {
+    public static String getOvers(Team team, Over over, Match match) {
         return team.getCurrentOver() +
                 "." +
-                team.getOvers().get(team.getCurrentOver()).getLegalDeliveries() +
+                over.getLegalDeliveries() +
                 "/" +
                 match.getMaxOvers();
     }
 
-    public static String getOverDetails(Team team) {
-        return team.getOvers().get(team.getCurrentOver()).getOverSummary();
+    public static String getOverDetails(Over over) {
+        return over.getOverSummary().toString();
     }
 
     public static ArrayList<String> getAllFilesInDirectory(String directory) {

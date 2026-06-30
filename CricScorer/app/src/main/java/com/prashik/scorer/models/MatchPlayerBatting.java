@@ -1,0 +1,171 @@
+package com.prashik.scorer.models;
+
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class MatchPlayerBatting implements Serializable {
+    // Batting
+    private static final long serialVersionUID = 2462471862401256640L;
+    private boolean batted = false;
+    private int runsScored = 0;
+    private int ballsPlayed = 0;
+    private double strikeRate = 0;
+    private int foursScored = 0;
+    private int sixesScored = 0;
+    private int dotsPlayed = 0;
+    private boolean twenty = false;
+    private boolean thirty = false;
+    private boolean fifty = false;
+    private ArrayList<String> battingDetails = new ArrayList<>();
+    private boolean out = false;
+    String coughtBy = "";
+    String bowledBy = "";
+    String runOutBy = "";
+
+    public MatchPlayerBatting() {
+
+    }
+
+    public boolean isOut() {
+        return out;
+    }
+
+    public void setOut(boolean out) {
+        this.out = out;
+    }
+
+    public boolean isBatted() {
+        return batted;
+    }
+
+    public void setBatted(boolean batted) {
+        this.batted = batted;
+    }
+
+    public double getStrikeRate() {
+        return strikeRate;
+    }
+
+    public void setStrikeRate(double strikeRate) {
+        this.strikeRate = strikeRate;
+    }
+
+    public boolean isTwenty() {
+        return twenty;
+    }
+
+    public void setTwenty(boolean twenty) {
+        this.twenty = twenty;
+    }
+
+    public boolean isThirty() {
+        return thirty;
+    }
+
+    public void setThirty(boolean thirty) {
+        this.thirty = thirty;
+    }
+
+    public boolean isFifty() {
+        return fifty;
+    }
+
+    public void setFifty(boolean fifty) {
+        this.fifty = fifty;
+    }
+
+    public ArrayList<String> getBattingDetails() {
+        return battingDetails;
+    }
+    public void addToBattingDetails(String str) {
+        this.battingDetails.add(str);
+    }
+
+    public void setBattingDetails(ArrayList<String> battingDetails) {
+        this.battingDetails = battingDetails;
+    }
+
+    public int getRunsScored() {
+        return runsScored;
+    }
+
+    public void setRunsScored(int runsScored) {
+        this.runsScored = runsScored;
+    }
+
+    public int getBallsPlayed() {
+        return ballsPlayed;
+    }
+    public void incrementBallsPlayed() {
+        this.ballsPlayed = this.ballsPlayed + 1;
+    }
+
+    public void setBallsPlayed(int ballsPlayed) {
+        this.ballsPlayed = ballsPlayed;
+    }
+
+    public int getFoursScored() {
+        return foursScored;
+    }
+    public void incrementFoursScored() {
+        this.foursScored = this.foursScored + 1;
+    }
+
+    public void setFoursScored(int foursScored) {
+        this.foursScored = foursScored;
+    }
+
+    public int getSixesScored() {
+        return sixesScored;
+    }
+    public void incrementSixesScored() {
+        this.sixesScored = this.sixesScored + 1;
+    }
+
+    public void setSixesScored(int sixesScored) {
+        this.sixesScored = sixesScored;
+    }
+
+    public int getDotsPlayed() {
+        return dotsPlayed;
+    }
+    public void incrementDotsPlayed() {
+        this.dotsPlayed = this.dotsPlayed + 1;
+    }
+
+    public void setDotsPlayed(int dotsPlayed) {
+        this.dotsPlayed = dotsPlayed;
+    }
+
+    public void updateStrikeRate() {
+        if(this.ballsPlayed > 0) {
+            this.strikeRate = ((double) this.runsScored /this.ballsPlayed) * 100;
+        } else {
+            this.strikeRate = 0;
+        }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "MatchPlayerBatting{" +
+                "batted=" + batted +
+                ", runsScored=" + runsScored +
+                ", ballsPlayed=" + ballsPlayed +
+                ", strikeRate=" + strikeRate +
+                ", foursScored=" + foursScored +
+                ", sixesScored=" + sixesScored +
+                ", dotsPlayed=" + dotsPlayed +
+                ", twenty=" + twenty +
+                ", thirty=" + thirty +
+                ", fifty=" + fifty +
+                ", battingDetails=" + battingDetails +
+                ", out=" + out +
+                ", coughtBy='" + coughtBy + '\'' +
+                ", bowledBy='" + bowledBy + '\'' +
+                ", runOutBy='" + runOutBy + '\'' +
+                '}';
+    }
+}

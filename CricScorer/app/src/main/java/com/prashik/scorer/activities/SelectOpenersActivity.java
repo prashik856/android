@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.Over;
+import com.prashik.scorer.models.Team;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,17 +45,9 @@ public class SelectOpenersActivity extends AppCompatActivity {
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
+        this.playersOptions = this.match.getBattingTeam().getPlayerNames().toArray(new String[0]);
+        this.bowlerOptions = this.match.getBowlingTeam().getPlayerNames().toArray(new String[0]);
 
-        if(this.match.isTeamABatFirst()) {
-            System.out.println("Team A is batting first.");
-            // team a players
-            this.playersOptions = this.match.getTeamA().getPlayerNames().toArray(new String[0]);
-            this.bowlerOptions = this.match.getTeamB().getPlayerNames().toArray(new String[0]);
-        } else {
-            System.out.println("Team B is batting first.");
-            this.playersOptions = this.match.getTeamB().getPlayerNames().toArray(new String[0]);
-            this.bowlerOptions = this.match.getTeamA().getPlayerNames().toArray(new String[0]);
-        }
         System.out.println("Players Options: " + Arrays.toString(this.playersOptions));
         System.out.println("Bowlers Options: " + Arrays.toString(this.bowlerOptions));
         this.playersSelected = new boolean[this.playersOptions.length];
@@ -159,9 +152,38 @@ public class SelectOpenersActivity extends AppCompatActivity {
         this.match.setNonStrikeBatsman(openers.get(1));
         this.match.setCurrentBowler(bowler);
 
+        ArrayList<Team> teams = this.match.getBattingAndBowlingTeams();
+        Team battingTeam = teams.get(0);
+        Team bowlingTeam = teams.get(1);
+
+        int strikerIndex = -1;
+        int nonStrikerIndex = -1;
+        int bowlerIndex = -1;
+
+        strikerIndex = battingTeam.getMatchPlayerIndex(openers.get(0));
+        nonStrikerIndex = battingTeam.getMatchPlayerIndex(openers.get(1));
+        bowlerIndex = bowlingTeam.getMatchPlayerIndex(bowler);
+
+        battingTeam.getTeamPlayers().get(strikerIndex).getMatchPlayerBatting().setBatted(true);
+        battingTeam.getTeamPlayers().get(nonStrikerIndex).getMatchPlayerBatting().setBatted(true);
+        bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().setBowled(true);
+
+        // Set bowler name in over object
+        bowlingTeam.getOvers().get(bowlingTeam.getCurrentOver())
+                .setPlayerName(bowler);
+
+        this.match.setStrikerBatsmanIndex(strikerIndex);
+        this.match.setNonStrikerBatsmanIndex(nonStrikerIndex);
+        this.match.setCurrentBowlerIndex(bowlerIndex);
+
+        // set innings
+        this.match.setInnings(1);
+
         System.out.println("Striker: " + this.match.getStrikerBatsman());
         System.out.println("Non Striker: " + this.match.getNonStrikeBatsman());
         System.out.println("Bowler: " + this.match.getCurrentBowler());
+
+        System.out.println("Match object before going to match score: " + this.match.toString());
 
         System.out.println("Going to match score.");
         Intent intent = new Intent(this, MatchScoreActivity.class);

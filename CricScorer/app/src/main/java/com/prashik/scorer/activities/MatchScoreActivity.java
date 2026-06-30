@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,7 +17,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.prashik.scorer.MainActivity;
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
+import com.prashik.scorer.models.MatchPlayer;
+import com.prashik.scorer.models.Over;
 import com.prashik.scorer.models.Player;
+import com.prashik.scorer.models.Team;
 import com.prashik.scorer.util.Utils;
 
 import java.util.HashMap;
@@ -28,6 +32,13 @@ public class MatchScoreActivity extends AppCompatActivity {
     HashMap<String, String> nameToIdMap;
     HashMap<String, Player> allPlayers;
     String filesDirectory;
+
+    Team battingTeam;
+    Team bowlingTeam;
+    MatchPlayer strikerBatsman;
+    MatchPlayer nonStrikeBatsman;
+    MatchPlayer bowler;
+    Over currentOver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             // match file name is always going to be unique due to uuid
             Utils.createFile(matchDataFile);
         }
+        setBattingAndBowlingTeams();
 
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
@@ -62,6 +74,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.nameToIdMap = Utils.readNameToIdMapFile(dataFile);
             }
         }
+        this.currentOver = this.bowlingTeam.getCurrentOverObject();
 
         System.out.println("Match Object: ");
         System.out.println(this.match);
@@ -71,22 +84,12 @@ public class MatchScoreActivity extends AppCompatActivity {
         TextView runsAndWicketsText = findViewById(R.id.score_value_ms);
         TextView oversText = findViewById(R.id.overs_value_ms);
         TextView runRateText = findViewById(R.id.run_rate_ms);
-        String name = "";
+        String name = this.battingTeam.getName();
         float runRate = 0;
-        String score = "";
-        String overs = "";
-        String overDetails = "";
-        if(this.match.isTeamABatFirst()) {
-            name = this.match.getTeamA().getName();
-            score = Utils.getScore(this.match.getTeamA());
-            overs = Utils.getOvers(this.match.getTeamA(), this.match);
-            overDetails = Utils.getOverDetails(this.match.getTeamA());
-        } else {
-            name = this.match.getTeamB().getName();
-            score = Utils.getScore(this.match.getTeamB());
-            overs = Utils.getOvers(this.match.getTeamB(), this.match);
-            overDetails = Utils.getOverDetails(this.match.getTeamB());
-        }
+        String score = Utils.getScore(this.battingTeam);
+        String overs = Utils.getOvers(this.bowlingTeam, this.currentOver, this.match);
+        String overDetails = Utils.getOverDetails(this.currentOver);
+
         teamNameText.setText(name);
         runsAndWicketsText.setText(score);
         System.out.println("Score value: " + score);
@@ -98,18 +101,31 @@ public class MatchScoreActivity extends AppCompatActivity {
         String[] strikePlayerSplit = this.match.getStrikerBatsman().split(" ");
         String strikerNameToDisplay = strikePlayerSplit[0] + " " + "0(0)";
         strikerName.setText(strikerNameToDisplay);
+        this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getStrikerBatsman());
 
         String[] nonStrikePlayerSplit = this.match.getNonStrikeBatsman().split(" ");
         String nonStrikerNameToDisplay = nonStrikePlayerSplit[0] + " " + "0(0)";
         TextView nonStrikerName = findViewById(R.id.non_striker_name_ms);
         nonStrikerName.setText(nonStrikerNameToDisplay);
+        this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getNonStrikeBatsman());
 
         TextView bowlerNameText = findViewById(R.id.current_bowler_ms);
         String temp = "Bowler Name\n" + this.match.getCurrentBowler().split(" ")[0];
         bowlerNameText.setText(temp);
+        this.bowler = this.bowlingTeam.getMatchPlayerFromName(this.match.getCurrentBowler());
+
 
         TextView overDetailsText = findViewById(R.id.current_over_details_ms);
         overDetailsText.setText(overDetails);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(MatchScoreActivity.this, "You cannot go back now. " +
+                        "Press home instead.", Toast.LENGTH_LONG).show();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(callback);
 
         Utils.syncMatchData(this.match.getDataFileName(this.filesDirectory), this.match);
 
@@ -120,6 +136,11 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
     }
 
+    public void setBattingAndBowlingTeams() {
+        this.battingTeam = this.match.getBattingAndBowlingTeams().get(0);
+        this.bowlingTeam = this.match.getBattingAndBowlingTeams().get(1);
+    }
+
     public void handleHomeClick(View view) {
         Utils.syncMatchData(this.match.getDataFileName(this.filesDirectory), this.match);
         Intent intent = new Intent(this, MainActivity.class);
@@ -127,8 +148,30 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleZeroClick(View view) {
-        // Add zero to over
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.", Toast.LENGTH_LONG).show();
+        }
 
+        // Add dot ball to striker batsman
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+
+        // Updated the over
+        this.currentOver.getOverSummary().add("0");
+        this.currentOver.incrementDotBalls();
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.updateOverCompleted();
+
+        // Add dot ball info to current bowler
+        this.bowler.getMatchPlayerBowling().incrementDotsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+        }
     }
 
     public void handleOneClick(View view) {
@@ -200,6 +243,10 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleInningsEndClick(View view) {
+
+    }
+
+    public void handleRetireClick(View view) {
 
     }
 }

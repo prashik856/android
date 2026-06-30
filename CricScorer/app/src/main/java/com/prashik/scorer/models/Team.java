@@ -133,6 +133,19 @@ public class Team implements Serializable {
         return null;
     }
 
+    public int getMatchPlayerIndex(String playerName) {
+        for(int i=0; i<this.teamPlayers.size(); i++) {
+            if(this.teamPlayers.get(i).getPlayerName().equals(playerName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public Over getCurrentOverObject() {
+        return this.overs.get(this.getCurrentOver());
+    }
+
     @NonNull
     @Override
     public String toString() {
