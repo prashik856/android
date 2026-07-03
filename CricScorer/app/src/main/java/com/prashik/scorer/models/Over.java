@@ -18,6 +18,8 @@ public class Over implements Serializable {
     private int byes = 0;
     private int dots = 0;
     private int extras = 0;
+    private int runs = 0;
+    private boolean maiden = false;
     private boolean overCompleted = false;
 
     public Over(int matchOverId) {
@@ -124,9 +126,55 @@ public class Over implements Serializable {
         this.wides = wides;
     }
 
+    public int getRuns() {
+        return runs;
+    }
+    public void incrementRuns() {
+        this.runs = this.runs + 1;
+    }
+    public void addTwoToRuns() {
+        this.runs = this.runs + 2;
+    }
+    public void addThreeToRuns() {
+        this.runs = this.runs + 3;
+    }
+    public void addFourToRuns() {
+        this.runs = this.runs + 4;
+    }
+    public void addFiveToRuns() {
+        this.runs = this.runs + 5;
+    }
+    public void addSixToRuns() {
+        this.runs = this.runs + 6;
+    }
+    public void addSevenToRuns() {
+        // no ball + 6
+        this.runs = this.runs + 7;
+    }
+
+
+    public void setRuns(int runs) {
+        this.runs = runs;
+    }
+
+    public boolean isMaiden() {
+        return maiden;
+    }
+
+    public void setMaiden(boolean maiden) {
+        this.maiden = maiden;
+    }
+
+    public void updateMainden() {
+        if(this.runs == 0) {
+            this.maiden = true;
+        }
+    }
+
     public void updateOverCompleted() {
         if(this.legalDeliveries >= this.maxLegalDeliveries) {
             this.overCompleted = true;
+            this.updateMainden();
         }
     }
 

@@ -25,8 +25,11 @@ public class MatchPlayerBowling implements Serializable {
     private int runsConceded = 0;
     private int legalDeliveriesBowled = 0;
     private int deliveriesBowled = 0;
+    private int maidenOverBowled = 0;
+    ArrayList<int> overBowled = new ArrayList<>();
     ArrayList<String> bowledPlayers = new ArrayList<>();
     ArrayList<String> wicketsTakenPlayers = new ArrayList<>();
+    ArrayList<String> maidenBowledTo = new ArrayList<>();
 
     public MatchPlayerBowling() {
 
@@ -160,6 +163,28 @@ public class MatchPlayerBowling implements Serializable {
     public int getRunsConceded() {
         return runsConceded;
     }
+    public void incrementRunsConceded() {
+        this.runsConceded = this.runsConceded + 1;
+    }
+    public void addTwoToRunsConceded() {
+        this.runsConceded = this.runsConceded + 2;
+    }
+    public void addThreeToRunsConceded() {
+        this.runsConceded = this.runsConceded + 3;
+    }
+    public void addFourToRunsConceded() {
+        this.runsConceded = this.runsConceded + 4;
+    }
+    public void addFiveToRunsConceded() {
+        this.runsConceded = this.runsConceded + 5;
+    }
+    public void addSixToRunsConceded() {
+        this.runsConceded = this.runsConceded + 6;
+    }
+    public void addSevenToRunsConceded() {
+        // no ball + 6
+        this.runsConceded = this.runsConceded + 7;
+    }
 
     public void setRunsConceded(int runsConceded) {
         this.runsConceded = runsConceded;
@@ -222,6 +247,42 @@ public class MatchPlayerBowling implements Serializable {
 
     public void setWicketsTakenPlayers(ArrayList<String> wicketsTakenPlayers) {
         this.wicketsTakenPlayers = wicketsTakenPlayers;
+    }
+
+    public int getMaidenOverBowled() {
+        return maidenOverBowled;
+    }
+
+    public void incrementMaidenOverBowled() {
+        this.maidenOverBowled = this.maidenOverBowled + 1;
+    }
+
+    public void setMaidenOverBowled(int maidenOverBowled) {
+        this.maidenOverBowled = maidenOverBowled;
+    }
+
+    public ArrayList<String> getMaidenBowledTo() {
+        return maidenBowledTo;
+    }
+
+    public void setMaidenBowledTo(ArrayList<String> maidenBowled) {
+        this.maidenBowledTo = maidenBowledTo;
+    }
+
+    public void addToMaidenOverBowledTo(String playerName) {
+        this.maidenBowledTo.add(playerName);
+    }
+
+    public ArrayList<int> getOverBowled() {
+        return overBowled;
+    }
+
+    public void addToOverBowled(int index) {
+        this.overBowled.add(index);
+    }
+
+    public void setOverBowled(ArrayList<int> overBowled) {
+        this.overBowled = overBowled;
     }
 
     public void updateBowlingEconomy() {

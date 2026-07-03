@@ -167,6 +167,9 @@ public class SelectOpenersActivity extends AppCompatActivity {
         battingTeam.getTeamPlayers().get(strikerIndex).getMatchPlayerBatting().setBatted(true);
         battingTeam.getTeamPlayers().get(nonStrikerIndex).getMatchPlayerBatting().setBatted(true);
         bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().setBowled(true);
+        bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().addToOverBowled(
+                bowlingTeam.getCurrentOver()
+        );
 
         // Set bowler name in over object
         bowlingTeam.getOvers().get(bowlingTeam.getCurrentOver())

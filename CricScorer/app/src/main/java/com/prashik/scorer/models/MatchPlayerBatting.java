@@ -55,6 +55,22 @@ public class MatchPlayerBatting implements Serializable {
     public boolean isTwenty() {
         return twenty;
     }
+    public void updateRecords() {
+        if(this.runsScored >= 20 && this.runsScored < 30) {
+            this.twenty = true;
+        }
+
+        if(this.runsScored >= 30 && this.runsScored < 50) {
+            this.twenty = false;
+            this.thirty = true;
+        }
+
+        if(this.runsScored >= 50) {
+            this.fifty = true;
+            this.thirty = false;
+            this.twenty = false;
+        }
+    }
 
     public void setTwenty(boolean twenty) {
         this.twenty = twenty;
@@ -89,6 +105,28 @@ public class MatchPlayerBatting implements Serializable {
 
     public int getRunsScored() {
         return runsScored;
+    }
+    public void incrementRunsScored() {
+        this.runsScored = this.runsScored + 1;
+    }
+    public void addTwoToRunsScored() {
+        this.runsScored = this.runsScored + 2;
+    }
+    public void addThreeToRunsScored() {
+        this.runsScored = this.runsScored + 3;
+    }
+    public void addFourToRunsScored() {
+        this.runsScored = this.runsScored + 4;
+    }
+    public void addFiveToRunsScored() {
+        this.runsScored = this.runsScored + 5;
+    }
+    public void addSixToRunsScored() {
+        this.runsScored = this.runsScored + 6;
+    }
+    public void addSevenToRunsScored() {
+        // no ball + 6
+        this.runsScored = this.runsScored + 7;
     }
 
     public void setRunsScored(int runsScored) {

@@ -175,17 +175,60 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
         if(this.currentOver.isOverCompleted()) {
             this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+            if(this.currentOver.isMaiden()) {
+                this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
+                this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
+                        this.match.getStrikerBatsman());
+            }
+        }
+        this.syncMatch();
+    }
+
+    public void handleOneClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.", Toast.LENGTH_LONG).show();
+        }
+
+        // add single
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("1");
+        this.strikerBatsman.getMatchPlayerBatting().incrementRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // Update the over
+        this.currentOver.getOverSummary().add("1");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.incrementRuns();
+        this.currentOver.updateOverCompleted();
+
+        // Add single run info to current bowler
+        this.bowler.getMatchPlayerBowling().incrementRunsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+            if(this.currentOver.isMaiden()) {
+                this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
+                this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
+                        this.match.getStrikerBatsman());
+            }
         }
 
         this.syncMatch();
     }
 
-    public void handleOneClick(View view) {
-
-    }
-
     public void handleTwoClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.", Toast.LENGTH_LONG).show();
+        }
 
+        // add two
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("2");
+        this.strikerBatsman.getMatchPlayerBatting().addTwoToRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
     }
 
     public void handleRotateStrikeClick(View view) {
