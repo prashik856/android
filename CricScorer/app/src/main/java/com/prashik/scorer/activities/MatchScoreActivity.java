@@ -232,7 +232,11 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleRotateStrikeClick(View view) {
-
+        // basic
+        String temp1 = this.match.getStrikerBatsman();
+        String temp2 = this.match.getNonStrikerBatsman();
+        this.match.setStrikerBatsman(temp2);
+        this.match.setNonStrikerBatsman(temp1);
     }
 
     public void handleThreeClick(View view) {
