@@ -127,13 +127,17 @@ public class MatchScoreActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(callback);
 
-        Utils.syncMatchData(this.match.getDataFileName(this.filesDirectory), this.match);
+        this.syncMatch();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void syncMatch() {
+        Utils.syncMatchData(this.match.getDataFileName(this.filesDirectory), this.match);
     }
 
     public void setBattingAndBowlingTeams() {
@@ -172,6 +176,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         if(this.currentOver.isOverCompleted()) {
             this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
         }
+
+        this.syncMatch();
     }
 
     public void handleOneClick(View view) {
