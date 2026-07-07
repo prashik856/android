@@ -17,8 +17,12 @@ public class Team implements Serializable {
     private int wickets = 0;
     private int maxWickets;
     private ArrayList<Over> overs = new ArrayList<>();
-    private int currentOver = 0;
+    private int currentOverBowling = 0;
+    private int currentOverBatting = 0;
     private int teamSize;
+    private double runRate = 0;
+    private int legalDeliveriesPlayed = 0;
+    private int maxLegalDeliveries;
 
     public Team(String name) {
         this.name = name;
@@ -67,6 +71,24 @@ public class Team implements Serializable {
     public int getRuns() {
         return runs;
     }
+    public void incrementRuns() {
+        this.runs = this.runs + 1;
+    }
+    public void addTwoToRuns() {
+        this.runs = this.runs + 2;
+    }
+    public void addThreeToRuns() {
+        this.runs = this.runs + 3;
+    }
+    public void addFourToRuns() {
+        this.runs = this.runs + 4;
+    }
+    public void addFiveToRuns() {
+        this.runs = this.runs + 5;
+    }
+    public void addSixToRuns() {
+        this.runs = this.runs + 6;
+    }
 
     public void setRuns(int runs) {
         this.runs = runs;
@@ -93,6 +115,7 @@ public class Team implements Serializable {
             newOvers.add(over);
         }
         this.overs = newOvers;
+        this.maxLegalDeliveries = maxOvers * 6;
         System.out.println("Overs array after set: " + this.overs);
     }
 
@@ -116,12 +139,65 @@ public class Team implements Serializable {
         this.overs = overs;
     }
 
-    public int getCurrentOver() {
-        return currentOver;
+    public double getRunRate() {
+        return runRate;
     }
 
-    public void setCurrentOver(int currentOver) {
-        this.currentOver = currentOver;
+    public void setRunRate(double runRate) {
+        this.runRate = runRate;
+    }
+
+    public void updateRunRate() {
+        if(!(this.legalDeliveriesPlayed == 0)) {
+            int oversBowled = this.legalDeliveriesPlayed / 6;
+            int ballsInNewOver = this.legalDeliveriesPlayed % 6;
+            double denominator = oversBowled +  ((double)ballsInNewOver/6);
+            this.runRate = this.runs/denominator;
+        }
+    }
+
+    public int getLegalDeliveriesPlayed() {
+        return legalDeliveriesPlayed;
+    }
+
+    public void incrementLegalDeliveriesPlayed() {
+        this.legalDeliveriesPlayed = this.legalDeliveriesPlayed + 1;
+    }
+
+    public void setLegalDeliveriesPlayed(int legalDeliveriesPlayed) {
+        this.legalDeliveriesPlayed = legalDeliveriesPlayed;
+    }
+
+    public int getMaxLegalDeliveries() {
+        return maxLegalDeliveries;
+    }
+
+    public void setMaxLegalDeliveries(int maxLegalDeliveries) {
+        this.maxLegalDeliveries = maxLegalDeliveries;
+    }
+
+    public int getCurrentOverBowling() {
+        return currentOverBowling;
+    }
+
+    public void incrementCurrentOverBowling() {
+        this.currentOverBowling = this.currentOverBowling + 1;
+    }
+
+    public void setCurrentOverBowling(int currentOverBowling) {
+        this.currentOverBowling = currentOverBowling;
+    }
+
+    public int getCurrentOverBatting() {
+        return currentOverBatting;
+    }
+
+    public void incrementCurrentOverBatting() {
+        this.currentOverBatting = this.currentOverBatting + 1;
+    }
+
+    public void setCurrentOverBatting(int currentOverBatting) {
+        this.currentOverBatting = currentOverBatting;
     }
 
     public MatchPlayer getMatchPlayerFromName(String playerName) {
@@ -143,10 +219,11 @@ public class Team implements Serializable {
     }
 
     public Over getCurrentOverObject() {
-        return this.overs.get(this.getCurrentOver());
+        return this.overs.get(this.getCurrentOverBowling());
     }
 
     @NonNull
+
     @Override
     public String toString() {
         return "Team{" +
@@ -159,8 +236,12 @@ public class Team implements Serializable {
                 ", wickets=" + wickets +
                 ", maxWickets=" + maxWickets +
                 ", overs=" + overs +
-                ", currentOver=" + currentOver +
+                ", currentOverBowling=" + currentOverBowling +
+                ", currentOverBatting=" + currentOverBatting +
                 ", teamSize=" + teamSize +
+                ", runRate=" + runRate +
+                ", legalDeliveriesPlayed=" + legalDeliveriesPlayed +
+                ", maxLegalDeliveries=" + maxLegalDeliveries +
                 '}';
     }
 }

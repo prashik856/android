@@ -156,6 +156,9 @@ public class SelectOpenersActivity extends AppCompatActivity {
         Team battingTeam = teams.get(0);
         Team bowlingTeam = teams.get(1);
 
+        System.out.println("Batting team: " + battingTeam.toString());
+        System.out.println("Bowling team: " + bowlingTeam.toString());
+
         int strikerIndex = -1;
         int nonStrikerIndex = -1;
         int bowlerIndex = -1;
@@ -168,11 +171,11 @@ public class SelectOpenersActivity extends AppCompatActivity {
         battingTeam.getTeamPlayers().get(nonStrikerIndex).getMatchPlayerBatting().setBatted(true);
         bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().setBowled(true);
         bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().addToOverBowled(
-                bowlingTeam.getCurrentOver()
+                bowlingTeam.getCurrentOverBowling()
         );
 
         // Set bowler name in over object
-        bowlingTeam.getOvers().get(bowlingTeam.getCurrentOver())
+        bowlingTeam.getOvers().get(bowlingTeam.getCurrentOverBowling())
                 .setPlayerName(bowler);
 
         this.match.setStrikerBatsmanIndex(strikerIndex);

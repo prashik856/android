@@ -3,6 +3,7 @@ package com.prashik.scorer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -90,8 +91,18 @@ public class PreviousMatchesActivity extends AppCompatActivity {
     }
 
     public void handleOnMatchClick(View view) {
+        // read match file
         System.out.println("Clicked on match.");
+        TextView textView = (TextView) view;
+        String matchFile = textView.getContentDescription().toString();
+        System.out.println("Match file: " + matchFile);
+        String matchFileLocation = this.filesDirectory + "/" + matchFile;
+        System.out.println("Match file location: " + matchFileLocation);
+        Match match = Utils.readMatchFile(matchFileLocation);
+
+        // push match object
         Intent intent = new Intent(this, MatchInformationActivity.class);
+        intent.putExtra("match_object", match);
         startActivity(intent);
     }
 }

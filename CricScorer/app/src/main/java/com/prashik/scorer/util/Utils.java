@@ -305,7 +305,7 @@ public class Utils {
     }
 
     public static String getOvers(Team team, Over over, Match match) {
-        return team.getCurrentOver() +
+        return team.getCurrentOverBowling() +
                 "." +
                 over.getLegalDeliveries() +
                 "/" +
@@ -313,7 +313,12 @@ public class Utils {
     }
 
     public static String getOverDetails(Over over) {
-        return over.getOverSummary().toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for(String str: over.getOverSummary()) {
+            stringBuilder.append(str);
+            stringBuilder.append(" ");
+        }
+        return stringBuilder.toString();
     }
 
     public static ArrayList<String> getAllFilesInDirectory(String directory) {

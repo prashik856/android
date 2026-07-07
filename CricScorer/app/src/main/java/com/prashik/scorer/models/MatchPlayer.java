@@ -15,6 +15,10 @@ public class MatchPlayer implements Serializable {
 
     public MatchPlayer(Player player) {
         this.player = player;
+        this.playerName = this.player.getFullName();
+        this.matchPlayerBatting = new MatchPlayerBatting();
+        this.matchPlayerBowling = new MatchPlayerBowling();
+        this.matchPlayerFielding = new MatchPlayerFielding();
     }
 
     public Player getPlayer() {
@@ -26,7 +30,7 @@ public class MatchPlayer implements Serializable {
     }
 
     public String getPlayerName() {
-        return playerName;
+        return this.playerName;
     }
 
     public void setPlayerName(String playerName) {

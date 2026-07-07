@@ -7,8 +7,210 @@
     android:layout_height="match_parent"
     tools:context=".activities.MatchInformationActivity">
 
+    <TextView
+        android:id="@+id/player_info_heading18"
+        android:layout_width="160dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:text="2nd Inning Bowling"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading16" />
+
+    <TextView
+        android:id="@+id/player_info_heading17"
+        android:layout_width="160dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="16dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:text="2nd Inning Batting"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading18"
+        app:layout_constraintHorizontal_bias="0.194"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading15" />
+
+    <TextView
+        android:id="@+id/player_info_heading16"
+        android:layout_width="160dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:text="1st Inning Bowling"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/match_summary_link" />
+
+    <TextView
+        android:id="@+id/player_info_heading15"
+        android:layout_width="160dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="20dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:text="1st Inning Batting"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading16"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/match_summary_link" />
+
+    <TextView
+        android:id="@+id/match_summary_link"
+        android:layout_width="120dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="24dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:text="Match Summary"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toss_summary_mi" />
+
+    <TextView
+        android:id="@+id/toss_summary_mi"
+        android:layout_width="370dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="16dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="team name"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.365"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/score_bowling_mi" />
+
+    <TextView
+        android:id="@+id/player_info_heading14"
+        android:layout_width="129dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="8dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="1st Innings"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/batting_team_mi"
+        app:layout_constraintHorizontal_bias="0.535"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/match_summary_mi" />
+
+    <TextView
+        android:id="@+id/score_batting_mi"
+        android:layout_width="370dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="12dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="score"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/batting_team_mi" />
+
+    <TextView
+        android:id="@+id/batting_team_mi"
+        android:layout_width="230dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="team name"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/match_summary_mi" />
+
+    <TextView
+        android:id="@+id/score_bowling_mi"
+        android:layout_width="370dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="12dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="score"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bowling_team_mi" />
+
+    <TextView
+        android:id="@+id/bowling_team_mi"
+        android:layout_width="230dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="team name"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/score_batting_mi" />
+
+    <TextView
+        android:id="@+id/player_info_heading11"
+        android:layout_width="129dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="24dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="2nd Innings"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/bowling_team_mi"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/score_batting_mi" />
+
     <Button
-        android:id="@+id/button10"
+        android:id="@+id/status_button_mi"
+        android:layout_width="95dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="cursive"
+        android:onClick="handleHomeClick"
+        android:text="Home"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view3" />
+
+    <Button
+        android:id="@+id/home_button"
         android:layout_width="77dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
@@ -19,7 +221,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/player_info_heading10"
-        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scorer_text_view3" />
 
@@ -28,13 +230,13 @@
         android:layout_width="177dp"
         android:layout_height="41dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="cursive"
         android:text="Match Information"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/status_button_mi"
         app:layout_constraintTop_toBottomOf="@+id/scorer_text_view3" />
 
     <TextView
@@ -51,4 +253,19 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/match_summary_mi"
+        android:layout_width="250dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="16dp"
+        android:background="#E7EBEF"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.426"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading10" />
 </androidx.constraintlayout.widget.ConstraintLayout>

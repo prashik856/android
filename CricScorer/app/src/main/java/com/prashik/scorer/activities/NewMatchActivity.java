@@ -72,7 +72,6 @@ public class NewMatchActivity extends AppCompatActivity {
         teamB = new Team(teamBName);
 
         match = new Match(teamA, teamB);
-        match.setDate();
 
         System.out.println("Team A Name: " + teamAName);
         System.out.println("Team B Name: " + teamBName);

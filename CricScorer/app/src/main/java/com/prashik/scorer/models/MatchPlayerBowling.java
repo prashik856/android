@@ -26,7 +26,7 @@ public class MatchPlayerBowling implements Serializable {
     private int legalDeliveriesBowled = 0;
     private int deliveriesBowled = 0;
     private int maidenOverBowled = 0;
-    ArrayList<int> overBowled = new ArrayList<>();
+    ArrayList<Integer> overBowled = new ArrayList<>();
     ArrayList<String> bowledPlayers = new ArrayList<>();
     ArrayList<String> wicketsTakenPlayers = new ArrayList<>();
     ArrayList<String> maidenBowledTo = new ArrayList<>();
@@ -265,15 +265,15 @@ public class MatchPlayerBowling implements Serializable {
         return maidenBowledTo;
     }
 
-    public void setMaidenBowledTo(ArrayList<String> maidenBowled) {
-        this.maidenBowledTo = maidenBowledTo;
+    public void setMaidenBowledTo(ArrayList<String> arr) {
+        this.maidenBowledTo = arr;
     }
 
     public void addToMaidenOverBowledTo(String playerName) {
         this.maidenBowledTo.add(playerName);
     }
 
-    public ArrayList<int> getOverBowled() {
+    public ArrayList<Integer> getOverBowled() {
         return overBowled;
     }
 
@@ -281,7 +281,7 @@ public class MatchPlayerBowling implements Serializable {
         this.overBowled.add(index);
     }
 
-    public void setOverBowled(ArrayList<int> overBowled) {
+    public void setOverBowled(ArrayList<Integer> overBowled) {
         this.overBowled = overBowled;
     }
 

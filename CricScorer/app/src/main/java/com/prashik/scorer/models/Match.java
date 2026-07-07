@@ -18,6 +18,7 @@ public class Match implements Serializable {
     private Team teamA;
     private Team teamB;
     private String date;
+    private long startTime;
     private boolean teamAToss = false;
     private boolean teamABatFirst = false;
     private boolean teamBToss = false;
@@ -36,10 +37,14 @@ public class Match implements Serializable {
     private String battingTeamName = "";
     private String bowlingTeamName = "";
 
+    private String result = "";
+
     public Match(Team team1, Team team2) {
         this.teamA = team1;
         this.teamB = team2;
         this.id = UUID.randomUUID().toString();
+        setCurrentDate();
+        setCurrentTime();
     }
 
     public Team getTeamA() {
@@ -60,7 +65,7 @@ public class Match implements Serializable {
     public String getDate() {
         return date;
     }
-    public void setDate() {
+    public void setCurrentDate() {
         Date temp = new Date();
         this.date = new SimpleDateFormat("yyyy-MM-dd").format(temp);
     }
@@ -211,6 +216,37 @@ public class Match implements Serializable {
 
     public void setBowlingTeamName(String bowlingTeamName) {
         this.bowlingTeamName = bowlingTeamName;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setCurrentTime() {
+        this.setStartTime(new Date().getTime());
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public void updateResult() {
+        if(this.isCompleted()) {
+            // tied
+            if(this.teamA.getRuns() == this.teamB.getRuns()) {
+                this.result = "Match Tied";
+            }
+
+
+        }
     }
 
     public void setBattingAndBowlingTeamNames() {
