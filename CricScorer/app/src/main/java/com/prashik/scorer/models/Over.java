@@ -21,6 +21,7 @@ public class Over implements Serializable {
     private int runs = 0;
     private boolean maiden = false;
     private boolean overCompleted = false;
+    private int wickets = 0;
 
     public Over(int matchOverId) {
         this.matchOverId = matchOverId;
@@ -152,7 +153,6 @@ public class Over implements Serializable {
         this.runs = this.runs + 7;
     }
 
-
     public void setRuns(int runs) {
         this.runs = runs;
     }
@@ -163,6 +163,18 @@ public class Over implements Serializable {
 
     public void setMaiden(boolean maiden) {
         this.maiden = maiden;
+    }
+
+    public int getWickets() {
+        return wickets;
+    }
+
+    public void setWickets(int wickets) {
+        this.wickets = wickets;
+    }
+
+    public void incrementWickets() {
+        this.wickets = this.wickets + 1;
     }
 
     public void updateMainden() {
@@ -192,7 +204,10 @@ public class Over implements Serializable {
                 ", byes=" + byes +
                 ", dots=" + dots +
                 ", extras=" + extras +
+                ", runs=" + runs +
+                ", maiden=" + maiden +
                 ", overCompleted=" + overCompleted +
+                ", wickets=" + wickets +
                 '}';
     }
 }

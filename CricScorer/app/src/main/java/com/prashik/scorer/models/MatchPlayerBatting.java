@@ -177,6 +177,30 @@ public class MatchPlayerBatting implements Serializable {
         this.dotsPlayed = dotsPlayed;
     }
 
+    public String getCoughtBy() {
+        return coughtBy;
+    }
+
+    public void setCoughtBy(String coughtBy) {
+        this.coughtBy = coughtBy;
+    }
+
+    public String getBowledBy() {
+        return bowledBy;
+    }
+
+    public void setBowledBy(String bowledBy) {
+        this.bowledBy = bowledBy;
+    }
+
+    public String getRunOutBy() {
+        return runOutBy;
+    }
+
+    public void setRunOutBy(String runOutBy) {
+        this.runOutBy = runOutBy;
+    }
+
     public void updateStrikeRate() {
         if(this.ballsPlayed > 0) {
             this.strikeRate = ((double) this.runsScored /this.ballsPlayed) * 100;

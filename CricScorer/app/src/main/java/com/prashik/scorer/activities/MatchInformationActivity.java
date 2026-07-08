@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.prashik.scorer.MainActivity;
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
+import com.prashik.scorer.util.Utils;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
 public class MatchInformationActivity extends AppCompatActivity {
     Match match;
+    HashMap<String, String> dataFilesMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +31,70 @@ public class MatchInformationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_match_information);
 
+        this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
 
         // set done or resume
         Button button = findViewById(R.id.status_button_mi);
+        TextView textView = findViewById(R.id.match_summary_mi);
         if(this.match.isCompleted()) {
             button.setText("Done");
+            textView.setText(this.match.getResult());
         } else {
             button.setText("Resume");
+            textView.setText("Match is incomplete.");
         }
 
+        TextView battingTeam = findViewById(R.id.batting_team_mi);
+        TextView bowlingTeam = findViewById(R.id.bowling_team_mi);
+        TextView firstInningsScore = findViewById(R.id.score_batting_mi);
+        TextView secondInningsScore = findViewById(R.id.score_bowling_mi);
+        if(this.match.isTeamABatFirst()) {
+            System.out.println("Team A batting in first innings.");
+            battingTeam.setText(this.match.getTeamA().getName());
+            bowlingTeam.setText(this.match.getTeamB().getName());
+
+            String score = Utils.getScore(this.match.getTeamA());
+            double runRate = this.match.getTeamA().getRunRate();
+            String overs = Utils.getOvers(this.match.getTeamB(),
+                    this.match.getTeamB().getCurrentOverObject(), this.match);
+            System.out.println(String.format("First innings score %s, runrate %.2f and overs %s",
+                    score, runRate, overs));
+
+            firstInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
+
+            score = Utils.getScore(this.match.getTeamB());
+            runRate = this.match.getTeamB().getRunRate();
+            overs = Utils.getOvers(this.match.getTeamA(),
+                    this.match.getTeamA().getCurrentOverObject(), this.match);
+            System.out.println(String.format("Second innings score %s, runrate %.2f and overs %s",
+                    score, runRate, overs));
+            secondInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
+
+        } else {
+            System.out.println("Team B batting in first innings.");
+            battingTeam.setText(this.match.getTeamB().getName());
+            bowlingTeam.setText(this.match.getTeamA().getName());
+
+            String score = Utils.getScore(this.match.getTeamB());
+            double runRate = this.match.getTeamB().getRunRate();
+            String overs = Utils.getOvers(this.match.getTeamA(),
+                    this.match.getTeamA().getCurrentOverObject(), this.match);
+            firstInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
+            firstInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
+
+            score = Utils.getScore(this.match.getTeamA());
+            runRate = this.match.getTeamA().getRunRate();
+            overs = Utils.getOvers(this.match.getTeamB(),
+                    this.match.getTeamB().getCurrentOverObject(), this.match);
+            System.out.println(String.format("Second innings score %s, runrate %.2f and overs %s",
+                    score, runRate, overs));
+            secondInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
+        }
+
+        // toss summary
+        TextView tossSummary = findViewById(R.id.toss_summary_mi);
+        tossSummary.setText(this.match.getTossDecision());
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -47,6 +106,45 @@ public class MatchInformationActivity extends AppCompatActivity {
 
     public void handleHomeClick(View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleMatchSummaryClick(View view) {
+        System.out.println("Going to detailed match summary.");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleFirstInningsBattingClick(View view) {
+        System.out.println("Going to first innings batting summary.");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleFirstInningsBowlingClick(View view) {
+        System.out.println("Going to first innings bowling summary.");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleSecondInningsBattingClick(View view) {
+        System.out.println("Going to second innings batting summary");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleSecondInningsBowlingClick(View view) {
+        System.out.println("Going to second innings bowling summary");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleDoneOrResumeClick(View view) {
+        System.out.println("Going to match score activity for resuming match.");
+        Intent intent = new Intent(this, MatchScoreActivity.class);
+        intent.putExtra("resume_match", true);
+        intent.putExtra("match_object", this.match);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
         startActivity(intent);
     }
 }

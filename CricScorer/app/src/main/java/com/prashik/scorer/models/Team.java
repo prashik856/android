@@ -23,6 +23,7 @@ public class Team implements Serializable {
     private double runRate = 0;
     private int legalDeliveriesPlayed = 0;
     private int maxLegalDeliveries;
+    private ArrayList<Integer> fallOfWickets = new ArrayList<>();
 
     public Team(String name) {
         this.name = name;
@@ -96,6 +97,9 @@ public class Team implements Serializable {
 
     public int getWickets() {
         return wickets;
+    }
+    public void incrementWickets() {
+        this.wickets = this.wickets + 1;
     }
 
     public void setWickets(int wickets) {
@@ -200,6 +204,18 @@ public class Team implements Serializable {
         this.currentOverBatting = currentOverBatting;
     }
 
+    public ArrayList<Integer> getFallOfWickets() {
+        return fallOfWickets;
+    }
+
+    public void setFallOfWickets(ArrayList<Integer> fallOfWickets) {
+        this.fallOfWickets = fallOfWickets;
+    }
+
+    public void updateFallOfWickets() {
+        this.fallOfWickets.add(this.runs);
+    }
+
     public MatchPlayer getMatchPlayerFromName(String playerName) {
         for(MatchPlayer matchPlayer : this.teamPlayers) {
             if(matchPlayer.getPlayerName().equals(playerName)) {
@@ -219,11 +235,13 @@ public class Team implements Serializable {
     }
 
     public Over getCurrentOverObject() {
+        if(this.currentOverBowling == this.overs.size()) {
+            return this.overs.get(this.currentOverBowling - 1);
+        }
         return this.overs.get(this.getCurrentOverBowling());
     }
 
     @NonNull
-
     @Override
     public String toString() {
         return "Team{" +
@@ -242,6 +260,7 @@ public class Team implements Serializable {
                 ", runRate=" + runRate +
                 ", legalDeliveriesPlayed=" + legalDeliveriesPlayed +
                 ", maxLegalDeliveries=" + maxLegalDeliveries +
+                ", fallOfWickets=" + fallOfWickets +
                 '}';
     }
 }

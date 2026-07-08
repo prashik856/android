@@ -12,9 +12,9 @@ public class MatchPlayerBowling implements Serializable {
     private boolean bowled = false;
     private int wicketsTaken = 0;
     private double economy = 0;
-    private int twoFer = 0;
-    private int threeFer = 0;
-    private int fiveFer = 0;
+    private boolean twoFer = false;
+    private boolean threeFer = false;
+    private boolean fiveFer = false;
     private int foursConceded = 0;
     private int dotsConceded = 0;
     private int sixesConceded = 0;
@@ -51,46 +51,27 @@ public class MatchPlayerBowling implements Serializable {
         this.economy = economy;
     }
 
-    public int getTwoFer() {
+    public boolean isTwoFer() {
         return twoFer;
     }
-    public void incrementTwoFer() {
-        this.twoFer = this.twoFer + 1;
-    }
-    public void decrementTwoFer() {
-        if(this.twoFer > 0) {
-            this.twoFer = this.twoFer - 1;
-        }
-    }
 
-    public void setTwoFer(int twoFer) {
+    public void setTwoFer(boolean twoFer) {
         this.twoFer = twoFer;
     }
 
-    public int getThreeFer() {
+    public boolean isThreeFer() {
         return threeFer;
     }
-    public void incrementThreeFer() {
-        this.threeFer = this.threeFer + 1;
-    }
-    public void decrementThreeFer() {
-        if(this.threeFer > 0) {
-            this.threeFer = this.threeFer - 1;
-        }
-    }
 
-    public void setThreeFer(int threeFer) {
+    public void setThreeFer(boolean threeFer) {
         this.threeFer = threeFer;
     }
 
-    public int getFiveFer() {
+    public boolean isFiveFer() {
         return fiveFer;
     }
-    public void incrementFiveFer() {
-        this.fiveFer = this.fiveFer + 1;
-    }
 
-    public void setFiveFer(int fiveFer) {
+    public void setFiveFer(boolean fiveFer) {
         this.fiveFer = fiveFer;
     }
 
@@ -241,12 +222,20 @@ public class MatchPlayerBowling implements Serializable {
         this.bowledPlayers = bowledPlayers;
     }
 
+    public void addToBowledPlayers(String bowledPlayer) {
+        this.bowledPlayers.add(bowledPlayer);
+    }
+
     public ArrayList<String> getWicketsTakenPlayers() {
         return wicketsTakenPlayers;
     }
 
     public void setWicketsTakenPlayers(ArrayList<String> wicketsTakenPlayers) {
         this.wicketsTakenPlayers = wicketsTakenPlayers;
+    }
+
+    public void addToWicketsTakenPlayers(String wicketTakenPlayer) {
+        this.wicketsTakenPlayers.add(wicketTakenPlayer);
     }
 
     public int getMaidenOverBowled() {
@@ -291,6 +280,23 @@ public class MatchPlayerBowling implements Serializable {
             int ballsInNewOver = this.legalDeliveriesBowled % 6;
             double denominator = this.noOfOvers +  ((double)ballsInNewOver/6);
             this.economy = this.runsConceded/denominator;
+        }
+    }
+
+    public void updateRecords() {
+        if(this.wicketsTaken == 2) {
+            this.twoFer = true;
+        }
+
+        if(this.wicketsTaken == 3) {
+            this.twoFer = false;
+            this.threeFer = true;
+        }
+
+        if(this.wicketsTaken >= 5) {
+            this.fiveFer = true;
+            this.twoFer = false;
+            this.threeFer = false;
         }
     }
 

@@ -5,11 +5,9 @@ import androidx.annotation.NonNull;
 import com.prashik.scorer.util.Utils;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Match implements Serializable {
@@ -36,8 +34,9 @@ public class Match implements Serializable {
     private int innings = -1;
     private String battingTeamName = "";
     private String bowlingTeamName = "";
-
     private String result = "";
+
+    private ArrayList<String> activities = new ArrayList<>();
 
     public Match(Team team1, Team team2) {
         this.teamA = team1;
@@ -238,6 +237,18 @@ public class Match implements Serializable {
         this.result = result;
     }
 
+    public ArrayList<String> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(ArrayList<String> activities) {
+        this.activities = activities;
+    }
+
+    public void addToActivities(String activity) {
+        this.activities.add(activity);
+    }
+
     public void updateResult() {
         if(this.isCompleted()) {
             // tied
@@ -245,30 +256,63 @@ public class Match implements Serializable {
                 this.result = "Match Tied";
             }
 
-
+            // team a bat first
+            if(this.teamABatFirst) {
+                if(this.teamA.getRuns() > this.teamB.getRuns()) {
+                    // team a won
+                    int runDiff = this.teamA.getRuns() - this.teamB.getRuns();
+                    this.result = String.format("%s with captain %s won by %d runs.",
+                            this.teamA.getName(), this.teamA.getCaptainName(), runDiff);
+                }
+                else {
+                    // team b won
+                    int wicketsDiff = this.teamB.getMaxWickets() - this.teamB.getWickets();
+                    this.result = String.format("%s with captain %s won by %d wickets.",
+                            this.teamB.getName(), this.teamB.getCaptainName(), wicketsDiff);
+                }
+            } else {
+                // team b bat first
+                if(this.teamB.getRuns() > this.teamA.getRuns()) {
+                    // team b won
+                    int runDiff = this.teamB.getRuns() - this.teamA.getRuns();
+                    this.result = String.format("%s with captain %s won by %d runs.",
+                            this.teamB.getName(), this.teamB.getCaptainName(), runDiff);
+                } else {
+                    // team a won
+                    int wicketsDiff = this.teamA.getMaxWickets() - this.teamA.getWickets();
+                    this.result = String.format("%s with captain %s won by %d wickets.",
+                            this.teamA.getName(), this.teamA.getCaptainName(), wicketsDiff);
+                }
+            }
         }
     }
 
     public void setBattingAndBowlingTeamNames() {
         if(this.getInnings() == 1) {
             // first innings
+            System.out.println("This is first innings.");
             if(this.isTeamABatFirst()) {
                 // team A is batting
+                System.out.println("Team A batting and Team B bowling.");
                 this.battingTeamName = this.teamA.getName();
                 this.bowlingTeamName = this.teamB.getName();
             } else {
                 // team B is batting
+                System.out.println("Team B batting and Team A bowling.");
                 this.battingTeamName = this.teamB.getName();
                 this.bowlingTeamName = this.teamA.getName();
             }
         } else {
             // second innings
+            System.out.println("This is second innings.");
             if(this.isTeamABatFirst()) {
                 // team B is batting
+                System.out.println("Team B batting and Team A bowling.");
                 this.battingTeamName = this.teamB.getName();
                 this.bowlingTeamName = this.teamA.getName();
             } else {
                 // team A is batting
+                System.out.println("Team A batting and Team B bowling.");
                 this.battingTeamName = this.teamA.getName();
                 this.bowlingTeamName = this.teamB.getName();
             }

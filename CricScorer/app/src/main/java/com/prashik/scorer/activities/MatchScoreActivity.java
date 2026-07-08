@@ -40,29 +40,40 @@ public class MatchScoreActivity extends AppCompatActivity {
     MatchPlayer bowler;
     Over currentOver;
 
+    boolean resumeMatch = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_match_score);
 
+        this.resumeMatch = getIntent().getSerializableExtra("resume_match") != null;
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
         this.filesDirectory = this.dataFilesMap.get("files_directory");
 
-        // Check if this match already exists
-        boolean alreadyExists = Utils.isMatchAlreadyExists(this.filesDirectory, this.match);
-        if(alreadyExists) {
-            Toast.makeText(this, "The match with similar details already exists. Please edit the existing match or delete that match first.", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        if(!resumeMatch) {
+            System.out.println("This is the first time we are playing this match.");
+            // Check if this match already exists
+            boolean alreadyExists = Utils.isMatchAlreadyExists(this.filesDirectory, this.match);
+            if(alreadyExists) {
+                Toast.makeText(this, "The match with similar details already exists. Please edit the existing match or delete that match first.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                String matchDataFile = this.match.getDataFileName(this.filesDirectory);
+                System.out.println("Match Data File Name: " + matchDataFile);
+                // match file name is always going to be unique due to uuid
+                Utils.createFile(matchDataFile);
+            }
         } else {
-            String matchDataFile = this.match.getDataFileName(this.filesDirectory);
-            System.out.println("Match Data File Name: " + matchDataFile);
-            // match file name is always going to be unique due to uuid
-            Utils.createFile(matchDataFile);
+            System.out.println("Resuming match.");
         }
+
         setBattingAndBowlingTeams();
+        System.out.println("Batting team: " + this.battingTeam.getName());
+        System.out.println("Bowling team: " + this.bowlingTeam.getName());
 
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
@@ -78,11 +89,11 @@ public class MatchScoreActivity extends AppCompatActivity {
         System.out.println("Match Object: ");
         System.out.println(this.match);
 
-        this.updateScore();
-
         this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getStrikerBatsman());
         this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getNonStrikeBatsman());
         this.bowler = this.bowlingTeam.getMatchPlayerFromName(this.match.getCurrentBowler());
+
+        this.updateScore();
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -132,12 +143,16 @@ public class MatchScoreActivity extends AppCompatActivity {
         // show striker
         TextView strikerName = findViewById(R.id.striker_name_ms);
         String[] strikePlayerSplit = this.match.getStrikerBatsman().split(" ");
-        String strikerNameToDisplay = strikePlayerSplit[0] + " " + "0(0)";
+        String runsScored = Integer.toString(this.strikerBatsman.getMatchPlayerBatting().getRunsScored());
+        String ballsPlayed = Integer.toString(this.strikerBatsman.getMatchPlayerBatting().getBallsPlayed());
+        String strikerNameToDisplay = strikePlayerSplit[0] + " " + runsScored + "(" + ballsPlayed + ")";
         strikerName.setText(strikerNameToDisplay);
 
         // show non striker
         String[] nonStrikePlayerSplit = this.match.getNonStrikeBatsman().split(" ");
-        String nonStrikerNameToDisplay = nonStrikePlayerSplit[0] + " " + "0(0)";
+        runsScored = Integer.toString(this.nonStrikeBatsman.getMatchPlayerBatting().getRunsScored());
+        ballsPlayed = Integer.toString(this.nonStrikeBatsman.getMatchPlayerBatting().getBallsPlayed());
+        String nonStrikerNameToDisplay = nonStrikePlayerSplit[0] + " " + runsScored + "(" + ballsPlayed + ")";
         TextView nonStrikerName = findViewById(R.id.non_striker_name_ms);
         nonStrikerName.setText(nonStrikerNameToDisplay);
 
@@ -156,8 +171,20 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void setBattingAndBowlingTeams() {
-        this.battingTeam = this.match.getBattingAndBowlingTeams().get(0);
-        this.bowlingTeam = this.match.getBattingAndBowlingTeams().get(1);
+        this.battingTeam = this.match.getBattingTeam();
+        this.bowlingTeam = this.match.getBowlingTeam();
+    }
+
+    public void rotateStrike() {
+        // basic
+        String temp1 = this.match.getStrikerBatsman();
+        String temp2 = this.match.getNonStrikeBatsman();
+        this.match.setStrikerBatsman(temp2);
+        this.match.setNonStrikeBatsman(temp1);
+
+        MatchPlayer temp3 = this.strikerBatsman;
+        this.strikerBatsman = this.nonStrikeBatsman;
+        this.nonStrikeBatsman = temp3;
     }
 
     public void handleHomeClick(View view) {
@@ -205,6 +232,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             }
         }
 
+        this.match.addToActivities("0");
         this.updateScore();
         this.syncMatch();
     }
@@ -245,6 +273,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.battingTeam.incrementCurrentOverBatting();
         }
 
+        this.rotateStrike();
+        this.match.addToActivities("1");
         this.updateScore();
         this.syncMatch();
     }
@@ -256,7 +286,12 @@ public class MatchScoreActivity extends AppCompatActivity {
             return;
         }
 
-        // add two
+        // update team score
+        this.battingTeam.addTwoToRuns();
+        this.battingTeam.incrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        // update batsmen score
         this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("2");
         this.strikerBatsman.getMatchPlayerBatting().addTwoToRunsScored();
         this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
@@ -266,10 +301,10 @@ public class MatchScoreActivity extends AppCompatActivity {
         // Update the over
         this.currentOver.getOverSummary().add("2");
         this.currentOver.incrementLegalDeliveries();
-        this.currentOver.incrementRuns();
+        this.currentOver.addTwoToRuns();
         this.currentOver.updateOverCompleted();
 
-        // Add single run info to current bowler
+        // Update bowler runs
         this.bowler.getMatchPlayerBowling().addTwoToRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -278,66 +313,268 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
         }
 
+        this.match.addToActivities("2");
         this.updateScore();
         this.syncMatch();
     }
 
     public void handleThreeClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // update team score
+        this.battingTeam.addThreeToRuns();
+        this.battingTeam.incrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("3");
+        this.strikerBatsman.getMatchPlayerBatting().addThreeToRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // Update the over
+        this.currentOver.getOverSummary().add("3");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.addThreeToRuns();
+        this.currentOver.updateOverCompleted();
+
+        // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addThreeToRunsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+        }
+
+        this.match.addToActivities("3");
+        this.rotateStrike();
+        this.updateScore();
+        this.syncMatch();
     }
 
     public void handleFourClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // update team score
+        this.battingTeam.addFourToRuns();
+        this.battingTeam.incrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("4");
+        this.strikerBatsman.getMatchPlayerBatting().addFourToRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // Update the over
+        this.currentOver.getOverSummary().add("4");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.addFourToRuns();
+        this.currentOver.updateOverCompleted();
+
+        // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addFourToRunsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+        }
+
+        this.match.addToActivities("4");
+        this.updateScore();
+        this.syncMatch();
     }
 
     public void handleFiveClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // update team score
+        this.battingTeam.addFiveToRuns();
+        this.battingTeam.incrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("5");
+        this.strikerBatsman.getMatchPlayerBatting().addFiveToRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // Update the over
+        this.currentOver.getOverSummary().add("5");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.addFiveToRuns();
+        this.currentOver.updateOverCompleted();
+
+        // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addFiveToRunsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+        }
+
+        this.match.addToActivities("5");
+        this.rotateStrike();
+        this.updateScore();
+        this.syncMatch();
     }
 
     public void handleSixClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // update team score
+        this.battingTeam.addSixToRuns();
+        this.battingTeam.incrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("6");
+        this.strikerBatsman.getMatchPlayerBatting().addSixToRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // Update the over
+        this.currentOver.getOverSummary().add("6");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.addSixToRuns();
+        this.currentOver.updateOverCompleted();
+
+        // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addSixToRunsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+        }
+
+        this.match.addToActivities("6");
+        this.updateScore();
+        this.syncMatch();
     }
 
     public void handleRotateStrikeClick(View view) {
         // basic
-        String temp1 = this.match.getStrikerBatsman();
-        String temp2 = this.match.getNonStrikeBatsman();
-        this.match.setStrikerBatsman(temp2);
-        this.match.setNonStrikeBatsman(temp1);
-
-        MatchPlayer temp3 = this.strikerBatsman;
-        this.strikerBatsman = this.nonStrikeBatsman;
-        this.nonStrikeBatsman = temp3;
-
+        rotateStrike();
+        this.match.addToActivities("RotateStrike");
         this.syncMatch();
     }
 
-
-
     public void handleUndoClick(View view) {
-
+        // TODO: This needs to be implemented properly and later
     }
 
 
 
     public void handleWideBallClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // TODO: need options to select how many more runs were scored with this
 
     }
 
     public void handleNoBallClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // TODO: need option to again see runs scored
     }
 
     public void handleEditOversClick(View view) {
-
+        // TODO: this will be handled later
     }
 
     public void handleByeClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // TODO: give option to select runs scored
     }
 
     public void handleBowledClick(View view) {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        // update team score
+        this.battingTeam.incrementWickets();
+        this.battingTeam.incrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+        this.battingTeam.updateFallOfWickets();
+
+        // update batsman score
+        this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+        this.strikerBatsman.getMatchPlayerBatting().setOut(true);
+        this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("Out");
+        this.strikerBatsman.getMatchPlayerBatting().setBowledBy(this.match.getCurrentBowler());
+
+        // update over
+        this.currentOver.getOverSummary().add("Out");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.incrementDotBalls();
+        this.currentOver.incrementWickets();
+        this.currentOver.updateOverCompleted();
+
+        // update bowling record
+        this.bowler.getMatchPlayerBowling().incrementWicketsTaken();
+        this.bowler.getMatchPlayerBowling().incrementDotsConceded();
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        if(this.currentOver.isOverCompleted()) {
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+            if(this.currentOver.isMaiden()) {
+                this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
+                this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
+                        this.match.getStrikerBatsman());
+            }
+        }
+        this.bowler.getMatchPlayerBowling().updateRecords();
+        this.bowler.getMatchPlayerBowling().addToBowledPlayers(this.match.getStrikerBatsman());
+        this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
+
+        this.match.addToActivities("Out");
+        // TODO: handle selection of the new batsman here
+
+        this.updateScore();
+        this.syncMatch();
     }
 
     public void handleCaughtClick(View view) {

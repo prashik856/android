@@ -102,6 +102,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
 
         // push match object
         Intent intent = new Intent(this, MatchInformationActivity.class);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", match);
         startActivity(intent);
     }

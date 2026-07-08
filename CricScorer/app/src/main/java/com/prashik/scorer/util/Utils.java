@@ -305,9 +305,18 @@ public class Utils {
     }
 
     public static String getOvers(Team team, Over over, Match match) {
+        if(over == null) {
+            System.out.println("Didn't receive over object. I will assume that the team didn't even bowl.");
+            return "0.0/" + match.getMaxOvers();
+        }
+
+        String balls = "0";
+        if(over.getLegalDeliveries() != 6) {
+            balls = Integer.toString(over.getLegalDeliveries());
+        }
         return team.getCurrentOverBowling() +
                 "." +
-                over.getLegalDeliveries() +
+                balls +
                 "/" +
                 match.getMaxOvers();
     }

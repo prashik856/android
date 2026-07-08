@@ -152,9 +152,8 @@ public class SelectOpenersActivity extends AppCompatActivity {
         this.match.setNonStrikeBatsman(openers.get(1));
         this.match.setCurrentBowler(bowler);
 
-        ArrayList<Team> teams = this.match.getBattingAndBowlingTeams();
-        Team battingTeam = teams.get(0);
-        Team bowlingTeam = teams.get(1);
+        Team battingTeam = this.match.getBattingTeam();
+        Team bowlingTeam = this.match.getBowlingTeam();
 
         System.out.println("Batting team: " + battingTeam.toString());
         System.out.println("Bowling team: " + bowlingTeam.toString());
@@ -181,9 +180,6 @@ public class SelectOpenersActivity extends AppCompatActivity {
         this.match.setStrikerBatsmanIndex(strikerIndex);
         this.match.setNonStrikerBatsmanIndex(nonStrikerIndex);
         this.match.setCurrentBowlerIndex(bowlerIndex);
-
-        // set innings
-        this.match.setInnings(1);
 
         System.out.println("Striker: " + this.match.getStrikerBatsman());
         System.out.println("Non Striker: " + this.match.getNonStrikeBatsman());

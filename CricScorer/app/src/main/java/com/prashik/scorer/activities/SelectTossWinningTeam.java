@@ -104,6 +104,7 @@ public class SelectTossWinningTeam extends AppCompatActivity {
                 this.match.setTeamAToss(true);
                 this.match.setTeamBToss(false);
                 this.match.setTossDecision(this.match.getTeamA().getName() + " won the toss and chose to " + chosenAnswer);
+                System.out.println(this.match.getTossDecision());
                 if(selectedAnswer == 0) {
                     this.match.setTeamABatFirst(true);
                     this.match.setTeamBBatFirst(false);
@@ -111,10 +112,8 @@ public class SelectTossWinningTeam extends AppCompatActivity {
                     this.match.setTeamBBatFirst(true);
                     this.match.setTeamABatFirst(false);
                 }
-                this.match.setBattingAndBowlingTeamNames();
-                System.out.println(this.match.getTeamA().getName() + " won the toss and chose to " + chosenAnswer);
                 System.out.println("Team A Bat First: " + this.match.isTeamABatFirst());
-                System.out.println("Team B Bat First " + this.match.isTeamBBatFirst());
+                System.out.println("Team B Bat First: " + this.match.isTeamBBatFirst());
 
                 Intent intent = new Intent(this, MatchPropertiesActivity.class);
                 intent.putExtra("data_files_hashmap", dataFilesMap);
@@ -163,7 +162,6 @@ public class SelectTossWinningTeam extends AppCompatActivity {
                     this.match.setTeamABatFirst(true);
                     this.match.setTeamBBatFirst(false);
                 }
-                this.match.setBattingAndBowlingTeamNames();
                 System.out.println(this.match.getTeamB().getName() + " won the toss and chose to " + chosenAnswer);
                 System.out.println("Team A Bat First: " + this.match.isTeamABatFirst());
                 System.out.println("Team B Bat First " + this.match.isTeamBBatFirst());

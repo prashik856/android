@@ -57,6 +57,8 @@ public class MatchPropertiesActivity extends AppCompatActivity {
         this.match.getTeamA().setOvers(maxOvers);
         this.match.getTeamB().setOvers(maxOvers);
 
+        // set innings
+        this.match.setInnings(1);
         this.match.setBattingAndBowlingTeamNames();
 
         System.out.println("Both team objects after setting max overs: ");
