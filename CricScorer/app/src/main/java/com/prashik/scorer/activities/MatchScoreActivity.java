@@ -1,5 +1,7 @@
 package com.prashik.scorer.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,8 @@ import com.prashik.scorer.models.Player;
 import com.prashik.scorer.models.Team;
 import com.prashik.scorer.util.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MatchScoreActivity extends AppCompatActivity {
@@ -39,8 +43,9 @@ public class MatchScoreActivity extends AppCompatActivity {
     MatchPlayer nonStrikeBatsman;
     MatchPlayer bowler;
     Over currentOver;
-
     boolean resumeMatch = false;
+    String[] runsOptions = {"0", "1", "2", "3", "4", "5", "6"};
+    int runsScoredOnBadDelivery = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getStrikerBatsman());
         this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getNonStrikeBatsman());
         this.bowler = this.bowlingTeam.getMatchPlayerFromName(this.match.getCurrentBowler());
+        this.currentOver = this.bowlingTeam.getCurrentOverObject();
 
         this.updateScore();
 
@@ -114,7 +120,6 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void updateScore() {
-        this.currentOver = this.bowlingTeam.getCurrentOverObject();
         TextView teamNameText = findViewById(R.id.team_name_ms);
         TextView runsAndWicketsText = findViewById(R.id.score_value_ms);
         TextView oversText = findViewById(R.id.overs_value_ms);
@@ -123,8 +128,12 @@ public class MatchScoreActivity extends AppCompatActivity {
         String name = this.battingTeam.getName();
         double runRate = this.battingTeam.getRunRate();
         String score = Utils.getScore(this.battingTeam);
-        String overs = Utils.getOvers(this.bowlingTeam, this.currentOver, this.match);
+        String overs = Utils.getOvers(this.battingTeam, this.match);
         String overDetails = Utils.getOverDetails(this.currentOver);
+        String inningsValue = "1st Innings";
+        if(this.match.getInnings() != 1) {
+
+        }
 
         // show batting team name
         teamNameText.setText(name);
@@ -221,16 +230,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-            this.bowlingTeam.incrementCurrentOverBowling();
-            this.battingTeam.incrementCurrentOverBatting();
-            if(this.currentOver.isMaiden()) {
-                this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
-                this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
-                        this.match.getStrikerBatsman());
-            }
-        }
 
         this.match.addToActivities("0");
         this.updateScore();
@@ -267,11 +266,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-            this.bowlingTeam.incrementCurrentOverBowling();
-            this.battingTeam.incrementCurrentOverBatting();
-        }
 
         this.rotateStrike();
         this.match.addToActivities("1");
@@ -309,9 +303,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-        }
 
         this.match.addToActivities("2");
         this.updateScore();
@@ -348,9 +339,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-        }
 
         this.match.addToActivities("3");
         this.rotateStrike();
@@ -388,9 +376,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-        }
 
         this.match.addToActivities("4");
         this.updateScore();
@@ -427,9 +412,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-        }
 
         this.match.addToActivities("5");
         this.rotateStrike();
@@ -467,13 +449,186 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-        }
 
         this.match.addToActivities("6");
         this.updateScore();
         this.syncMatch();
+    }
+
+    public void handleOverCompleteClick(View view) {
+        if(!this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "You cannot end the over without bowling 6 legal deliveries."
+                    , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        System.out.println("Over completed. Updating records");
+        // update records after over is completed
+        this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+        this.bowlingTeam.incrementCurrentOverBowling();
+        this.battingTeam.incrementCurrentOverBatting();
+        if(this.currentOver.isMaiden()) {
+            System.out.println("A Maiden over was bowled.");
+            this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
+            this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
+                    this.match.getStrikerBatsman());
+        }
+
+        // Over is now completed. Check if innings is completed
+        if(this.battingTeam.isBattingInningsCompleted()) {
+            if(this.match.getInnings() == 1) {
+                System.out.println("First Innings Completed. Start the second innings now.");
+
+                // Open a new dialogue box here to ask to start second innings.
+                AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                builder.setTitle("Start second innings?");
+                builder.setCancelable(false);
+
+                String[] options = {"Yes", "No"};
+                final int[] optionSelected = {-1};
+
+                builder.setSingleChoiceItems(options, optionSelected[0],
+                        (dialog, which) -> optionSelected[0] = which);
+
+                builder.setPositiveButton("Ok", (dialog, which) -> {
+                    if(optionSelected[0] == -1) {
+                        Toast.makeText(this, "Select Yes to start a the new innings.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    String answer = options[optionSelected[0]];
+                    System.out.println("Option selected is: " + answer);
+
+                    if(answer.equals("Yes")) {
+                        // update innings
+                        this.match.setInnings(2);
+                        // update bowling and batting teams
+                        this.match.setBattingAndBowlingTeamNames();
+                        this.syncMatch();
+
+                        System.out.println("Go to the screen to select the new openors for second innings.");
+                        System.out.println("Opening Select Openers Activity");
+                        Intent intent = new Intent(this, SelectOpenersActivity.class);
+                        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+                        intent.putExtra("match_object", this.match);
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+                builder.setNeutralButton("Clear", (dialog, which) -> {
+                    optionSelected[0] = -1;
+                });
+
+                builder.show();
+            }
+
+            if(this.match.getInnings() == 2) {
+                System.out.println("Second Innings Completed. Match is finished.");
+                // Open a new dialogue box here to ask to end the match.
+                AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                builder.setTitle("End the match?");
+                builder.setCancelable(false);
+
+                String[] options = {"Yes", "No"};
+                final int[] optionSelected = {-1};
+
+                builder.setSingleChoiceItems(options, optionSelected[0],
+                        (dialog, which) -> optionSelected[0] = which);
+
+                builder.setPositiveButton("Ok", (dialog, which) -> {
+                    if(optionSelected[0] == -1) {
+                        Toast.makeText(this, "Select Yes to end the match.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    String answer = options[optionSelected[0]];
+                    System.out.println("Option selected is: " + answer);
+
+                    if(answer.equals("Yes")) {
+                        this.match.setCompleted(true);
+                        this.match.updateResult();
+                        this.syncMatch();
+
+                        System.out.println("Go to match information.");
+                        Intent intent = new Intent(this, MatchInformationActivity.class);
+                        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+                        intent.putExtra("match_object", match);
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+                builder.setNeutralButton("Clear", (dialog, which) -> {
+                    optionSelected[0] = -1;
+                });
+
+                builder.show();
+            }
+        } else {
+            System.out.println("Open the screen to select the new bowler.");
+            AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+            builder.setTitle("Select Bowler.");
+            builder.setCancelable(false);
+
+            ArrayList<String> temp = new ArrayList<>();
+            for(String str: this.bowlingTeam.getPlayerNames()) {
+                if(!str.equals(this.bowler.getPlayerName())) {
+                    temp.add(str);
+                }
+            }
+            String[] bowlerOptions = temp.toArray(new String[0]);
+            System.out.println("Bowler options: " + Arrays.toString(bowlerOptions));
+
+            final int[] bowlerSelected = {-1};
+            builder.setSingleChoiceItems(bowlerOptions, bowlerSelected[0],
+                    (dialog, which) -> bowlerSelected[0] = which);
+
+            builder.setPositiveButton("Ok", (dialog, which) -> {
+                if(bowlerSelected[0] == -1) {
+                    Toast.makeText(this, "You need to select a new bowler.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // else, we now have the new bowler selected.
+                String newBowler = bowlerOptions[bowlerSelected[0]];
+                System.out.println("Bowler to bowl the new over is: " + newBowler);
+                this.match.setCurrentBowler(newBowler);
+
+                int bowlerIndex = this.bowlingTeam.getMatchPlayerIndex(newBowler);
+                this.match.setCurrentBowlerIndex(bowlerIndex);
+                this.bowler = this.bowlingTeam.getTeamPlayers().get(bowlerIndex);
+                this.bowler.getMatchPlayerBowling().setBowled(true);
+                this.bowler.getMatchPlayerBowling().addToOverBowled(this.bowlingTeam.getCurrentOverBowling());
+
+                this.currentOver = this.bowlingTeam.getCurrentOverObject();
+                this.currentOver.setPlayerName(this.bowler.getPlayerName());
+                System.out.println("New Over Object: " + this.currentOver.toString());
+
+                // add over complete to match activities
+                this.match.addToActivities("OverComplete");
+
+                // rotate strike
+                this.rotateStrike();
+                this.updateScore();
+                this.syncMatch();
+
+                System.out.println("New Bowler Selected is: " + bowlerOptions[bowlerSelected[0]]);
+            });
+
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+            builder.setNeutralButton("Clear", (dialog, which) -> {
+                bowlerSelected[0] = -1;
+            });
+
+            builder.show();
+
+            if(bowlerSelected[0] == -1) {
+                Toast.makeText(this, "You need to select a new bowler.", Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 
     public void handleRotateStrikeClick(View view) {
@@ -487,17 +642,75 @@ public class MatchScoreActivity extends AppCompatActivity {
         // TODO: This needs to be implemented properly and later
     }
 
-
-
     public void handleWideBallClick(View view) {
         if(this.currentOver.isOverCompleted()) {
             Toast.makeText(this, "Over is completed. Please start a new over.",
                     Toast.LENGTH_LONG).show();
             return;
         }
+        int runsScoredOnWideBall = -1;
 
-        // TODO: need options to select how many more runs were scored with this
+        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+        builder.setTitle("Runs scored on wide ball?");
+        builder.setCancelable(false);
 
+        builder.setSingleChoiceItems(runsOptions, runsScoredOnBadDelivery,
+                (dialog, which) -> runsScoredOnBadDelivery = Integer.parseInt(runsOptions[which]));
+
+        builder.setPositiveButton("Ok", (dialog, which) -> {
+            if(runsScoredOnBadDelivery == -1) {
+                Toast.makeText(this, "You need to select runs scored on wide ball.", Toast.LENGTH_LONG).show();
+            }
+            System.out.println("Runs scored on bad delivery: " + runsScoredOnBadDelivery);
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        builder.setNeutralButton("Clear", (dialog, which) -> {
+            runsScoredOnBadDelivery = -1;
+        });
+
+        builder.show();
+
+        if(runsScoredOnBadDelivery == -1) {
+            Toast.makeText(this, "You need to select runs scored on wide ball.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        runsScoredOnWideBall = this.runsScoredOnBadDelivery + 1;
+        System.out.println("Runs scored on wide ball: " + runsScoredOnWideBall);
+
+        // update team score
+        this.battingTeam.setRuns(this.battingTeam.getRuns() + runsScoredOnWideBall);
+        this.battingTeam.updateRunRate();
+
+        // wide ball runs will not go to the batsman
+
+        // Update the over
+        String activityValue = this.runsScoredOnBadDelivery + "WD";
+        this.currentOver.getOverSummary().add(activityValue);
+        this.currentOver.incrementWides();
+        this.currentOver.setExtras(this.currentOver.getExtras() + runsScoredOnWideBall);
+        this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnWideBall);
+
+        // update bowler runs
+        this.bowler.getMatchPlayerBowling().setRunsConceded(
+                this.bowler.getMatchPlayerBowling().getRunsConceded() + runsScoredOnWideBall);
+        this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().incrementWides();
+        this.bowler.getMatchPlayerBowling().setExtrasConceded(
+                this.bowler.getMatchPlayerBowling().getExtrasConceded() + runsScoredOnWideBall
+        );
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+
+        this.match.addToActivities(activityValue);
+        if(this.runsScoredOnBadDelivery % 2 == 1) {
+            rotateStrike();
+        }
+        this.runsScoredOnBadDelivery = -1;
+        this.updateScore();
+        this.syncMatch();
     }
 
     public void handleNoBallClick(View view) {
@@ -558,14 +771,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-        if(this.currentOver.isOverCompleted()) {
-            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-            if(this.currentOver.isMaiden()) {
-                this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
-                this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
-                        this.match.getStrikerBatsman());
-            }
-        }
         this.bowler.getMatchPlayerBowling().updateRecords();
         this.bowler.getMatchPlayerBowling().addToBowledPlayers(this.match.getStrikerBatsman());
         this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());

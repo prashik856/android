@@ -304,21 +304,10 @@ public class Utils {
                 team.getWickets();
     }
 
-    public static String getOvers(Team team, Over over, Match match) {
-        if(over == null) {
-            System.out.println("Didn't receive over object. I will assume that the team didn't even bowl.");
-            return "0.0/" + match.getMaxOvers();
-        }
-
-        String balls = "0";
-        if(over.getLegalDeliveries() != 6) {
-            balls = Integer.toString(over.getLegalDeliveries());
-        }
-        return team.getCurrentOverBowling() +
-                "." +
-                balls +
-                "/" +
-                match.getMaxOvers();
+    public static String getOvers(Team team, Match match) {
+        int overs = team.getLegalDeliveriesPlayed() / 6;
+        int balls = team.getLegalDeliveriesPlayed() % 6;
+        return overs + "." + balls + "/" + match.getMaxOvers();
     }
 
     public static String getOverDetails(Over over) {

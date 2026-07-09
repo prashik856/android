@@ -241,6 +241,10 @@ public class Team implements Serializable {
         return this.overs.get(this.getCurrentOverBowling());
     }
 
+    public boolean isBattingInningsCompleted() {
+        return this.legalDeliveriesPlayed == this.overs.size() * 6 || this.wickets == this.maxWickets;
+    }
+
     @NonNull
     @Override
     public String toString() {

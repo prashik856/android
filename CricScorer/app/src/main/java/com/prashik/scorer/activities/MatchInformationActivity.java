@@ -56,8 +56,7 @@ public class MatchInformationActivity extends AppCompatActivity {
 
             String score = Utils.getScore(this.match.getTeamA());
             double runRate = this.match.getTeamA().getRunRate();
-            String overs = Utils.getOvers(this.match.getTeamB(),
-                    this.match.getTeamB().getCurrentOverObject(), this.match);
+            String overs = Utils.getOvers(this.match.getTeamA(), this.match);
             System.out.println(String.format("First innings score %s, runrate %.2f and overs %s",
                     score, runRate, overs));
 
@@ -65,8 +64,7 @@ public class MatchInformationActivity extends AppCompatActivity {
 
             score = Utils.getScore(this.match.getTeamB());
             runRate = this.match.getTeamB().getRunRate();
-            overs = Utils.getOvers(this.match.getTeamA(),
-                    this.match.getTeamA().getCurrentOverObject(), this.match);
+            overs = Utils.getOvers(this.match.getTeamB(), this.match);
             System.out.println(String.format("Second innings score %s, runrate %.2f and overs %s",
                     score, runRate, overs));
             secondInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
@@ -78,15 +76,13 @@ public class MatchInformationActivity extends AppCompatActivity {
 
             String score = Utils.getScore(this.match.getTeamB());
             double runRate = this.match.getTeamB().getRunRate();
-            String overs = Utils.getOvers(this.match.getTeamA(),
-                    this.match.getTeamA().getCurrentOverObject(), this.match);
+            String overs = Utils.getOvers(this.match.getTeamB(), this.match);
             firstInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
             firstInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));
 
             score = Utils.getScore(this.match.getTeamA());
             runRate = this.match.getTeamA().getRunRate();
-            overs = Utils.getOvers(this.match.getTeamB(),
-                    this.match.getTeamB().getCurrentOverObject(), this.match);
+            overs = Utils.getOvers(this.match.getTeamA(), this.match);
             System.out.println(String.format("Second innings score %s, runrate %.2f and overs %s",
                     score, runRate, overs));
             secondInningsScore.setText(String.format("%s  in  %s  |  RR: %.2f", score, overs, runRate));

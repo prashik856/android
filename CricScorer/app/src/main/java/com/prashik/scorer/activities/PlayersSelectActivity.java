@@ -61,53 +61,49 @@ public class PlayersSelectActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.select_playing_players);
         selectedPlayers = new boolean[allPlayers.size()];
 
-        textView.setOnClickListener(new View.OnClickListener() {
+        textView.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(PlayersSelectActivity.this);
+            TextView showAllPlayersTextView = findViewById(R.id.show_all_playing_players_sp);
+            builder.setTitle("Select Playing Players");
+            builder.setCancelable(false);
 
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(PlayersSelectActivity.this);
-                TextView showAllPlayersTextView = findViewById(R.id.show_all_playing_players_sp);
-                builder.setTitle("Select Playing Players");
-                builder.setCancelable(false);
+            // setup on click
+            builder.setMultiChoiceItems(playersArray, selectedPlayers,
+                    (dialog, which, isChecked) -> {
+                // Check condition
+                if(isChecked) {
+                    // when this checkbox is selected, we will add this in our players list
+                    playersList.add(which);
+                    // we sort our array list
+                    Collections.sort(playersList);
+                } else {
+                    // when unselected, remove position from our list
+                    playersList.remove(Integer.valueOf(which));
+                }
+            });
 
-                // setup on click
-                builder.setMultiChoiceItems(playersArray, selectedPlayers,
-                        (dialog, which, isChecked) -> {
-                    // Check condition
-                    if(isChecked) {
-                        // when this checkbox is selected, we will add this in our players list
-                        playersList.add(which);
-                        // we sort our array list
-                        Collections.sort(playersList);
-                    } else {
-                        // when unselected, remove position from our list
-                        playersList.remove(Integer.valueOf(which));
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                StringBuilder stringBuilder = new StringBuilder();
+                for(int i=0; i<playersList.size(); i++) {
+                    stringBuilder.append(playersArray[playersList.get(i)]);
+                    if(i != playersList.size() - 1) {
+                        stringBuilder.append(", ");
                     }
-                });
+                }
+                showAllPlayersTextView.setText(stringBuilder.toString());
+            });
 
-                builder.setPositiveButton("OK", (dialog, which) -> {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for(int i=0; i<playersList.size(); i++) {
-                        stringBuilder.append(playersArray[playersList.get(i)]);
-                        if(i != playersList.size() - 1) {
-                            stringBuilder.append(", ");
-                        }
-                    }
-                    showAllPlayersTextView.setText(stringBuilder.toString());
-                });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            builder.setNeutralButton("Clear All", (dialog, which) -> {
+                for(int i=0; i<selectedPlayers.length; i++) {
+                    selectedPlayers[i] = false;
+                    playersList.clear();
+                    showAllPlayersTextView.setText("");
+                }
+            });
 
-                builder.setNeutralButton("Clear All", (dialog, which) -> {
-                    for(int i=0; i<selectedPlayers.length; i++) {
-                        selectedPlayers[i] = false;
-                        playersList.clear();
-                        showAllPlayersTextView.setText("");
-                    }
-                });
-
-                builder.show();
-            }
+            builder.show();
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
