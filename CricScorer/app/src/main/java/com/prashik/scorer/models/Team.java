@@ -24,6 +24,7 @@ public class Team implements Serializable {
     private int legalDeliveriesPlayed = 0;
     private int maxLegalDeliveries;
     private ArrayList<Integer> fallOfWickets = new ArrayList<>();
+    private int extras = 0;
 
     public Team(String name) {
         this.name = name;
@@ -243,6 +244,22 @@ public class Team implements Serializable {
 
     public boolean isBattingInningsCompleted() {
         return this.legalDeliveriesPlayed == this.overs.size() * 6 || this.wickets == this.maxWickets;
+    }
+
+    public boolean isBowlingInningsCompleted() {
+        return this.currentOverBowling == this.overs.size();
+    }
+
+    public int getMaxOvers() {
+        return this.overs.size();
+    }
+
+    public int getExtras() {
+        return extras;
+    }
+
+    public void setExtras(int extras) {
+        this.extras = extras;
     }
 
     @NonNull

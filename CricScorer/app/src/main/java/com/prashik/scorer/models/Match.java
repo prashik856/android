@@ -333,6 +333,26 @@ public class Match implements Serializable {
         return teams;
     }
 
+    public void updateMatchCompleted() {
+        if(this.innings == 2) {
+            // runs scored
+            if(this.getBattingTeam().getRuns() > this.getBowlingTeam().getRuns()) {
+                // match is completed
+                this.completed = true;
+            }
+
+            // if overs are completed
+            if(this.getBattingTeam().getCurrentOverBatting() == this.getBattingTeam().getMaxOvers()) {
+                this.completed = true;
+            }
+
+            // batting team all out
+            if(this.getBattingTeam().isBattingInningsCompleted()) {
+                this.completed = true;
+            }
+        }
+    }
+
     public Team getBattingTeam() {
         return getBattingAndBowlingTeams().get(0);
     }
