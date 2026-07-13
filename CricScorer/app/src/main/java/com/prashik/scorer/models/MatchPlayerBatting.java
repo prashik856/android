@@ -20,8 +20,10 @@ public class MatchPlayerBatting implements Serializable {
     private boolean fifty = false;
     private ArrayList<String> battingDetails = new ArrayList<>();
     private boolean out = false;
+    // TODO: handle caught by
     String coughtBy = "";
     String bowledBy = "";
+    // TODO: handle runout by
     String runOutBy = "";
 
     public MatchPlayerBatting() {

@@ -353,6 +353,20 @@ public class Match implements Serializable {
         }
     }
 
+    public MatchPlayer getMatchPlayerObject(String playerName) {
+        int index1 = this.getBattingTeam().getMatchPlayerIndex(playerName);
+        int index2 = this.getBowlingTeam().getMatchPlayerIndex(playerName);
+        if(index1 != -1) {
+            // batting team player
+            return this.getBattingTeam().getTeamPlayers().get(index1);
+        }
+        if(index2 != -1) {
+            // bowling team player
+            return this.getBowlingTeam().getTeamPlayers().get(index2);
+        }
+        return null;
+    }
+
     public Team getBattingTeam() {
         return getBattingAndBowlingTeams().get(0);
     }
