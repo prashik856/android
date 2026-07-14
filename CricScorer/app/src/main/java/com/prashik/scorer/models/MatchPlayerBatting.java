@@ -20,11 +20,10 @@ public class MatchPlayerBatting implements Serializable {
     private boolean fifty = false;
     private ArrayList<String> battingDetails = new ArrayList<>();
     private boolean out = false;
-    // TODO: handle caught by
     String coughtBy = "";
     String bowledBy = "";
-    // TODO: handle runout by
     String runOutBy = "";
+    String wicketBy = "";
 
     public MatchPlayerBatting() {
 
@@ -201,6 +200,14 @@ public class MatchPlayerBatting implements Serializable {
 
     public void setRunOutBy(String runOutBy) {
         this.runOutBy = runOutBy;
+    }
+
+    public String getWicketBy() {
+        return wicketBy;
+    }
+
+    public void setWicketBy(String wicketBy) {
+        this.wicketBy = wicketBy;
     }
 
     public void updateStrikeRate() {

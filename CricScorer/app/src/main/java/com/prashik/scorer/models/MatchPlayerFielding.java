@@ -39,6 +39,10 @@ public class MatchPlayerFielding implements Serializable {
         this.noOfRunOuts = noOfRunOuts;
     }
 
+    public void addToCaughtPlayers(String batsmanName) {
+        this.coughtPlayers.add(batsmanName);
+    }
+
     @NonNull
     @Override
     public String toString() {
