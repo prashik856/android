@@ -8,6 +8,39 @@
     tools:context=".activities.MatchInformationActivity">
 
     <TextView
+        android:id="@+id/player_info_heading13"
+        android:layout_width="160dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:onClick="handleSecondInningsOversClick"
+        android:text="2nd Inning Overs"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading18" />
+
+    <TextView
+        android:id="@+id/player_info_heading12"
+        android:layout_width="160dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="20dp"
+        android:background="#4CAF50"
+        android:fontFamily="cursive"
+        android:onClick="handleFirstInningsOversClick"
+        android:text="1st Inning Overs"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading13"
+        app:layout_constraintHorizontal_bias="0.223"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading17" />
+
+    <TextView
         android:id="@+id/player_info_heading18"
         android:layout_width="160dp"
         android:layout_height="33dp"

@@ -113,7 +113,10 @@ public class MatchInformationActivity extends AppCompatActivity {
 
     public void handleFirstInningsBattingClick(View view) {
         System.out.println("Going to first innings batting summary.");
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, InningsBattingActivity.class);
+        intent.putExtra("match_object", this.match);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+        intent.putExtra("innings_value", 1);
         startActivity(intent);
     }
 
@@ -125,12 +128,27 @@ public class MatchInformationActivity extends AppCompatActivity {
 
     public void handleSecondInningsBattingClick(View view) {
         System.out.println("Going to second innings batting summary");
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, InningsBattingActivity.class);
+        intent.putExtra("match_object", this.match);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+        intent.putExtra("innings_value", 2);
         startActivity(intent);
     }
 
     public void handleSecondInningsBowlingClick(View view) {
         System.out.println("Going to second innings bowling summary");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleFirstInningsOversClick(View view) {
+        System.out.println("Going to first innings overs summary.");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void handleSecondInningsOversClick(View view) {
+        System.out.println("Going to second innings overs summary.");
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

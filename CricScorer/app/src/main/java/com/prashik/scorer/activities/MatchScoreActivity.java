@@ -1710,8 +1710,12 @@ public class MatchScoreActivity extends AppCompatActivity {
 
     public void handleEditPlayersClick(View view) {
         System.out.println("Edit the current match players.");
-        // by edit players?
-        // add new players?
+        // lets start simple,
+        // go to new activity edit match players
+        // select new players
+        // go to select players to team A activity
+        // fields should already be updated. If we want to update anything, that can be done.
+        //
         //
     }
 
@@ -1881,6 +1885,15 @@ public class MatchScoreActivity extends AppCompatActivity {
 
     public void handleUndoClick(View view) {
         // TODO: This needs to be implemented properly and later
+    }
+
+    public void handleInfoClick(View view) {
+        System.out.println("Go to match info activity");
+        // push match object
+        Intent intent = new Intent(this, MatchInformationActivity.class);
+        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+        intent.putExtra("match_object", match);
+        startActivity(intent);
     }
 
 }
