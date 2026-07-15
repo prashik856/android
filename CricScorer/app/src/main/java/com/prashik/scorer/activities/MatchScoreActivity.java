@@ -203,6 +203,33 @@ public class MatchScoreActivity extends AppCompatActivity {
         return temp.toArray(new String[0]);
     }
 
+    public boolean checkInningsCompletion() {
+        if(this.battingTeam.isBattingInningsCompleted()) {
+            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
+                            "Please start a new innings.",
+                    Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        if(this.match.isCompleted()) {
+            Toast.makeText(this, "Match is completed. Please end the innings.",
+                    Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkCompletions() {
+        if(this.currentOver.isOverCompleted()) {
+            Toast.makeText(this, "Over is completed. Please start a new over.",
+                    Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return this.checkInningsCompletion();
+    }
+
     public void syncMatch() {
         Utils.syncMatchData(this.match.getDataFileName(this.filesDirectory), this.match);
     }
@@ -231,22 +258,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleZeroClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -279,22 +291,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleOneClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -330,22 +327,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleTwoClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -380,22 +362,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleThreeClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -431,22 +398,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleFourClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -483,22 +435,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleFiveClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -534,22 +471,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleSixClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -682,6 +604,10 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleRotateStrikeClick(View view) {
+        if(this.checkCompletions()) {
+            return;
+        }
+
         // basic
         rotateStrike();
         this.match.addToActivities("RotateStrike");
@@ -689,22 +615,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleWideBallClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -778,26 +689,9 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleNoBallClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // TODO: Handle bye runs scored on no ball
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
         builder.setTitle("Runs scored on no ball?");
@@ -818,55 +712,92 @@ public class MatchScoreActivity extends AppCompatActivity {
             System.out.println("Runs scored on no ball: " + runsScoredOnNoBall);
             String batsmanActivity = Integer.toString(runsScoredOnBadDelivery[0]);
 
-            // update team score
-            this.battingTeam.setRuns(this.battingTeam.getRuns() + runsScoredOnNoBall);
-            this.battingTeam.setExtras(this.battingTeam.getExtras() + runsScoredOnNoBall);
-            this.battingTeam.updateRunRate();
+            int[] runsByeSelected = {-1};
+            String[] runsByeOptions = {"Legal Runs", "Bye Runs"};
 
-            // no ball runs will go to the batsman
-            this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails(batsmanActivity);
-            this.strikerBatsman.getMatchPlayerBatting().setRunsScored(
-                    this.strikerBatsman.getMatchPlayerBatting().getRunsScored() + runsScoredOnBadDelivery[0]
-            );
-            this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
-            if(runsScoredOnBadDelivery[0] == 4) {
-                this.strikerBatsman.getMatchPlayerBatting().incrementFoursScored();
-            } else if (runsScoredOnBadDelivery[0] == 6) {
-                this.strikerBatsman.getMatchPlayerBatting().incrementSixesScored();
+            AlertDialog.Builder byeRunsBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+            byeRunsBuilder.setTitle("Are runs scored bye runs?");
+            byeRunsBuilder.setCancelable(false);
+
+            byeRunsBuilder.setSingleChoiceItems(runsByeOptions, runsByeSelected[0],
+                    (dialog1, which1) -> runsByeSelected[0] = Integer.parseInt(runsByeOptions[which]));
+
+            byeRunsBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+
+            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
+                runsByeSelected[0] = -1;
+            });
+
+            byeRunsBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
+                if(runsByeSelected[0] == -1) {
+                    Toast.makeText(this, "You need to select if the runs scored are bye runs.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String runsByeValue = runsByeOptions[runsByeSelected[0]];
+                System.out.println("Runs scored on bad delivery are : " + runsByeValue);
+
+                // update team score
+                this.battingTeam.setRuns(this.battingTeam.getRuns() + runsScoredOnNoBall);
+                this.battingTeam.setExtras(this.battingTeam.getExtras() + runsScoredOnNoBall);
+                this.battingTeam.updateRunRate();
+
+                this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails(batsmanActivity);
+                this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
+                if(runsByeValue.equals("Legal Runs")) {
+                    // no ball runs will go to the batsman
+                    this.strikerBatsman.getMatchPlayerBatting().setRunsScored(
+                            this.strikerBatsman.getMatchPlayerBatting().getRunsScored() + runsScoredOnBadDelivery[0]
+                    );
+                    if(runsScoredOnBadDelivery[0] == 4) {
+                        this.strikerBatsman.getMatchPlayerBatting().incrementFoursScored();
+                    } else if (runsScoredOnBadDelivery[0] == 6) {
+                        this.strikerBatsman.getMatchPlayerBatting().incrementSixesScored();
+                    }
+                    this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+                    this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+                } else {
+                    this.currentOver.setByes(this.currentOver.getByes() + runsScoredOnBadDelivery[0]);
+                }
+
+
+                // Update the over
+                String activityValue = runsScoredOnBadDelivery[0] + "NB";
+                this.currentOver.getOverSummary().add(activityValue);
+                this.currentOver.incrementNoBalls();
+                this.currentOver.setExtras(this.currentOver.getExtras() + runsScoredOnNoBall);
+                this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnNoBall);
+
+                // update bowler runs
+                this.bowler.getMatchPlayerBowling().setRunsConceded(
+                        this.bowler.getMatchPlayerBowling().getRunsConceded() + runsScoredOnNoBall);
+                this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+                this.bowler.getMatchPlayerBowling().incrementNoBalls();
+                if(runsScoredOnBadDelivery[0] == 4) {
+                    this.bowler.getMatchPlayerBowling().incrementFoursConceded();
+                } else if(runsScoredOnBadDelivery[0] == 6) {
+                    this.bowler.getMatchPlayerBowling().incrementSixesConceded();
+                }
+                this.bowler.getMatchPlayerBowling().setExtrasConceded(
+                        this.bowler.getMatchPlayerBowling().getExtrasConceded() + runsScoredOnNoBall
+                );
+                this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+                this.match.addToActivities(activityValue);
+                if(runsScoredOnBadDelivery[0] % 2 == 1) {
+                    rotateStrike();
+                }
+
+                this.match.updateMatchCompleted();
+                this.updateScore();
+                this.syncMatch();
+            });
+
+            byeRunsBuilder.show();
+
+            if(runsByeSelected[0] == -1) {
+                Toast.makeText(this, "You need to select if the runs scored are bye runs.", Toast.LENGTH_LONG).show();
             }
-            this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
-            this.strikerBatsman.getMatchPlayerBatting().updateRecords();
-
-            // Update the over
-            String activityValue = runsScoredOnBadDelivery[0] + "NB";
-            this.currentOver.getOverSummary().add(activityValue);
-            this.currentOver.incrementNoBalls();
-            this.currentOver.setExtras(this.currentOver.getExtras() + runsScoredOnNoBall);
-            this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnNoBall);
-
-            // update bowler runs
-            this.bowler.getMatchPlayerBowling().setRunsConceded(
-                    this.bowler.getMatchPlayerBowling().getRunsConceded() + runsScoredOnNoBall);
-            this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
-            this.bowler.getMatchPlayerBowling().incrementNoBalls();
-            if(runsScoredOnBadDelivery[0] == 4) {
-                this.bowler.getMatchPlayerBowling().incrementFoursConceded();
-            } else if(runsScoredOnBadDelivery[0] == 6) {
-                this.bowler.getMatchPlayerBowling().incrementSixesConceded();
-            }
-            this.bowler.getMatchPlayerBowling().setExtrasConceded(
-                    this.bowler.getMatchPlayerBowling().getExtrasConceded() + runsScoredOnNoBall
-            );
-            this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
-
-            this.match.addToActivities(activityValue);
-            if(runsScoredOnBadDelivery[0] % 2 == 1) {
-                rotateStrike();
-            }
-            runsScoredOnBadDelivery[0] = -1;
-            this.match.updateMatchCompleted();
-            this.updateScore();
-            this.syncMatch();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -883,22 +814,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleByeClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -971,22 +887,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleBowledClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -1091,22 +992,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleCaughtClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -1168,6 +1054,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             // update match
             this.match.updateMatchCompleted();
+            this.syncMatch();
+            this.updateScore();
 
             if(this.battingTeam.isBattingInningsCompleted()) {
                 this.updateScore();
@@ -1246,22 +1134,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleHitWicketClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -1365,22 +1238,7 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleRunOutClick(View view) {
-        if(this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "Over is completed. Please start a new over.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.battingTeam.isBattingInningsCompleted()) {
-            Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                            "Please start a new innings.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(this.match.isCompleted()) {
-            Toast.makeText(this, "Match is completed. Please end the innings.",
-                    Toast.LENGTH_LONG).show();
+        if(this.checkCompletions()) {
             return;
         }
 
@@ -1541,24 +1399,168 @@ public class MatchScoreActivity extends AppCompatActivity {
                             // update team score
                             this.battingTeam.incrementWickets();
                             if(ballExtraRun == 0) {
+                                System.out.println("This is a legal delivery on run out.");
                                 // legal delivery
                                 this.battingTeam.incrementLegalDeliveriesPlayed();
+                                this.currentOver.incrementLegalDeliveries();
+                                this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+                                // a legal delivery
+                                runOutPlayerObject.getMatchPlayerBatting().incrementBallsPlayed();
+                                runOutPlayerObject.getMatchPlayerBatting().setRunsScored(
+                                        runOutPlayerObject.getMatchPlayerBatting().getRunsScored() + batLegalRuns
+                                );
+                                runOutPlayerObject.getMatchPlayerBatting().updateStrikeRate();
+                                runOutPlayerObject.getMatchPlayerBatting().updateRecords();
                             }
+
                             // anyone of them depending on the conditions is zero
-                            this.battingTeam.setExtras(this.battingTeam.getExtras() +
-                                    ballExtraRun + batExtraRuns);
                             this.battingTeam.setRuns(this.battingTeam.getRuns() + ballExtraRun + batExtraRuns + batLegalRuns);
                             this.battingTeam.updateRunRate();
                             this.battingTeam.updateFallOfWickets();
 
-                            // update batsman score
-                            runOutPlayerObject.getMatchPlayerBatting().incrementBallsPlayed();
-                            runOutPlayerObject.getMatchPlayerBatting().updateStrikeRate();
-                            runOutPlayerObject.getMatchPlayerBatting().updateRecords();
+                            // UPDATE BATSMAN RECORD
                             runOutPlayerObject.getMatchPlayerBatting().setOut(true);
-                            runOutPlayerObject.getMatchPlayerBatting().addToBattingDetails("Out-Caught");
-                            runOutPlayerObject.getMatchPlayerBatting().setCoughtBy(caughtBy);
+                            runOutPlayerObject.getMatchPlayerBatting().addToBattingDetails("Out-Runout");
                             runOutPlayerObject.getMatchPlayerBatting().setWicketBy(this.bowler.getPlayerName());
+                            runOutPlayerObject.getMatchPlayerBatting().setRunOutBy(runOutByPlayer);
+
+                            // update over
+                            this.currentOver.getOverSummary().add("Out");
+                            this.currentOver.incrementWickets();
+                            this.currentOver.updateOverCompleted();
+
+                            // update bowler records
+                            if(ballExtraRun + batLegalRuns + batExtraRuns == 0) {
+                                System.out.println("Dot ball on run out.");
+                                this.bowler.getMatchPlayerBowling().incrementDotsConceded();
+                                this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
+                                this.currentOver.incrementDotBalls();
+                            }
+
+                            // "Wide Ball", "No Ball"
+                            if(ballType.equals("Wide Ball")) {
+                                System.out.println("Wide ball on run out.");
+                                this.bowler.getMatchPlayerBowling().incrementWides();
+                                this.bowler.getMatchPlayerBowling().setExtrasConceded(
+                                        this.bowler.getMatchPlayerBowling().getExtrasConceded() +
+                                                ballExtraRun + batLegalRuns + batExtraRuns
+                                );
+                                this.currentOver.incrementWides();
+                                this.currentOver.setExtras(
+                                        this.currentOver.getExtras() + ballExtraRun + batLegalRuns + batExtraRuns
+                                );
+
+                                this.battingTeam.setExtras(this.battingTeam.getExtras() +
+                                        ballExtraRun + batExtraRuns + batLegalRuns);
+                            }
+
+                            // update extras
+                            if(ballType.equals("No Ball")) {
+                                System.out.println("No ball on run out.");
+                                this.bowler.getMatchPlayerBowling().incrementNoBalls();
+                                this.bowler.getMatchPlayerBowling().setExtrasConceded(
+                                        this.bowler.getMatchPlayerBowling().getExtrasConceded() +
+                                                ballExtraRun + batLegalRuns + batExtraRuns
+                                );
+                                this.currentOver.incrementNoBalls();
+                                this.currentOver.setExtras(
+                                        this.currentOver.getExtras() + ballExtraRun + batLegalRuns + batExtraRuns
+                                );
+
+                                this.battingTeam.setExtras(this.battingTeam.getExtras() +
+                                        ballExtraRun + batExtraRuns + batLegalRuns);
+                            }
+
+                            // runs conceded
+                            this.currentOver.setRuns(
+                                    this.currentOver.getRuns() + ballExtraRun + batLegalRuns + batExtraRuns
+                            );
+                            this.bowler.getMatchPlayerBowling().setRunsConceded(
+                                    this.bowler.getMatchPlayerBowling().getRunsConceded()
+                                            + ballExtraRun + batLegalRuns + batExtraRuns
+                            );
+                            this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
+                            this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+                            this.bowler.getMatchPlayerBowling().updateRecords();
+                            this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
+
+                            this.match.updateMatchCompleted();
+                            this.syncMatch();
+                            this.updateScore();
+
+                            // Check if match is already completed.
+                            if(this.battingTeam.isBattingInningsCompleted()) {
+                                this.updateScore();
+                                this.syncMatch();
+                                Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
+                                                "Please start a new innings.",
+                                        Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            if(this.match.isCompleted()) {
+                                this.updateScore();
+                                this.syncMatch();
+                                Toast.makeText(this, "Match is completed. Please end the innings.",
+                                        Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            // Get list of not out Batsman
+                            String[] notOutBatsman = this.getNotOutBatsMan();
+                            int[] optionSelected = {-1};
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                            builder.setTitle("Select new Batsman?");
+                            builder.setCancelable(false);
+
+                            builder.setSingleChoiceItems(notOutBatsman, optionSelected[0],
+                                    (dialog6, which6) -> optionSelected[0] = which6);
+
+                            builder.setPositiveButton("Ok", (dialog6, which6) -> {
+                                if(optionSelected[0] == -1) {
+                                    Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                String newBatsman = notOutBatsman[optionSelected[0]];
+                                System.out.println("New batsman is: " + newBatsman);
+
+                                // update the striker batsman or non striker batsman
+                                if(runOutBatsman.equals(this.match.getStrikerBatsman())) {
+                                    // update striker batsman
+                                    this.match.setStrikerBatsman(newBatsman);
+                                    this.match.setStrikerBatsmanIndex(
+                                            this.battingTeam.getMatchPlayerIndex(newBatsman)
+                                    );
+                                    this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
+                                    this.strikerBatsman.getMatchPlayerBatting().setBatted(true);
+                                    this.match.addToActivities(newBatsman + "-In");
+                                } else {
+                                    // update non striker batsman
+                                    this.match.setNonStrikeBatsman(newBatsman);
+                                    this.match.setNonStrikerBatsmanIndex(
+                                            this.battingTeam.getMatchPlayerIndex(newBatsman)
+                                    );
+                                    this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
+                                    this.nonStrikeBatsman.getMatchPlayerBatting().setBatted(true);
+                                    this.match.addToActivities(newBatsman + "-In");
+                                }
+
+                                this.updateScore();
+                                this.syncMatch();
+                            });
+
+                            builder.setNeutralButton("Clear", (dialog6, which6) -> {
+                                optionSelected[0] = -1;
+                            });
+
+                            builder.show();
+
+                            if(optionSelected[0] == -1) {
+                                System.out.println("This condition should never arrive.");
+                                Toast.makeText(this, "You need to select a new batsman after the wicket.", Toast.LENGTH_LONG).show();
+                            }
+
 
                         });
 
@@ -1609,15 +1611,174 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleRetireClick(View view) {
+        System.out.println("Clicked on retire batsman.");
+        // do everything after over completion
+        if(this.checkCompletions()) {
+            return;
+        }
 
+        // select the batsman be to retired
+        // select the new batsman from the remaining batsman
+        // replace new batsman with existing batsman
+        // Get list of not out Batsman
+        String[] retireBatsmanOptions = {this.strikerBatsman.getPlayerName(),
+                this.nonStrikeBatsman.getPlayerName()};
+        int[] retireBatsmanSelected = {-1};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+        builder.setTitle("Select the batsman to be retired?");
+        builder.setCancelable(false);
+
+        builder.setSingleChoiceItems(retireBatsmanOptions, retireBatsmanSelected[0],
+                (dialog, which) -> retireBatsmanSelected[0] = which);
+
+        builder.setNeutralButton("Clear", (dialog, which) -> {
+            retireBatsmanSelected[0] = -1;
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        builder.setPositiveButton("Ok", (dialog, which) -> {
+            if(retireBatsmanSelected[0] == -1) {
+                Toast.makeText(this, "You need to select the batsman who is going to retire.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            String batsmanToRetire = retireBatsmanOptions[retireBatsmanSelected[0]];
+            System.out.println("Batsman to retire is: " + batsmanToRetire);
+
+            // Get list of not out Batsman
+            String[] notOutBatsman = this.getNotOutBatsMan();
+            int[] optionSelected = {-1};
+            AlertDialog.Builder newBatsmanBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+            newBatsmanBuilder.setTitle("Select new Batsman?");
+            newBatsmanBuilder.setCancelable(false);
+
+            newBatsmanBuilder.setSingleChoiceItems(notOutBatsman, optionSelected[0],
+                    (dialog1, which1) -> optionSelected[0] = which1);
+
+            newBatsmanBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
+                if(optionSelected[0] == -1) {
+                    Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String newBatsman = notOutBatsman[optionSelected[0]];
+                System.out.println("New batsman is: " + newBatsman);
+
+                if(batsmanToRetire.equals(this.match.getStrikerBatsman())) {
+                    // update the striker batsman
+                    this.match.setStrikerBatsman(newBatsman);
+                    this.match.setStrikerBatsmanIndex(
+                            this.battingTeam.getMatchPlayerIndex(newBatsman)
+                    );
+                    this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
+                    this.strikerBatsman.getMatchPlayerBatting().setBatted(true);
+                } else {
+                    this.match.setNonStrikeBatsman(newBatsman);
+                    this.match.setNonStrikerBatsmanIndex(
+                            this.battingTeam.getMatchPlayerIndex(newBatsman)
+                    );
+                    this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
+                    this.nonStrikeBatsman.getMatchPlayerBatting().setBatted(true);
+                }
+                this.match.addToActivities(batsmanToRetire + "-Retired");
+                this.match.addToActivities(newBatsman + "-In");
+
+                this.updateScore();
+                this.syncMatch();
+            });
+
+            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
+                optionSelected[0] = -1;
+            });
+
+            newBatsmanBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+
+            newBatsmanBuilder.show();
+
+            if(optionSelected[0] == -1) {
+                Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.show();
+
+        if(retireBatsmanSelected[0] == -1) {
+            Toast.makeText(this, "You need to select the batsman who is going to retire.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void handleEditPlayersClick(View view) {
-
+        System.out.println("Edit the current match players.");
+        // by edit players?
+        // add new players?
+        //
     }
 
     public void handleEditOversClick(View view) {
-        // TODO: this will be handled later
+        System.out.println("Edit overs clicked.");
+
+        if(this.checkInningsCompletion()) {
+            return;
+        }
+
+        String[] overIncreaseOptions = {"1", "2", "3", "-1", "-2", "-3"};
+        int[] overIncreaseSelected = {-1};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+        builder.setTitle("Select the number of overs to increase or decrease?");
+        builder.setCancelable(false);
+
+        builder.setSingleChoiceItems(overIncreaseOptions, overIncreaseSelected[0],
+                (dialog, which) -> overIncreaseSelected[0] = which);
+
+        builder.setNeutralButton("Clear", (dialog, which) -> {
+            overIncreaseSelected[0] = -1;
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        builder.setPositiveButton("Ok", (dialog1, which1) -> {
+            if(overIncreaseSelected[0] == -1) {
+                Toast.makeText(this, "You need to select the number of overs to increase.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            int oversToIncrease = Integer.parseInt(overIncreaseOptions[overIncreaseSelected[0]]);
+            System.out.println("Number of overs to increase: " + oversToIncrease);
+
+            if(oversToIncrease < 0) {
+                int currentOverPlayed = this.battingTeam.getCurrentOverBatting();
+                int maxOvers = this.match.getMaxOvers();
+                if(maxOvers + oversToIncrease <= currentOverPlayed) {
+                    Toast.makeText(this, "Invalid selection of overs." + currentOverPlayed + " overs are already completed.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                this.match.setMaxOvers(
+                        this.match.getMaxOvers() + oversToIncrease
+                );
+                this.match.getTeamA().decrementMaxOvers(oversToIncrease);
+                this.match.getTeamB().decrementMaxOvers(oversToIncrease);
+
+            } else {
+                // Set match properties
+                this.match.setMaxOvers(
+                        this.match.getMaxOvers() + oversToIncrease
+                );
+                this.match.getTeamA().incrementMaxOvers(oversToIncrease);
+                this.match.getTeamB().incrementMaxOvers(oversToIncrease);
+            }
+
+            this.syncMatch();
+            this.updateScore();
+        });
+
+        builder.show();
+
+        if(overIncreaseSelected[0] == -1) {
+            Toast.makeText(this, "You need to select the number of overs to increase.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void handleInningsEndClick(View view) {

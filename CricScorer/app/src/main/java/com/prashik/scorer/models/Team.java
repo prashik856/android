@@ -124,6 +124,31 @@ public class Team implements Serializable {
         System.out.println("Overs array after set: " + this.overs);
     }
 
+    public void incrementMaxOvers(int oversToIncrease) {
+        System.out.println("Incrementing max overs by: " + oversToIncrease);
+        ArrayList<Over> overs = this.overs;
+        int sizeOfOvers = overs.size();
+        for(int i=0; i<oversToIncrease; i++) {
+            int id = sizeOfOvers + i;
+            Over over = new Over(id);
+            overs.add(over);
+        }
+        int maxOvers = sizeOfOvers + oversToIncrease;
+        this.maxLegalDeliveries = maxOvers * 6;
+        System.out.println("Overs array after set: " + this.overs);
+    }
+
+    public void decrementMaxOvers(int oversToDecrease) {
+        oversToDecrease = Math.abs(oversToDecrease);
+        int i = 0;
+        ArrayList<Over> overs = this.overs;
+        while(i < oversToDecrease) {
+            int lastIndex = overs.size() - 1;
+            overs.remove(lastIndex);
+            i++;
+        }
+    }
+
     public int getMaxWickets() {
         return maxWickets;
     }

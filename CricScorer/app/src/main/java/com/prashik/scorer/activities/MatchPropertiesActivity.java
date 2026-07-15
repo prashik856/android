@@ -50,6 +50,7 @@ public class MatchPropertiesActivity extends AppCompatActivity {
             Toast.makeText(this, "Max overs cannot be greater than 20.", Toast.LENGTH_LONG).show();
             return;
         }
+
         System.out.println("Max overs value: " + maxOvers);
 
         // Set match properties
