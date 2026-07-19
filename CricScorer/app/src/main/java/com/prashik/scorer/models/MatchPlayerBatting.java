@@ -59,11 +59,14 @@ public class MatchPlayerBatting implements Serializable {
     public void updateRecords() {
         if(this.runsScored >= 20 && this.runsScored < 30) {
             this.twenty = true;
+            this.thirty = false;
+            this.fifty = false;
         }
 
         if(this.runsScored >= 30 && this.runsScored < 50) {
             this.twenty = false;
             this.thirty = true;
+            this.fifty = false;
         }
 
         if(this.runsScored >= 50) {
@@ -99,6 +102,10 @@ public class MatchPlayerBatting implements Serializable {
     public void addToBattingDetails(String str) {
         this.battingDetails.add(str);
     }
+    public void removeLastFromBattingDetails() {
+        int size = this.battingDetails.size();
+        this.battingDetails.remove(size - 1);
+    }
 
     public void setBattingDetails(ArrayList<String> battingDetails) {
         this.battingDetails = battingDetails;
@@ -110,24 +117,46 @@ public class MatchPlayerBatting implements Serializable {
     public void incrementRunsScored() {
         this.runsScored = this.runsScored + 1;
     }
+    public void decrementRunsScored() {
+        this.runsScored = this.runsScored - 1;
+    }
     public void addTwoToRunsScored() {
         this.runsScored = this.runsScored + 2;
+    }
+    public void decrementTwoFromRunsScored() {
+        this.runsScored = this.runsScored - 2;
     }
     public void addThreeToRunsScored() {
         this.runsScored = this.runsScored + 3;
     }
+    public void decrementThreeFromRunsScored() {
+        this.runsScored = this.runsScored - 3;
+    }
     public void addFourToRunsScored() {
         this.runsScored = this.runsScored + 4;
+    }
+    public void decrementFourFromRunsScored() {
+        this.runsScored = this.runsScored - 4;
     }
     public void addFiveToRunsScored() {
         this.runsScored = this.runsScored + 5;
     }
+    public void decrementFiveFromRunsScored() {
+        this.runsScored = this.runsScored - 5;
+    }
     public void addSixToRunsScored() {
         this.runsScored = this.runsScored + 6;
+    }
+    public void decrementSixFromRunsScored() {
+        this.runsScored = this.runsScored - 6;
     }
     public void addSevenToRunsScored() {
         // no ball + 6
         this.runsScored = this.runsScored + 7;
+    }
+
+    public void decrementSevenFromRunsScored() {
+        this.runsScored = this.runsScored - 7;
     }
 
     public void setRunsScored(int runsScored) {
@@ -140,6 +169,9 @@ public class MatchPlayerBatting implements Serializable {
     public void incrementBallsPlayed() {
         this.ballsPlayed = this.ballsPlayed + 1;
     }
+    public void decrementBallsPlayed() {
+        this.ballsPlayed = this.ballsPlayed - 1;
+    }
 
     public void setBallsPlayed(int ballsPlayed) {
         this.ballsPlayed = ballsPlayed;
@@ -150,6 +182,9 @@ public class MatchPlayerBatting implements Serializable {
     }
     public void incrementFoursScored() {
         this.foursScored = this.foursScored + 1;
+    }
+    public void decrementFoursScored() {
+        this.foursScored = this.foursScored - 1;
     }
 
     public void setFoursScored(int foursScored) {
@@ -162,6 +197,9 @@ public class MatchPlayerBatting implements Serializable {
     public void incrementSixesScored() {
         this.sixesScored = this.sixesScored + 1;
     }
+    public void decrementSixesScored() {
+        this.sixesScored = this.sixesScored - 1;
+    }
 
     public void setSixesScored(int sixesScored) {
         this.sixesScored = sixesScored;
@@ -172,6 +210,9 @@ public class MatchPlayerBatting implements Serializable {
     }
     public void incrementDotsPlayed() {
         this.dotsPlayed = this.dotsPlayed + 1;
+    }
+    public void decrementDotsPlayed() {
+        this.dotsPlayed = this.dotsPlayed - 1;
     }
 
     public void setDotsPlayed(int dotsPlayed) {

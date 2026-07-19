@@ -83,6 +83,10 @@ public class MatchPlayerBowling implements Serializable {
         this.foursConceded = this.foursConceded + 1;
     }
 
+    public void decrementFoursConceded() {
+        this.foursConceded = this.foursConceded - 1;
+    }
+
     public void setFoursConceded(int foursConceded) {
         this.foursConceded = foursConceded;
     }
@@ -94,6 +98,10 @@ public class MatchPlayerBowling implements Serializable {
         this.dotsConceded = this.dotsConceded + 1;
     }
 
+    public void decrementDotsConceded() {
+        this.dotsConceded = this.dotsConceded - 1;
+    }
+
     public void setDotsConceded(int dotsConceded) {
         this.dotsConceded = dotsConceded;
     }
@@ -103,6 +111,9 @@ public class MatchPlayerBowling implements Serializable {
     }
     public void incrementSixesConceded() {
         this.sixesConceded = this.sixesConceded + 1;
+    }
+    public void decrementSixesConceded() {
+        this.sixesConceded = this.sixesConceded - 1;
     }
 
     public void setSixesConceded(int sixesConceded) {
@@ -148,24 +159,45 @@ public class MatchPlayerBowling implements Serializable {
     public void incrementRunsConceded() {
         this.runsConceded = this.runsConceded + 1;
     }
+    public void decrementRunsConceded() {
+        this.runsConceded = this.runsConceded - 1;
+    }
     public void addTwoToRunsConceded() {
         this.runsConceded = this.runsConceded + 2;
+    }
+    public void decrementTwoFromRunsConceded() {
+        this.runsConceded = this.runsConceded - 2;
     }
     public void addThreeToRunsConceded() {
         this.runsConceded = this.runsConceded + 3;
     }
+    public void decrementThreeFromRunsConceded() {
+        this.runsConceded = this.runsConceded - 3;
+    }
     public void addFourToRunsConceded() {
         this.runsConceded = this.runsConceded + 4;
+    }
+    public void decrementFourFromRunsConceded() {
+        this.runsConceded = this.runsConceded - 4;
     }
     public void addFiveToRunsConceded() {
         this.runsConceded = this.runsConceded + 5;
     }
+    public void decrementFiveFromRunsConceded() {
+        this.runsConceded = this.runsConceded - 5;
+    }
     public void addSixToRunsConceded() {
         this.runsConceded = this.runsConceded + 6;
+    }
+    public void decrementSixFromRunsConceded() {
+        this.runsConceded = this.runsConceded - 6;
     }
     public void addSevenToRunsConceded() {
         // no ball + 6
         this.runsConceded = this.runsConceded + 7;
+    }
+    public void decrementSevenFromRunsConceded() {
+        this.runsConceded = this.runsConceded - 7;
     }
 
     public void setRunsConceded(int runsConceded) {
@@ -177,6 +209,10 @@ public class MatchPlayerBowling implements Serializable {
     }
     public void incrementWicketsTaken() {
         this.wicketsTaken = this.wicketsTaken + 1;
+    }
+
+    public void decrementWicketsTaken() {
+        this.wicketsTaken = this.wicketsTaken - 1;
     }
 
     public void setWicketsTaken(int wicketsTaken) {
@@ -199,6 +235,10 @@ public class MatchPlayerBowling implements Serializable {
         this.legalDeliveriesBowled = this.legalDeliveriesBowled + 1;
     }
 
+    public void decrementLegalDeliveriesBowled() {
+        this.legalDeliveriesBowled = this.legalDeliveriesBowled - 1;
+    }
+
     public void setLegalDeliveriesBowled(int legalDeliveriesBowled) {
         this.legalDeliveriesBowled = legalDeliveriesBowled;
     }
@@ -209,6 +249,10 @@ public class MatchPlayerBowling implements Serializable {
 
     public void incrementDeliveriesBowled() {
         this.deliveriesBowled = this.deliveriesBowled + 1;
+    }
+
+    public void decrementDeliveriesBowled() {
+        this.deliveriesBowled = this.deliveriesBowled - 1;
     }
 
     public void setDeliveriesBowled(int deliveriesBowled) {
@@ -227,6 +271,11 @@ public class MatchPlayerBowling implements Serializable {
         this.bowledPlayers.add(bowledPlayer);
     }
 
+    public void removeFromBowledPlayers() {
+        int size = this.bowledPlayers.size();
+        this.bowledPlayers.remove(size - 1);
+    }
+
     public ArrayList<String> getWicketsTakenPlayers() {
         return wicketsTakenPlayers;
     }
@@ -237,6 +286,11 @@ public class MatchPlayerBowling implements Serializable {
 
     public void addToWicketsTakenPlayers(String wicketTakenPlayer) {
         this.wicketsTakenPlayers.add(wicketTakenPlayer);
+    }
+
+    public void removeFromWicketsTakenPlayers() {
+        int size = this.wicketsTakenPlayers.size();
+        this.wicketsTakenPlayers.remove(size - 1);
     }
 
     public int getMaidenOverBowled() {
@@ -285,6 +339,11 @@ public class MatchPlayerBowling implements Serializable {
 
     public void addToBowlingDetails(String bowlDetails) {
         this.bowlingDetails.add(bowlDetails);
+    }
+
+    public void removeLastElementOfBowlingDetails() {
+        int size = this.bowlingDetails.size();
+        this.bowlingDetails.remove(size - 1);
     }
 
     public void updateBowlingEconomy() {

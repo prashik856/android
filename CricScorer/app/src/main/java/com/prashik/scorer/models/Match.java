@@ -248,6 +248,10 @@ public class Match implements Serializable {
     public void addToActivities(String activity) {
         this.activities.add(activity);
     }
+    public void removeLastElementFromActivities() {
+        int size = this.activities.size();
+        this.activities.remove(size - 1);
+    }
 
     public void updateResult() {
         if(this.isCompleted()) {
@@ -334,6 +338,7 @@ public class Match implements Serializable {
     }
 
     public void updateMatchCompleted() {
+        this.completed = false;
         if(this.innings == 2) {
             // runs scored
             if(this.getBattingTeam().getRuns() > this.getBowlingTeam().getRuns()) {

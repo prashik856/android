@@ -31,6 +31,15 @@ public class Over implements Serializable {
         return overSummary;
     }
 
+    public void addToOverSummary(String str) {
+        this.overSummary.add(str);
+    }
+
+    public void removeLastElementFromOverSummary() {
+        int size = this.overSummary.size();
+        this.overSummary.remove(size - 1);
+    }
+
     public void setOverSummary(ArrayList<String> overSummary) {
         this.overSummary = overSummary;
     }
@@ -40,6 +49,10 @@ public class Over implements Serializable {
     }
     public void incrementLegalDeliveries() {
         this.legalDeliveries = this.legalDeliveries + 1;
+    }
+
+    public void decrementLegalDeliveries() {
+        this.legalDeliveries = this.legalDeliveries - 1;
     }
 
     public int getMaxLegalDeliveries() {
@@ -103,6 +116,10 @@ public class Over implements Serializable {
         this.dots = this.dots + 1;
     }
 
+    public void decrementDotBalls() {
+        this.dots = this.dots - 1;
+    }
+
     public void setDots(int dots) {
         this.dots = dots;
     }
@@ -133,24 +150,46 @@ public class Over implements Serializable {
     public void incrementRuns() {
         this.runs = this.runs + 1;
     }
+    public void decrementRuns() {
+        this.runs = this.runs - 1;
+    }
     public void addTwoToRuns() {
         this.runs = this.runs + 2;
+    }
+    public void decrementTwoFromRuns() {
+        this.runs = this.runs - 2;
     }
     public void addThreeToRuns() {
         this.runs = this.runs + 3;
     }
+    public void decrementThreeFromRuns() {
+        this.runs = this.runs - 3;
+    }
     public void addFourToRuns() {
         this.runs = this.runs + 4;
+    }
+    public void decrementFourFromRuns() {
+        this.runs = this.runs - 4;
     }
     public void addFiveToRuns() {
         this.runs = this.runs + 5;
     }
+    public void decrementFiveFromRuns() {
+        this.runs = this.runs - 5;
+    }
     public void addSixToRuns() {
         this.runs = this.runs + 6;
+    }
+    public void decrementSixFromRuns() {
+        this.runs = this.runs - 6;
     }
     public void addSevenToRuns() {
         // no ball + 6
         this.runs = this.runs + 7;
+    }
+
+    public void decrementSevenFromRuns() {
+        this.runs = this.runs - 7;
     }
 
     public void setRuns(int runs) {
@@ -176,6 +215,9 @@ public class Over implements Serializable {
     public void incrementWickets() {
         this.wickets = this.wickets + 1;
     }
+    public void decrementWickets() {
+        this.wickets = this.wickets - 1;
+    }
 
     public void updateMainden() {
         if(this.runs == 0) {
@@ -184,6 +226,7 @@ public class Over implements Serializable {
     }
 
     public void updateOverCompleted() {
+        this.overCompleted = false;
         if(this.legalDeliveries >= this.maxLegalDeliveries) {
             this.overCompleted = true;
             this.updateMainden();

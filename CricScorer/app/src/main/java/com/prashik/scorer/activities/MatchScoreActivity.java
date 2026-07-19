@@ -273,7 +273,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
 
         // Updated the over
-        this.currentOver.getOverSummary().add("0");
+        this.currentOver.addToOverSummary("0");
         this.currentOver.incrementDotBalls();
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.updateOverCompleted();
@@ -289,6 +289,40 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+
+    public boolean undoZeroRuns() {
+        // remove from activities
+        this.match.removeLastElementFromActivities();
+
+        // update bowler
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementDotsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // update the over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementDotBalls();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.updateOverCompleted();
+
+        // update batsman
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().decrementDotsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+
+        // update team
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleOneClick(View view) {
@@ -309,7 +343,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
         // Update the over
-        this.currentOver.getOverSummary().add("1");
+        this.currentOver.addToOverSummary("1");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.incrementRuns();
         this.currentOver.updateOverCompleted();
@@ -326,6 +360,43 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+
+    public boolean undoOneRun() {
+        // rotate strike
+        this.rotateStrike();
+        this.match.removeLastElementFromActivities();
+
+        // update bowler
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementRunsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // update over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementRuns();
+        this.currentOver.updateOverCompleted();
+
+        // remove single
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // update team score
+        this.battingTeam.decrementRuns();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleTwoClick(View view) {
@@ -346,7 +417,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
         // Update the over
-        this.currentOver.getOverSummary().add("2");
+        this.currentOver.addToOverSummary("2");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.addTwoToRuns();
         this.currentOver.updateOverCompleted();
@@ -362,6 +433,41 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+
+    public boolean undoTwoRuns() {
+        this.match.removeLastElementFromActivities();
+
+        // update bowler runs
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementTwoFromRunsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // update the over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementTwoFromRuns();
+        this.currentOver.updateOverCompleted();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementTwoFromRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // update team score
+        this.battingTeam.decrementTwoFromRuns();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleThreeClick(View view) {
@@ -382,7 +488,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
         // Update the over
-        this.currentOver.getOverSummary().add("3");
+        this.currentOver.addToOverSummary("3");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.addThreeToRuns();
         this.currentOver.updateOverCompleted();
@@ -399,6 +505,44 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+
+    public boolean undoThreeRuns() {
+        // update match
+        this.rotateStrike();
+        this.match.removeLastElementFromActivities();
+
+        // update bowler
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementThreeFromRunsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // update over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementThreeFromRuns();
+        this.currentOver.updateOverCompleted();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementThreeFromRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // update team score
+        this.battingTeam.decrementThreeFromRuns();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        // sync match
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleFourClick(View view) {
@@ -420,7 +564,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
         // Update the over
-        this.currentOver.getOverSummary().add("4");
+        this.currentOver.addToOverSummary("4");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.addFourToRuns();
         this.currentOver.updateOverCompleted();
@@ -437,6 +581,42 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+    public boolean undoFourRuns() {
+        this.match.removeLastElementFromActivities();
+
+        // update bowler
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementFourFromRunsConceded();
+        this.bowler.getMatchPlayerBowling().decrementFoursConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // Update the over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementFourFromRuns();
+        this.currentOver.updateOverCompleted();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementFourFromRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().decrementFoursScored();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // update team score
+        this.battingTeam.decrementFourFromRuns();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleFiveClick(View view) {
@@ -457,7 +637,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
         // Update the over
-        this.currentOver.getOverSummary().add("5");
+        this.currentOver.addToOverSummary("5");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.addFiveToRuns();
         this.currentOver.updateOverCompleted();
@@ -474,6 +654,41 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+    public boolean undoFiveRuns() {
+        this.rotateStrike();
+        this.match.removeLastElementFromActivities();
+
+        // Update bowler runs
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementFiveFromRunsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // Update the over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementFiveFromRuns();
+        this.currentOver.updateOverCompleted();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementFiveFromRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // update team score
+        this.battingTeam.decrementFiveFromRuns();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleSixClick(View view) {
@@ -495,7 +710,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
         // Update the over
-        this.currentOver.getOverSummary().add("6");
+        this.currentOver.addToOverSummary("6");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.addSixToRuns();
         this.currentOver.updateOverCompleted();
@@ -512,6 +727,43 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
+    }
+
+    public boolean undoSixruns() {
+        this.match.removeLastElementFromActivities();
+
+        // Update bowler runs
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementSixesConceded();
+        this.bowler.getMatchPlayerBowling().decrementSixFromRunsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+
+        // Update the over
+        this.currentOver.getOverSummary().add("6");
+        this.currentOver.incrementLegalDeliveries();
+        this.currentOver.addSixToRuns();
+        this.currentOver.updateOverCompleted();
+
+        // update batsmen score
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().decrementSixFromRunsScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementSixesScored();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+
+        // update team score
+        this.battingTeam.decrementSixFromRuns();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleOverCompleteClick(View view) {
@@ -618,7 +870,17 @@ public class MatchScoreActivity extends AppCompatActivity {
         // basic
         rotateStrike();
         this.match.addToActivities("RotateStrike");
+        this.updateScore();
         this.syncMatch();
+    }
+    public boolean undoRotateStrike() {
+        this.match.removeLastElementFromActivities();
+        rotateStrike();
+
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleWideBallClick(View view) {
@@ -917,7 +1179,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().setWicketBy(this.bowler.getPlayerName());
 
         // update over
-        this.currentOver.getOverSummary().add("Out");
+        this.currentOver.addToOverSummary("Out");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.incrementDotBalls();
         this.currentOver.incrementWickets();
@@ -1000,6 +1262,65 @@ public class MatchScoreActivity extends AppCompatActivity {
             System.out.println("This condition should never arrive.");
             Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public boolean undoBowled(String lastPlayerName) {
+        MatchPlayer player = this.battingTeam.getMatchPlayerFromName(lastPlayerName);
+
+        // remove new batsman in activity
+        this.match.removeLastElementFromActivities();
+
+        // not batted anymore
+        this.strikerBatsman.getMatchPlayerBatting().setBatted(false);
+        // set striker batsman
+        this.match.setStrikerBatsman(lastPlayerName);
+        this.match.setStrikerBatsmanIndex(
+                this.battingTeam.getMatchPlayerIndex(lastPlayerName)
+        );
+        // update striker batsman to last batsman
+        this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(lastPlayerName);
+
+        // remove last batsman out activity
+        this.match.removeLastElementFromActivities();
+
+        // update bowling record
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementWicketsTaken();
+        this.bowler.getMatchPlayerBowling().decrementDotsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        this.bowler.getMatchPlayerBowling().updateRecords();
+        this.bowler.getMatchPlayerBowling().removeFromWicketsTakenPlayers();
+        this.bowler.getMatchPlayerBowling().removeFromBowledPlayers();
+
+        // update over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementDotBalls();
+        this.currentOver.decrementWickets();
+        this.currentOver.updateOverCompleted();
+
+        // update batsman score
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+        this.strikerBatsman.getMatchPlayerBatting().setOut(false);
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().setBowledBy("");
+        this.strikerBatsman.getMatchPlayerBatting().setWicketBy("");
+
+        // update team score
+        this.battingTeam.decrementWickets();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+        this.battingTeam.removeFromFallOfWickets();
+
+        this.match.updateMatchCompleted();
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleCaughtClick(View view) {
@@ -1167,7 +1488,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.strikerBatsman.getMatchPlayerBatting().setWicketBy(this.bowler.getPlayerName());
 
         // update over
-        this.currentOver.getOverSummary().add("Out");
+        this.currentOver.addToOverSummary("Out");
         this.currentOver.incrementLegalDeliveries();
         this.currentOver.incrementDotBalls();
         this.currentOver.incrementWickets();
@@ -1248,6 +1569,60 @@ public class MatchScoreActivity extends AppCompatActivity {
             System.out.println("Impossible condition.");
             Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public boolean undoHitWicket(String lastBatsman) {
+        // remove new batsman in
+        this.match.removeLastElementFromActivities();
+
+        // set not batted
+        this.strikerBatsman.getMatchPlayerBatting().setBatted(false);
+
+        // remove reference
+        this.match.setStrikerBatsman(lastBatsman);
+        this.match.setStrikerBatsmanIndex(
+                this.battingTeam.getMatchPlayerIndex(lastBatsman)
+        );
+        this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(lastBatsman);
+
+        // remove out reference
+        this.match.removeLastElementFromActivities();
+
+        // update bowling record
+        this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
+        this.bowler.getMatchPlayerBowling().decrementWicketsTaken();
+        this.bowler.getMatchPlayerBowling().decrementDotsConceded();
+        this.bowler.getMatchPlayerBowling().decrementDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().decrementLegalDeliveriesBowled();
+        this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
+        this.bowler.getMatchPlayerBowling().updateRecords();
+        this.bowler.getMatchPlayerBowling().removeFromWicketsTakenPlayers();
+
+        // update over
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementDotBalls();
+        this.currentOver.decrementWickets();
+        this.currentOver.updateOverCompleted();
+
+        // update batsman score
+        this.strikerBatsman.getMatchPlayerBatting().decrementDotsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+        this.strikerBatsman.getMatchPlayerBatting().updateRecords();
+        this.strikerBatsman.getMatchPlayerBatting().setOut(false);
+        this.strikerBatsman.getMatchPlayerBatting().removeLastFromBattingDetails();
+        this.strikerBatsman.getMatchPlayerBatting().setWicketBy("");
+
+        // update team score
+        this.battingTeam.decrementWickets();
+        this.battingTeam.decrementLegalDeliveriesPlayed();
+        this.battingTeam.updateRunRate();
+        this.battingTeam.removeFromFallOfWickets();
+
+        this.updateScore();
+        this.syncMatch();
+
+        return true;
     }
 
     public void handleRunOutClick(View view) {
@@ -1897,7 +2272,85 @@ public class MatchScoreActivity extends AppCompatActivity {
     }
 
     public void handleUndoClick(View view) {
-        // TODO: This needs to be implemented properly and later
+        // we will support 0, 1, 2, 3, 4, 5, 6, bowled and hit wicket.
+        // all other decisions cannot be clicked by mistake
+
+        boolean undoDone = false;
+
+        int size = this.match.getActivities().size();
+        // get last activity
+        if(size == 0) {
+            Toast.makeText(this, "Nothing to undo.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String activity = this.match.getActivities().get(size - 1);
+
+        switch (activity) {
+            case "0":
+                System.out.println("Undo 0");
+                undoDone = undoZeroRuns();
+                break;
+            case "1":
+                System.out.println("Undo 1");
+                undoDone = undoOneRun();
+                break;
+            case "2":
+                System.out.println("Undo 2");
+                undoDone = undoTwoRuns();
+                break;
+            case "3":
+                System.out.println("Undo 3");
+                undoDone = undoThreeRuns();
+                break;
+            case "4":
+                System.out.println("Undo 4");
+                undoDone = undoFourRuns();
+                break;
+            case "5":
+                System.out.println("Undo 5");
+                undoDone = undoFiveRuns();
+            case "6":
+                System.out.println("Undo 6");
+                undoDone = undoSixruns();
+            case "RotateStrike":
+                undoDone = undoRotateStrike();
+            default:
+                break;
+        }
+
+        // last wicket out bowled
+        if(activity.contains("-Out-Bowled")) {
+            System.out.println("Undo bowled");
+            String playerName = activity.replace("-Out-Bowled", "");
+            undoDone = undoBowled(playerName);
+        }
+
+        // last wicket hit wicket
+        if(activity.contains("-Out-Hit-Wicket")) {
+            System.out.println("Undo hit wicket");
+            String playerName = activity.replace("-Out-Hit-Wicket", "");
+            undoDone = undoHitWicket(playerName);
+        }
+
+        // new batsman activity was added.
+        if(activity.contains("-In")) {
+            String previousActivity = this.match.getActivities().get(size - 2);
+
+            if(previousActivity.contains("-Out-Bowled")) {
+                System.out.println("Undo bowled");
+                String playerName = previousActivity.replace("-Out-Bowled", "");
+                undoDone = undoBowled(playerName);
+            } else if(previousActivity.contains("-Out-Hit-Wicket")) {
+                System.out.println("Undo hit wicket");
+                String playerName = previousActivity.replace("-Out-Hit-Wicket", "");
+                undoDone = undoHitWicket(playerName);
+            }
+        }
+
+        if(!undoDone) {
+            Toast.makeText(this, "Unsupported undo.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void handleInfoClick(View view) {

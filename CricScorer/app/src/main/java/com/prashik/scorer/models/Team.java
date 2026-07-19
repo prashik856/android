@@ -76,20 +76,39 @@ public class Team implements Serializable {
     public void incrementRuns() {
         this.runs = this.runs + 1;
     }
+    public void decrementRuns() {
+        this.runs = this.runs - 1;
+    }
+
     public void addTwoToRuns() {
         this.runs = this.runs + 2;
+    }
+    public void decrementTwoFromRuns() {
+        this.runs = this.runs - 2;
     }
     public void addThreeToRuns() {
         this.runs = this.runs + 3;
     }
+    public void decrementThreeFromRuns() {
+        this.runs = this.runs - 3;
+    }
     public void addFourToRuns() {
         this.runs = this.runs + 4;
+    }
+    public void decrementFourFromRuns() {
+        this.runs = this.runs - 4;
     }
     public void addFiveToRuns() {
         this.runs = this.runs + 5;
     }
+    public void decrementFiveFromRuns() {
+        this.runs = this.runs - 5;
+    }
     public void addSixToRuns() {
         this.runs = this.runs + 6;
+    }
+    public void decrementSixFromRuns() {
+        this.runs = this.runs - 6;
     }
 
     public void setRuns(int runs) {
@@ -101,6 +120,10 @@ public class Team implements Serializable {
     }
     public void incrementWickets() {
         this.wickets = this.wickets + 1;
+    }
+
+    public void decrementWickets() {
+        this.wickets = this.wickets - 1;
     }
 
     public void setWickets(int wickets) {
@@ -194,6 +217,10 @@ public class Team implements Serializable {
         this.legalDeliveriesPlayed = this.legalDeliveriesPlayed + 1;
     }
 
+    public void decrementLegalDeliveriesPlayed() {
+        this.legalDeliveriesPlayed = this.legalDeliveriesPlayed - 1;
+    }
+
     public void setLegalDeliveriesPlayed(int legalDeliveriesPlayed) {
         this.legalDeliveriesPlayed = legalDeliveriesPlayed;
     }
@@ -240,6 +267,11 @@ public class Team implements Serializable {
 
     public void updateFallOfWickets() {
         this.fallOfWickets.add(this.runs);
+    }
+
+    public void removeFromFallOfWickets() {
+        int size = this.fallOfWickets.size();
+        this.fallOfWickets.remove(size - 1);
     }
 
     public MatchPlayer getMatchPlayerFromName(String playerName) {
