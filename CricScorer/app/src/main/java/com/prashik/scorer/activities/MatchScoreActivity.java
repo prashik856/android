@@ -279,6 +279,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Add dot ball info to current bowler
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("0");
         this.bowler.getMatchPlayerBowling().incrementDotsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -314,6 +315,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Add single run info to current bowler
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("1");
         this.bowler.getMatchPlayerBowling().incrementRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -350,6 +352,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("2");
         this.bowler.getMatchPlayerBowling().addTwoToRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -385,6 +388,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("3");
         this.bowler.getMatchPlayerBowling().addThreeToRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -422,6 +426,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("4");
         this.bowler.getMatchPlayerBowling().addFourToRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementFoursConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
@@ -458,6 +463,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("5");
         this.bowler.getMatchPlayerBowling().addFiveToRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -495,6 +501,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // Update bowler runs
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("6");
         this.bowler.getMatchPlayerBowling().addSixToRunsConceded();
         this.bowler.getMatchPlayerBowling().incrementSixesConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
@@ -651,6 +658,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnWideBall);
 
             // update bowler runs
+            this.bowler.getMatchPlayerBowling().addToBowlingDetails(activityValue);
             this.bowler.getMatchPlayerBowling().setRunsConceded(
                     this.bowler.getMatchPlayerBowling().getRunsConceded() + runsScoredOnWideBall);
             this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
@@ -769,6 +777,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnNoBall);
 
                 // update bowler runs
+                this.bowler.getMatchPlayerBowling().addToBowlingDetails(activityValue);
                 this.bowler.getMatchPlayerBowling().setRunsConceded(
                         this.bowler.getMatchPlayerBowling().getRunsConceded() + runsScoredOnNoBall);
                 this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
@@ -849,6 +858,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnBye);
 
             // update bowler runs
+            this.bowler.getMatchPlayerBowling().addToBowlingDetails(activityValue);
             this.bowler.getMatchPlayerBowling().setRunsConceded(
                     this.bowler.getMatchPlayerBowling().getRunsConceded() + runsScoredOnBye);
             this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
@@ -914,6 +924,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // update bowling record
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("Out-Bowled");
         this.bowler.getMatchPlayerBowling().incrementWicketsTaken();
         this.bowler.getMatchPlayerBowling().incrementDotsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
@@ -1039,6 +1050,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.currentOver.updateOverCompleted();
 
             // update bowling record
+            this.bowler.getMatchPlayerBowling().addToBowlingDetails("Out-Caught");
             this.bowler.getMatchPlayerBowling().incrementWicketsTaken();
             this.bowler.getMatchPlayerBowling().incrementDotsConceded();
             this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
@@ -1162,6 +1174,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // update bowling record
+        this.bowler.getMatchPlayerBowling().addToBowlingDetails("Out-Hit-Wicket");
         this.bowler.getMatchPlayerBowling().incrementWicketsTaken();
         this.bowler.getMatchPlayerBowling().incrementDotsConceded();
         this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();

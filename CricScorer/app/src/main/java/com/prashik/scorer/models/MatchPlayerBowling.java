@@ -30,6 +30,7 @@ public class MatchPlayerBowling implements Serializable {
     ArrayList<String> bowledPlayers = new ArrayList<>();
     ArrayList<String> wicketsTakenPlayers = new ArrayList<>();
     ArrayList<String> maidenBowledTo = new ArrayList<>();
+    ArrayList<String> bowlingDetails = new ArrayList<>();
 
     public MatchPlayerBowling() {
 
@@ -272,6 +273,18 @@ public class MatchPlayerBowling implements Serializable {
 
     public void setOverBowled(ArrayList<Integer> overBowled) {
         this.overBowled = overBowled;
+    }
+
+    public ArrayList<String> getBowlingDetails() {
+        return bowlingDetails;
+    }
+
+    public void setBowlingDetails(ArrayList<String> bowlingDetails) {
+        this.bowlingDetails = bowlingDetails;
+    }
+
+    public void addToBowlingDetails(String bowlDetails) {
+        this.bowlingDetails.add(bowlDetails);
     }
 
     public void updateBowlingEconomy() {

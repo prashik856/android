@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
+import com.prashik.scorer.models.MatchPlayer;
 
 public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerBattingAdapter.ViewHolder>{
 
     // with all players names, I get access to their names. using this, i can get their match player
     String[] allPlayerNames;
+    Match match;
 
     @NonNull
     @Override
@@ -26,8 +28,48 @@ public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerB
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.getTextView().setText("");
-        viewHolder.getTextView().setContentDescription("");
+        String name = allPlayerNames[position];
+        MatchPlayer player = this.match.getMatchPlayerObject(name);
+        int runsScored = player.getMatchPlayerBatting().getRunsScored();
+        int ballsPlayed = player.getMatchPlayerBatting().getBallsPlayed();
+        String wicketValue = "";
+        if(!player.getMatchPlayerBatting().isOut()) {
+            name = name + "*";
+            wicketValue = "Not out";
+        } else {
+            if(!player.getMatchPlayerBatting().getCoughtBy().isEmpty()) {
+                wicketValue = String.format("c %s b %s", player.getMatchPlayerBatting().getCoughtBy(),
+                        player.getMatchPlayerBatting().getWicketBy());
+            } else if(!player.getMatchPlayerBatting().getBowledBy().isEmpty()) {
+                wicketValue = String.format("b %s", player.getMatchPlayerBatting().getWicketBy());
+            } else if(!player.getMatchPlayerBatting().getRunOutBy().isEmpty()) {
+                wicketValue = String.format("run out %s", player.getMatchPlayerBatting().getRunOutBy());
+            } else {
+                // hit wicket
+                wicketValue = String.format("b %s", player.getMatchPlayerBatting().getWicketBy());
+            }
+        }
+        double strikeRate = player.getMatchPlayerBatting().getStrikeRate();
+
+        int fours = player.getMatchPlayerBatting().getFoursScored();
+        int sixes = player.getMatchPlayerBatting().getSixesScored();
+        int dots = player.getMatchPlayerBatting().getDotsPlayed();
+
+        String id = player.getPlayer().getId();
+
+        StringBuilder battingDetails = new StringBuilder();
+        battingDetails.append("Every Ball Score - ");
+        for(int i=0; i<player.getMatchPlayerBatting().getBattingDetails().size(); i++) {
+            battingDetails.append(player.getMatchPlayerBatting().getBattingDetails().get(i));
+            battingDetails.append(" ");
+        }
+
+
+        String textValue = String.format("%s %d(%d)\tSR: %.2f\n0s:%d\t4s:%d\t6s:%d\n%s\n%s",
+                name, runsScored, ballsPlayed, strikeRate, dots, fours, sixes, battingDetails, wicketValue);
+
+        viewHolder.getTextView().setText(textValue);
+        viewHolder.getTextView().setContentDescription(id);
     }
 
     @Override
@@ -50,5 +92,6 @@ public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerB
 
     public MatchPlayerBattingAdapter(String[] allPlayerNameValues, Match matchObject) {
         this.allPlayerNames = allPlayerNameValues;
+        this.match = matchObject;
     }
 }
