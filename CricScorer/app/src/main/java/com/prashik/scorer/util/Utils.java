@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -287,6 +288,18 @@ public class Utils {
         return players.toArray(new String[0]);
     }
 
+    public static String[] getRemainingPlayersList(HashMap<String, String> allPlayers, Match match) {
+        String[] allPlayersString = getPlayersList(allPlayers);
+        ArrayList<String> matchPlayers = match.getMatchPlayers();
+        ArrayList<String> temp = new ArrayList<>();
+        for (String player : allPlayersString) {
+            if (!matchPlayers.contains(player)) {
+                temp.add(player);
+            }
+        }
+        return temp.toArray(new String[0]);
+    }
+
     public static MatchPlayer getMatchPlayer(String name,
                                              HashMap<String, String> map,
                                              HashMap<String, Player> allPlayers) {
@@ -316,6 +329,7 @@ public class Utils {
             stringBuilder.append(str);
             stringBuilder.append(" ");
         }
+        stringBuilder.append("| This Over - ").append(over.getRuns());
         return stringBuilder.toString();
     }
 

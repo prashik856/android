@@ -27,6 +27,7 @@ import com.prashik.scorer.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class MatchScoreActivity extends AppCompatActivity {
@@ -178,6 +179,74 @@ public class MatchScoreActivity extends AppCompatActivity {
         // show over details
         TextView overDetailsText = findViewById(R.id.current_over_details_ms);
         overDetailsText.setText(overDetails);
+    }
+
+    public void rebalanceTeams(ArrayList<String> team1, ArrayList<String> team2, String commonPlayer) {
+        // Create new player objects
+        for(String player: team1) {
+            this.match.addToMatchPlayers(player);
+        }
+
+        for(String player: team2) {
+            this.match.addToMatchPlayers(player);
+        }
+
+        MatchPlayer previousCommonPlayer = null;
+        // remove previous common player if we have it
+        if(!this.battingTeam.getCommonName().isEmpty()) {
+            // not empty
+            previousCommonPlayer = this.battingTeam.getMatchPlayerFromName(
+                    this.battingTeam.getCommonName()
+            );
+
+            if(!previousCommonPlayer.getPlayerName().equals(commonPlayer)) {
+                // new common player differs
+                this.battingTeam.getPlayerNames().remove(commonPlayer);
+                System.out.println("Updated batting team after removing common player: " + this.battingTeam.getPlayerNames());
+
+                this.battingTeam.removeFromTeamPlayers(previousCommonPlayer);
+                System.out.println("Updated batting team after removal : " + this.battingTeam.toString());
+
+                this.bowlingTeam.getPlayerNames().remove(commonPlayer);
+                System.out.println("Updated bowling team after removing common player: " + this.bowlingTeam.getPlayerNames());
+
+                this.bowlingTeam.removeFromTeamPlayers(previousCommonPlayer);
+                System.out.println("Updated bowling team after removal: " + this.bowlingTeam.toString());
+            } else {
+                System.out.println("New common player is same as previous common player. No need to remove.");
+            }
+        }
+
+        // add team1 to batting team
+        for(String player: team1) {
+            if(previousCommonPlayer != null && previousCommonPlayer.getPlayerName().equals(player)) {
+                // same player so, object already exists. No need to initialize
+                this.battingTeam.addToTeam(previousCommonPlayer);
+            } else {
+                // initialize a new player
+                String playerId = nameToIdMap.get(player);
+                Player playerObject = allPlayers.get(playerId);
+                MatchPlayer matchPlayer = new MatchPlayer(playerObject);
+                this.battingTeam.addToTeam(matchPlayer);
+            }
+        }
+
+        // add team 2 to bowling team
+        for(String player: team2) {
+            if(previousCommonPlayer != null && previousCommonPlayer.getPlayerName().equals(player)) {
+                // same player so, object already exists. No need to initialize
+                this.bowlingTeam.addToTeam(previousCommonPlayer);
+            }
+            // initialize a new player
+            String playerId = nameToIdMap.get(player);
+            Player playerObject = allPlayers.get(playerId);
+            MatchPlayer matchPlayer = new MatchPlayer(playerObject);
+            this.bowlingTeam.addToTeam(matchPlayer);
+        }
+
+        if(this.battingTeam.getTeamSize() != this.bowlingTeam.getTeamSize()) {
+            throw new RuntimeException("Team size not equal after rebalancing.");
+        }
     }
 
     public String[] getNotOutBatsMan() {
@@ -2096,17 +2165,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         }
     }
 
-    public void handleEditPlayersClick(View view) {
-        System.out.println("Edit the current match players.");
-        // lets start simple,
-        // go to new activity edit match players
-        // select new players
-        // go to select players to team A activity
-        // fields should already be updated. If we want to update anything, that can be done.
-        //
-        //
-    }
-
     public void handleEditOversClick(View view) {
         System.out.println("Edit overs clicked.");
 
@@ -2360,6 +2418,173 @@ public class MatchScoreActivity extends AppCompatActivity {
         intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", match);
         startActivity(intent);
+    }
+
+    public void handleEditPlayersClick(View view) {
+        System.out.println("Edit the current match players.");
+        // Select new players -> cancellable
+        String[] remainingPlayers = Utils.getRemainingPlayersList(nameToIdMap, this.match);
+        boolean[] selectedPlayers = new boolean[remainingPlayers.length];
+        ArrayList<Integer> playersList = new ArrayList<>();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+        builder.setTitle("Select the new players which are playing?");
+        builder.setCancelable(false);
+
+        builder.setMultiChoiceItems(remainingPlayers, selectedPlayers,
+                (dialog, which, isChecked) -> {
+                    // Check condition
+                    if(isChecked) {
+                        // when this checkbox is selected, we will add this in our players list
+                        playersList.add(which);
+                        // we sort our array list
+                        Collections.sort(playersList);
+                    } else {
+                        // when unselected, remove position from our list
+                        playersList.remove(Integer.valueOf(which));
+                    }
+                });
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            for(int i=0; i<playersList.size(); i++) {
+                stringBuilder.append(remainingPlayers[playersList.get(i)]);
+                if(i != playersList.size() - 1) {
+                    stringBuilder.append(", ");
+                }
+            }
+
+            System.out.println("The new players selected are: " + stringBuilder);
+
+            ArrayList<String> temp = new ArrayList<>();
+            for(int val: playersList) {
+                temp.add(remainingPlayers[val]);
+            }
+
+            // distribute new players + common player -> if we have it
+            if(!this.battingTeam.getCommonName().isEmpty()) {
+                // no common
+                temp.add(this.battingTeam.getCommonName());
+            }
+
+            boolean isEven = Utils.isEven(temp.size());
+            int maxPlayersToSelect = temp.size()/2;
+
+            String[] playersOptionList = temp.toArray(new String[0]);
+            boolean[] playersSelectedInTeam = new boolean[playersOptionList.length];
+            ArrayList<Integer> playerSelectedIndex = new ArrayList<>();
+
+            AlertDialog.Builder selectPlayersBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+            selectPlayersBuilder.setTitle("Select " + maxPlayersToSelect + " players for " + this.battingTeam.getName() + " team.");
+            selectPlayersBuilder.setCancelable(false);
+
+            selectPlayersBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+
+            selectPlayersBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
+                for(int i=0; i<playersOptionList.length; i++) {
+                    playersSelectedInTeam[i] = false;
+                }
+                playerSelectedIndex.clear();
+            });
+
+            selectPlayersBuilder.setMultiChoiceItems(playersOptionList, playersSelectedInTeam,
+                    (dialog1, which1, isChecked) -> {
+                        // Check condition
+                        if(isChecked) {
+                            // when this checkbox is selected, we will add this in our players list
+                            playerSelectedIndex.add(which);
+                            // we sort our array list
+                            Collections.sort(playerSelectedIndex);
+                        } else {
+                            // when unselected, remove position from our list
+                            playerSelectedIndex.remove(which1);
+                        }
+                    });
+
+            selectPlayersBuilder.setPositiveButton("OK", (dialog1, which1) -> {
+                if(playerSelectedIndex.size() > maxPlayersToSelect) {
+                    Toast.makeText(this, "You need to select only " + maxPlayersToSelect + " players.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                ArrayList<String> temp2 = new ArrayList<>();
+                for(int val: playerSelectedIndex) {
+                    temp2.add(playersOptionList[val]);
+                }
+                System.out.println("the players selected are: " + temp2);
+
+                ArrayList<String> temp3 = new ArrayList<>();
+                for(String player: playersOptionList) {
+                    // if
+                    if(!temp2.contains(player)) {
+                        temp3.add(player);
+                    }
+                }
+
+                if(isEven) {
+                    this.rebalanceTeams(temp2, temp3, "");
+                    Toast.makeText(this, "Teams have been rebalanced.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    // Go to options to select the common player
+                    System.out.println("Select the common player from the remaining players.");
+
+                    String[] commonOptions = temp3.toArray(new String[0]);
+                    int[] commonPlayerSelected = {-1};
+
+                    AlertDialog.Builder commonPlayerBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                    commonPlayerBuilder.setTitle("Please select common player");
+                    commonPlayerBuilder.setCancelable(false);
+
+                    commonPlayerBuilder.setSingleChoiceItems(commonOptions, commonPlayerSelected[0],
+                            (dialog3, which3) -> commonPlayerSelected[0] = which3);
+
+                    commonPlayerBuilder.setNeutralButton("Clear", (dialog3, which3) -> {
+                        commonPlayerSelected[0] = -1;
+                    });
+
+                    commonPlayerBuilder.setPositiveButton("Ok", (dialog3, which3) -> {
+                        if(commonPlayerSelected[0] == -1) {
+                            Toast.makeText(this, "You need to select the common player.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                        String commonPlayer = commonOptions[commonPlayerSelected[0]];
+                        System.out.println("Common player selected is: " + commonPlayer);
+
+                        // temp3 already has common player. Add it to temp2.
+                        temp2.add(commonPlayer);
+
+                        // rebalance teams
+                        this.rebalanceTeams(temp2, temp3, commonPlayer);
+
+                        Toast.makeText(this, "Teams have been rebalanced.",
+                                Toast.LENGTH_LONG).show();
+                    });
+
+                    commonPlayerBuilder.show();
+
+                    if(commonPlayerSelected[0] == -1) {
+                        System.out.println("Impossible condition.");
+                        Toast.makeText(this, "You need to select the common player.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            selectPlayersBuilder.show();
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        builder.setNeutralButton("Clear All", (dialog, which) -> {
+            Arrays.fill(selectedPlayers, false);
+            playersList.clear();
+        });
+
+        builder.show();
+
+        Toast.makeText(this, "You need to select the new players.", Toast.LENGTH_LONG).show();
     }
 
 }

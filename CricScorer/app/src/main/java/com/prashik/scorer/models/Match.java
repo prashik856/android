@@ -121,6 +121,15 @@ public class Match implements Serializable {
         this.matchPlayers = matchPlayers;
     }
 
+    public void addToMatchPlayers(String matchPlayer) {
+        if(!this.matchPlayers.contains(matchPlayer)) {
+            System.out.println("New player " + matchPlayer + " not present in existing match players.");
+            this.matchPlayers.add(matchPlayer);
+        } else {
+            System.out.println("New player " + matchPlayer + " already exists in the list of match players.");
+        }
+    }
+
     public int getMaxOvers() {
         return maxOvers;
     }

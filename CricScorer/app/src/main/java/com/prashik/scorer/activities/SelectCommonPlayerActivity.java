@@ -142,6 +142,7 @@ public class SelectCommonPlayerActivity extends AppCompatActivity {
         if(!teamA.getPlayerNames().contains(commonPlayer.getPlayer().getFullName())) {
             teamA.getTeamPlayers().add(commonPlayer);
             teamA.getPlayerNames().add(commonPlayer.getPlayer().getFullName());
+            teamA.setCommonName(commonPlayer.getPlayerName());
         }
         System.out.println("Team A Players after adding common player: " + teamA.getPlayerNames());
 
@@ -174,6 +175,7 @@ public class SelectCommonPlayerActivity extends AppCompatActivity {
         if(!teamB.getPlayerNames().contains(commonPlayer.getPlayer().getFullName())) {
             teamB.getTeamPlayers().add(commonPlayer);
             teamB.getPlayerNames().add(commonPlayer.getPlayer().getFullName());
+            teamB.setCommonName(commonPlayer.getPlayerName());
         }
         System.out.println("Team B Players after adding common player: " + teamB.getPlayerNames());
 
