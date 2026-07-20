@@ -22,7 +22,7 @@ public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerB
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.text_row_item, viewGroup, false);
+                .inflate(R.layout.text_row_item_batting, viewGroup, false);
         return new MatchPlayerBattingAdapter.ViewHolder(view);
     }
 
@@ -33,12 +33,16 @@ public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerB
         int runsScored = player.getMatchPlayerBatting().getRunsScored();
         int ballsPlayed = player.getMatchPlayerBatting().getBallsPlayed();
         String wicketValue = "";
-        if(!player.getMatchPlayerBatting().isOut()) {
+
+        if(player.getMatchPlayerBatting().isBatted() && !player.getMatchPlayerBatting().isOut()) {
             name = name + "*";
+        }
+
+        if(!player.getMatchPlayerBatting().isOut()) {
             wicketValue = "Not out";
         } else {
             if(!player.getMatchPlayerBatting().getCoughtBy().isEmpty()) {
-                wicketValue = String.format("c %s b %s", player.getMatchPlayerBatting().getCoughtBy(),
+                wicketValue = String.format("c %s    b %s", player.getMatchPlayerBatting().getCoughtBy(),
                         player.getMatchPlayerBatting().getWicketBy());
             } else if(!player.getMatchPlayerBatting().getBowledBy().isEmpty()) {
                 wicketValue = String.format("b %s", player.getMatchPlayerBatting().getWicketBy());
@@ -65,7 +69,10 @@ public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerB
         }
 
 
-        String textValue = String.format("%s %d(%d)\tSR: %.2f\n0s:%d\t4s:%d\t6s:%d\n%s\n%s",
+        String textValue = String.format("%s   %d(%d)    SR: %.2f\n" +
+                        "0s:%d   4s:%d   6s:%d\n" +
+                        "%s\n" +
+                        "%s",
                 name, runsScored, ballsPlayed, strikeRate, dots, fours, sixes, battingDetails, wicketValue);
 
         viewHolder.getTextView().setText(textValue);
@@ -82,7 +89,7 @@ public class MatchPlayerBattingAdapter extends RecyclerView.Adapter<MatchPlayerB
 
         public ViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.single_player_text);
+            textView = view.findViewById(R.id.single_batting_player);
         }
 
         public TextView getTextView() {

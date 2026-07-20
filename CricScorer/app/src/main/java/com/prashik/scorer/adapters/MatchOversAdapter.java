@@ -17,19 +17,18 @@ import java.util.ArrayList;
 
 public class MatchOversAdapter extends RecyclerView.Adapter<MatchOversAdapter.ViewHolder>{
     String[] allOvers;
-    Match match;
+    Team bowlingTeam;
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.text_row_item, viewGroup, false);
+                .inflate(R.layout.text_row_item_overs, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Team bowlingTeam = this.match.getBowlingTeam();
         Over over = bowlingTeam.getOvers().get(position);
 
         int overNumber = over.getMatchOverId() + 1;
@@ -65,10 +64,10 @@ public class MatchOversAdapter extends RecyclerView.Adapter<MatchOversAdapter.Vi
         }
 
         String text = String.format("Match Over: %d\n" +
-                "Bowled By:%s\n" +
-                "Balls:%d\tWB:%d\tNB:%d\tDots:%d\n" +
-                "W:%d\tR:%d\tByes:%d\tExtras:%d\n" +
-                "Maiden: %s\tCompleted: %s\n" +
+                "Bowled By:  %s\n" +
+                "Balls:%d   WB:%d   NB:%d   Dots:%d\n" +
+                "Wkts:%d   Runs:%d   Byes:%d   Extras:%d\n" +
+                "Maiden Over: %s    Over Completed: %s\n" +
                 "%s",
                 overNumber,
                 bowledBy,
@@ -92,7 +91,7 @@ public class MatchOversAdapter extends RecyclerView.Adapter<MatchOversAdapter.Vi
 
         public ViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.single_player_text);
+            textView = view.findViewById(R.id.single_over_item);
         }
 
         public TextView getTextView() {
@@ -100,9 +99,9 @@ public class MatchOversAdapter extends RecyclerView.Adapter<MatchOversAdapter.Vi
         }
     }
 
-    public MatchOversAdapter(String[] allOversValues, Match matchObject) {
+    public MatchOversAdapter(String[] allOversValues, Team bowlingTeamObject) {
         this.allOvers = allOversValues;
-        this.match = matchObject;
+        this.bowlingTeam = bowlingTeamObject;
     }
 
 }

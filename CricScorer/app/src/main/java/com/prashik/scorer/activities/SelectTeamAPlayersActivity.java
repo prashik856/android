@@ -72,7 +72,7 @@ public class SelectTeamAPlayersActivity extends AppCompatActivity {
         String teamAName = this.match.getTeamA().getName();
 
         TextView textView = findViewById(R.id.team_a_name_stp);
-        textView.setText(String.format("Select %s Players", teamAName));
+        textView.setText(String.format("Select %d players for %s team", this.teamMaxPlayers, teamAName));
 
         selectedPlayers = new boolean[playersWithoutCaptain.length];
         TextView textView1 = findViewById(R.id.select_team_a_players);

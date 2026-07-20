@@ -17,11 +17,15 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.adapters.PlayersAdapter;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
+import com.prashik.scorer.models.Match;
+import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class PlayersActivity extends AppCompatActivity {
 
@@ -63,5 +67,44 @@ public class PlayersActivity extends AppCompatActivity {
         intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
         intent.putExtra("player_id", playerId);
         startActivity(intent);
+    }
+
+    public void handleSyncClick(View view) {
+        System.out.println("Syncing name to id data.");
+        HashMap<String, String> nameToIdMap = new HashMap<>();
+        for(String playerId: allPlayers.keySet()) {
+            String playerName = Objects.requireNonNull(allPlayers.get(playerId)).getFullName();
+
+            if(nameToIdMap.get(playerName) == null) {
+                nameToIdMap.put(playerName, playerId);
+            } else {
+                System.out.println("Error syncning player " + playerName + ". Data already exists in naming map.");
+                throw new RuntimeException("Error. " + playerName + " already exists in map.");
+            }
+            String fileName = this.dataFilesMap.get("players_name_to_id_map_file_location");
+            Utils.syncNameToIdMapData(fileName, nameToIdMap);
+
+            System.out.println("Sync complete.");
+        }
+
+        // we can even sync player data here.
+        String filesDirectory = this.dataFilesMap.get("files_directory");
+//        ArrayList<String> matchFiles = Utils.getMatchFiles(Utils.getAllFilesInDirectory(filesDirectory));
+//
+//        for(String matchfile: matchFiles) {
+//            String fileToRead = filesDirectory + "/" + matchfile;
+//            System.out.println("File to read: " + fileToRead);
+//            Match match = Utils.readMatchFile(fileToRead);
+//
+//            // Go through all players
+//            for(MatchPlayer matchPlayer: match.getTeamA().getTeamPlayers()) {
+//
+//            }
+//
+//            // Go through all players
+//            for(MatchPlayer matchPlayer: match.getTeamB().getTeamPlayers()) {
+//
+//            }
+//        }
     }
 }

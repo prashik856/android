@@ -40,7 +40,20 @@ public class InningsBowlingActivity extends AppCompatActivity {
         this.innings = (int) getIntent().getSerializableExtra("innings_value");
 
         TextView inningsTitleView = findViewById(R.id.innings_title_ibowl);
-        Team bowlingTeam = this.match.getBowlingTeam();
+        Team bowlingTeam;
+        if(innings == 1) {
+            if(this.match.isTeamABatFirst()) {
+                bowlingTeam = this.match.getTeamB();
+            } else {
+                bowlingTeam = this.match.getTeamA();
+            }
+        } else {
+            if(this.match.isTeamABatFirst()) {
+                bowlingTeam = this.match.getTeamA();
+            } else {
+                bowlingTeam = this.match.getTeamB();
+            }
+        }
 
         String title = bowlingTeam.getName() + " Bowling";
         inningsTitleView.setText(title);
@@ -52,9 +65,6 @@ public class InningsBowlingActivity extends AppCompatActivity {
             if(matchPlayer.getMatchPlayerBowling().isBowled()) {
                 // bowled first
                 temp.add(0, matchPlayer.getPlayerName());
-            } else {
-                // not batted last
-                temp.add(matchPlayer.getPlayerName());
             }
         }
 

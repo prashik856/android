@@ -45,6 +45,7 @@ public class SelectOpenersActivity extends AppCompatActivity {
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
+        assert this.match != null;
         this.playersOptions = this.match.getBattingTeam().getPlayerNames().toArray(new String[0]);
         this.bowlerOptions = this.match.getBowlingTeam().getPlayerNames().toArray(new String[0]);
 
@@ -168,6 +169,7 @@ public class SelectOpenersActivity extends AppCompatActivity {
 
         battingTeam.getTeamPlayers().get(strikerIndex).getMatchPlayerBatting().setBatted(true);
         battingTeam.getTeamPlayers().get(nonStrikerIndex).getMatchPlayerBatting().setBatted(true);
+
         bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().setBowled(true);
         bowlingTeam.getTeamPlayers().get(bowlerIndex).getMatchPlayerBowling().addToOverBowled(
                 bowlingTeam.getCurrentOverBowling()

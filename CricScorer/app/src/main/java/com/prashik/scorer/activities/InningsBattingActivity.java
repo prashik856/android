@@ -39,7 +39,21 @@ public class InningsBattingActivity extends AppCompatActivity {
         this.innings = (int) getIntent().getSerializableExtra("innings_value");
 
         TextView inningsTitleView = findViewById(R.id.innings_title_ibat);
-        Team battingTeam = this.match.getBattingTeam();
+
+        Team battingTeam;
+        if(innings == 1) {
+            if(this.match.isTeamABatFirst()) {
+                battingTeam = this.match.getTeamA();
+            } else {
+                battingTeam = this.match.getTeamB();
+            }
+        } else {
+            if(this.match.isTeamABatFirst()) {
+                battingTeam = this.match.getTeamB();
+            } else {
+                battingTeam = this.match.getTeamA();
+            }
+        }
 
         String title = battingTeam.getName() + " Batting";
         inningsTitleView.setText(title);
@@ -70,7 +84,7 @@ public class InningsBattingActivity extends AppCompatActivity {
         StringBuilder fallOfWickets = new StringBuilder();
         for(int i=0; i<battingTeam.getFallOfWickets().size(); i++) {
             fallOfWickets.append(battingTeam.getFallOfWickets().get(i));
-            fallOfWickets.append("\t");
+            fallOfWickets.append("    ");
         }
         fow.setText(String.format("FOW: %s", fallOfWickets));
 

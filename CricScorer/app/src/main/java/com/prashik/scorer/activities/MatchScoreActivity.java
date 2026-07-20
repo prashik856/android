@@ -91,6 +91,9 @@ public class MatchScoreActivity extends AppCompatActivity {
             }
         }
 
+        System.out.println("All Players Object: " + this.allPlayers.toString());
+        System.out.println("Name to Id Map object: " + this.nameToIdMap.toString());
+
         System.out.println("Match Object: ");
         System.out.println(this.match);
 
@@ -183,6 +186,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
     public void rebalanceTeams(ArrayList<String> team1, ArrayList<String> team2, String commonPlayer) {
         // Create new player objects
+        System.out.println("Add players to match players.");
+        // team1 and team2 contains commonplayer + other player.
         for(String player: team1) {
             this.match.addToMatchPlayers(player);
         }
@@ -191,35 +196,34 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.match.addToMatchPlayers(player);
         }
 
+        System.out.println("Handling previous common player.");
         MatchPlayer previousCommonPlayer = null;
         // remove previous common player if we have it
         if(!this.battingTeam.getCommonName().isEmpty()) {
+            System.out.println("We already have a common player: " + this.battingTeam.getCommonName());
+
             // not empty
             previousCommonPlayer = this.battingTeam.getMatchPlayerFromName(
                     this.battingTeam.getCommonName()
             );
 
-            if(!previousCommonPlayer.getPlayerName().equals(commonPlayer)) {
-                // new common player differs
-                this.battingTeam.getPlayerNames().remove(commonPlayer);
-                System.out.println("Updated batting team after removing common player: " + this.battingTeam.getPlayerNames());
-
-                this.battingTeam.removeFromTeamPlayers(previousCommonPlayer);
-                System.out.println("Updated batting team after removal : " + this.battingTeam.toString());
-
-                this.bowlingTeam.getPlayerNames().remove(commonPlayer);
-                System.out.println("Updated bowling team after removing common player: " + this.bowlingTeam.getPlayerNames());
-
-                this.bowlingTeam.removeFromTeamPlayers(previousCommonPlayer);
-                System.out.println("Updated bowling team after removal: " + this.bowlingTeam.toString());
-            } else {
-                System.out.println("New common player is same as previous common player. No need to remove.");
-            }
+            // remove this player from both teams.
+            System.out.println("Removing previous common player " + previousCommonPlayer.getPlayerName() + " from both teams.");
+            this.battingTeam.removeFromTeamPlayers(previousCommonPlayer);
+            this.bowlingTeam.removeFromTeamPlayers(previousCommonPlayer);
+            this.battingTeam.setCommonName("");
+            this.bowlingTeam.setCommonName("");
         }
 
+        System.out.println("Updated teams after removing common player");
+        System.out.println("Batting team: " + this.battingTeam.toString());
+        System.out.println("Bowling team: " + this.bowlingTeam.toString());
+
+        System.out.println("Handling adding players to batting team.");
         // add team1 to batting team
         for(String player: team1) {
             if(previousCommonPlayer != null && previousCommonPlayer.getPlayerName().equals(player)) {
+                System.out.println("Adding previous common player to batting team.");
                 // same player so, object already exists. No need to initialize
                 this.battingTeam.addToTeam(previousCommonPlayer);
             } else {
@@ -231,10 +235,18 @@ public class MatchScoreActivity extends AppCompatActivity {
             }
         }
 
+        // set common player
+        if(!commonPlayer.isEmpty()) {
+            System.out.println("Updating common player in batting team.");
+            this.battingTeam.setCommonName(commonPlayer);
+        }
+
+        System.out.println("Handling adding players to bowling team.");
         // add team 2 to bowling team
         for(String player: team2) {
             if(previousCommonPlayer != null && previousCommonPlayer.getPlayerName().equals(player)) {
                 // same player so, object already exists. No need to initialize
+                System.out.println("Adding previous common player to bowling team.");
                 this.bowlingTeam.addToTeam(previousCommonPlayer);
             }
             // initialize a new player
@@ -244,9 +256,22 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.bowlingTeam.addToTeam(matchPlayer);
         }
 
+        if(!commonPlayer.isEmpty()) {
+            System.out.println("Updating common player in batting team.");
+            this.bowlingTeam.setCommonName(commonPlayer);
+        }
+
+        System.out.println("Updated teams after adding new players");
+        System.out.println("Batting team: " + this.battingTeam.toString());
+        System.out.println("Bowling team: " + this.bowlingTeam.toString());
+
         if(this.battingTeam.getTeamSize() != this.bowlingTeam.getTeamSize()) {
             throw new RuntimeException("Team size not equal after rebalancing.");
         }
+
+        System.out.println("Rebalancing complete. Syncing match.");
+        this.syncMatch();
+        this.updateScore();
     }
 
     public String[] getNotOutBatsMan() {
@@ -693,6 +718,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             return;
         }
 
+        System.out.println("Score 5");
         // update team score
         this.battingTeam.addFiveToRuns();
         this.battingTeam.incrementLegalDeliveriesPlayed();
@@ -724,6 +750,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.updateScore();
         this.syncMatch();
     }
+
     public boolean undoFiveRuns() {
         this.rotateStrike();
         this.match.removeLastElementFromActivities();
@@ -810,9 +837,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
         // Update the over
-        this.currentOver.getOverSummary().add("6");
-        this.currentOver.incrementLegalDeliveries();
-        this.currentOver.addSixToRuns();
+        this.currentOver.removeLastElementFromOverSummary();
+        this.currentOver.decrementLegalDeliveries();
+        this.currentOver.decrementSixFromRuns();
         this.currentOver.updateOverCompleted();
 
         // update batsmen score
@@ -843,17 +870,20 @@ public class MatchScoreActivity extends AppCompatActivity {
         }
 
         System.out.println("Over completed. Updating records");
-        // update records after over is completed
-        this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
-        this.bowlingTeam.incrementCurrentOverBowling();
-        this.battingTeam.incrementCurrentOverBatting();
-        if(this.currentOver.isMaiden()) {
-            System.out.println("A Maiden over was bowled.");
-            this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
-            this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
-                    this.match.getStrikerBatsman());
+        if(this.bowlingTeam.getCurrentOverBowling() <= this.match.getMaxOvers()) {
+            System.out.println("Records are already updated.");
+            // update records after over is completed
+            this.bowler.getMatchPlayerBowling().incrementNoOfOvers();
+            this.bowlingTeam.incrementCurrentOverBowling();
+            this.battingTeam.incrementCurrentOverBatting();
+            if(this.currentOver.isMaiden()) {
+                System.out.println("A Maiden over was bowled.");
+                this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
+                this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
+                        this.match.getStrikerBatsman());
+            }
+            this.match.updateMatchCompleted();
         }
-        this.match.updateMatchCompleted();
 
         if(this.battingTeam.isBattingInningsCompleted()) {
             Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
@@ -918,20 +948,16 @@ public class MatchScoreActivity extends AppCompatActivity {
             System.out.println("New Bowler Selected is: " + bowlerOptions[bowlerSelected[0]]);
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            bowlerSelected[0] = -1;
-        });
-
         builder.show();
 
         if(bowlerSelected[0] == -1) {
+            System.out.println("Impossible condition");
             Toast.makeText(this, "You need to select a new bowler.", Toast.LENGTH_LONG).show();
         }
     }
 
     public void handleRotateStrikeClick(View view) {
+        System.out.println("Rotate strike clicked.");
         if(this.checkCompletions()) {
             return;
         }
@@ -942,7 +968,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.updateScore();
         this.syncMatch();
     }
+
     public boolean undoRotateStrike() {
+        System.out.println("Undo Rotate Strike");
         this.match.removeLastElementFromActivities();
         rotateStrike();
 
@@ -1059,7 +1087,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             byeRunsBuilder.setCancelable(false);
 
             byeRunsBuilder.setSingleChoiceItems(runsByeOptions, runsByeSelected[0],
-                    (dialog1, which1) -> runsByeSelected[0] = Integer.parseInt(runsByeOptions[which]));
+                    (dialog1, which1) -> runsByeSelected[0] = which1);
 
             byeRunsBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
@@ -1081,10 +1109,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.battingTeam.setExtras(this.battingTeam.getExtras() + runsScoredOnNoBall);
                 this.battingTeam.updateRunRate();
 
-                this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails(batsmanActivity);
+
                 this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
                 if(runsByeValue.equals("Legal Runs")) {
                     // no ball runs will go to the batsman
+                    this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails(batsmanActivity);
                     this.strikerBatsman.getMatchPlayerBatting().setRunsScored(
                             this.strikerBatsman.getMatchPlayerBatting().getRunsScored() + runsScoredOnBadDelivery[0]
                     );
@@ -1096,6 +1125,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                     this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
                     this.strikerBatsman.getMatchPlayerBatting().updateRecords();
                 } else {
+                    this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
                     this.currentOver.setByes(this.currentOver.getByes() + runsScoredOnBadDelivery[0]);
                 }
 
@@ -1177,14 +1207,20 @@ public class MatchScoreActivity extends AppCompatActivity {
             // update team score
             this.battingTeam.setRuns(this.battingTeam.getRuns() + runsScoredOnBye);
             this.battingTeam.setExtras(this.battingTeam.getRuns() + runsScoredOnBye);
+            this.battingTeam.incrementLegalDeliveriesPlayed();
             this.battingTeam.updateRunRate();
 
             // bye runs will not go to the batsman
+            // but he will play the balls
+            this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
+            this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
+            this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
+            this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
             // Update the over
             String activityValue = runsScoredOnBye + "B";
-            this.currentOver.getOverSummary().add(activityValue);
-            this.currentOver.incrementNoBalls();
+            this.currentOver.addToOverSummary(activityValue);
+            this.currentOver.incrementLegalDeliveries();
             this.currentOver.setExtras(this.currentOver.getExtras() + runsScoredOnBye);
             this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnBye);
 
@@ -1221,10 +1257,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(runsGivenOnBye[0] == -1) {
-            Toast.makeText(this, "You need to select runs scored on bye.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleBowledClick(View view) {
@@ -1239,6 +1271,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.battingTeam.updateFallOfWickets();
 
         // update batsman score
+        this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
@@ -1321,10 +1354,6 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.syncMatch();
         });
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            optionSelected[0] = -1;
-        });
-
         builder.show();
 
         if(optionSelected[0] == -1) {
@@ -1371,6 +1400,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.currentOver.updateOverCompleted();
 
         // update batsman score
+        this.strikerBatsman.getMatchPlayerBatting().decrementDotsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
@@ -1424,6 +1454,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.battingTeam.updateFallOfWickets();
 
             // update batsman score
+            this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
             this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
             this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
             this.strikerBatsman.getMatchPlayerBatting().updateRecords();
@@ -1549,6 +1580,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.battingTeam.updateFallOfWickets();
 
         // update batsman score
+        this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
@@ -1628,10 +1660,6 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.syncMatch();
         });
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            optionSelected[0] = -1;
-        });
-
         builder.show();
 
         if(optionSelected[0] == -1) {
@@ -1676,6 +1704,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         // update batsman score
         this.strikerBatsman.getMatchPlayerBatting().decrementDotsPlayed();
+        this.strikerBatsman.getMatchPlayerBatting().decrementBallsPlayed();
         this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
         this.strikerBatsman.getMatchPlayerBatting().updateRecords();
         this.strikerBatsman.getMatchPlayerBatting().setOut(false);
@@ -1698,17 +1727,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         if(this.checkCompletions()) {
             return;
         }
-
-        // Before updating anything, we need to know 4 things
-        // run out player
-        // runs scored on the ball
-        // is ball a legal delivery [wide, no, none]
-        // are runs scored bye?
-        // the batsman which is out
-
-        // then, update the match
-
-        // select the new batsman if match is not completed.
 
         int[] runOutBySelected = {-1};
         String[] allMatchPlayers = this.getFieldingPlayers();
@@ -1853,6 +1871,9 @@ public class MatchScoreActivity extends AppCompatActivity {
                             System.out.println("Bat Extra Runs: " + batExtraRuns);
                             System.out.println("Bat Legal Runs: " + batLegalRuns);
 
+                            // anyone of them depending on the conditions is zero
+                            int totalRunsOnRunout = ballExtraRun + batExtraRuns + batLegalRuns;
+
                             // update team score
                             this.battingTeam.incrementWickets();
                             if(ballExtraRun == 0) {
@@ -1868,26 +1889,26 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 );
                                 runOutPlayerObject.getMatchPlayerBatting().updateStrikeRate();
                                 runOutPlayerObject.getMatchPlayerBatting().updateRecords();
+                                this.currentOver.getOverSummary().add(totalRunsOnRunout + "-Runout");
+                                this.match.addToActivities(totalRunsOnRunout + "-Runout");
                             }
 
-                            // anyone of them depending on the conditions is zero
-                            this.battingTeam.setRuns(this.battingTeam.getRuns() + ballExtraRun + batExtraRuns + batLegalRuns);
+                            this.battingTeam.setRuns(this.battingTeam.getRuns() + totalRunsOnRunout);
                             this.battingTeam.updateRunRate();
                             this.battingTeam.updateFallOfWickets();
 
                             // UPDATE BATSMAN RECORD
                             runOutPlayerObject.getMatchPlayerBatting().setOut(true);
-                            runOutPlayerObject.getMatchPlayerBatting().addToBattingDetails("Out-Runout");
+                            runOutPlayerObject.getMatchPlayerBatting().addToBattingDetails(batLegalRuns + "-Out-Runout");
                             runOutPlayerObject.getMatchPlayerBatting().setWicketBy(this.bowler.getPlayerName());
                             runOutPlayerObject.getMatchPlayerBatting().setRunOutBy(runOutByPlayer);
 
                             // update over
-                            this.currentOver.getOverSummary().add("Out");
                             this.currentOver.incrementWickets();
                             this.currentOver.updateOverCompleted();
 
                             // update bowler records
-                            if(ballExtraRun + batLegalRuns + batExtraRuns == 0) {
+                            if(totalRunsOnRunout == 0) {
                                 System.out.println("Dot ball on run out.");
                                 this.bowler.getMatchPlayerBowling().incrementDotsConceded();
                                 this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
@@ -1900,15 +1921,17 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 this.bowler.getMatchPlayerBowling().incrementWides();
                                 this.bowler.getMatchPlayerBowling().setExtrasConceded(
                                         this.bowler.getMatchPlayerBowling().getExtrasConceded() +
-                                                ballExtraRun + batLegalRuns + batExtraRuns
+                                                totalRunsOnRunout
                                 );
                                 this.currentOver.incrementWides();
                                 this.currentOver.setExtras(
-                                        this.currentOver.getExtras() + ballExtraRun + batLegalRuns + batExtraRuns
+                                        this.currentOver.getExtras() + totalRunsOnRunout
                                 );
 
                                 this.battingTeam.setExtras(this.battingTeam.getExtras() +
                                         ballExtraRun + batExtraRuns + batLegalRuns);
+                                this.currentOver.getOverSummary().add((totalRunsOnRunout - 1) + "-WD-Runout");
+                                this.match.addToActivities((totalRunsOnRunout - 1) + "-WD-Runout");
                             }
 
                             // update extras
@@ -1917,29 +1940,33 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 this.bowler.getMatchPlayerBowling().incrementNoBalls();
                                 this.bowler.getMatchPlayerBowling().setExtrasConceded(
                                         this.bowler.getMatchPlayerBowling().getExtrasConceded() +
-                                                ballExtraRun + batLegalRuns + batExtraRuns
+                                                totalRunsOnRunout
                                 );
                                 this.currentOver.incrementNoBalls();
                                 this.currentOver.setExtras(
-                                        this.currentOver.getExtras() + ballExtraRun + batLegalRuns + batExtraRuns
+                                        this.currentOver.getExtras() + totalRunsOnRunout
                                 );
 
                                 this.battingTeam.setExtras(this.battingTeam.getExtras() +
                                         ballExtraRun + batExtraRuns + batLegalRuns);
+                                this.currentOver.getOverSummary().add((totalRunsOnRunout - 1) + "-NB-Runout");
+                                this.match.addToActivities((totalRunsOnRunout - 1) + "-NB-Runout");
                             }
 
                             // runs conceded
                             this.currentOver.setRuns(
-                                    this.currentOver.getRuns() + ballExtraRun + batLegalRuns + batExtraRuns
+                                    this.currentOver.getRuns() + totalRunsOnRunout
                             );
                             this.bowler.getMatchPlayerBowling().setRunsConceded(
                                     this.bowler.getMatchPlayerBowling().getRunsConceded()
-                                            + ballExtraRun + batLegalRuns + batExtraRuns
+                                            + totalRunsOnRunout
                             );
                             this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
                             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
                             this.bowler.getMatchPlayerBowling().updateRecords();
                             this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
+
+                            this.match.addToActivities(runOutBatsman + "-Runout");
 
                             this.match.updateMatchCompleted();
                             this.syncMatch();
@@ -2007,18 +2034,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 this.syncMatch();
                             });
 
-                            builder.setNeutralButton("Clear", (dialog6, which6) -> {
-                                optionSelected[0] = -1;
-                            });
-
                             builder.show();
-
-                            if(optionSelected[0] == -1) {
-                                System.out.println("This condition should never arrive.");
-                                Toast.makeText(this, "You need to select a new batsman after the wicket.", Toast.LENGTH_LONG).show();
-                            }
-
-
                         });
 
                         runOutBatsmanBuilder.show();
@@ -2071,6 +2087,11 @@ public class MatchScoreActivity extends AppCompatActivity {
         System.out.println("Clicked on retire batsman.");
         // do everything after over completion
         if(this.checkCompletions()) {
+            return;
+        }
+
+        if(this.getNotOutBatsMan().length == 0) {
+            Toast.makeText(this, "This is last wicket. You cannot retire player now.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -2210,7 +2231,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 );
                 this.match.getTeamA().decrementMaxOvers(oversToIncrease);
                 this.match.getTeamB().decrementMaxOvers(oversToIncrease);
-
+                this.match.addToActivities("Over-Decrease-" + oversToIncrease);
             } else {
                 // Set match properties
                 this.match.setMaxOvers(
@@ -2218,6 +2239,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 );
                 this.match.getTeamA().incrementMaxOvers(oversToIncrease);
                 this.match.getTeamB().incrementMaxOvers(oversToIncrease);
+                this.match.addToActivities("Over-Increase-" + oversToIncrease);
             }
 
             this.syncMatch();
@@ -2233,6 +2255,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
     public void handleInningsEndClick(View view) {
         System.out.println("Innings end clicked.");
+
         // Innings complete
         if(this.battingTeam.isBattingInningsCompleted()) {
             if(this.match.getInnings() == 1) {
@@ -2260,7 +2283,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                     if(answer.equals("Yes")) {
                         // update innings
                         this.match.setInnings(2);
-                        // update bowling and batting teams
+                        // update bowling and batting teams names
                         this.match.setBattingAndBowlingTeamNames();
                         this.syncMatch();
 
@@ -2307,6 +2330,53 @@ public class MatchScoreActivity extends AppCompatActivity {
                         this.match.setCompleted(true);
                         this.match.updateResult();
                         this.syncMatch();
+
+                        Utils.updateGlobalRecords(dataFilesMap, this.match);
+
+                        System.out.println("Go to match information.");
+                        Intent intent = new Intent(this, MatchInformationActivity.class);
+                        intent.putExtra("data_files_hashmap", this.dataFilesMap);
+                        intent.putExtra("match_object", match);
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+                builder.setNeutralButton("Clear", (dialog, which) -> {
+                    optionSelected[0] = -1;
+                });
+
+                builder.show();
+            }
+        } else if(this.match.isCompleted()) {
+            if (this.match.getInnings() == 2) {
+                System.out.println("Second Innings Completed. Match is finished.");
+                // Open a new dialogue box here to ask to end the match.
+                AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                builder.setTitle("End the match?");
+                builder.setCancelable(false);
+
+                String[] options = {"Yes", "No"};
+                final int[] optionSelected = {-1};
+
+                builder.setSingleChoiceItems(options, optionSelected[0],
+                        (dialog, which) -> optionSelected[0] = which);
+
+                builder.setPositiveButton("Ok", (dialog, which) -> {
+                    if (optionSelected[0] == -1) {
+                        Toast.makeText(this, "Select Yes to end the match.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    String answer = options[optionSelected[0]];
+                    System.out.println("Option selected is: " + answer);
+
+                    if (answer.equals("Yes")) {
+                        this.match.setCompleted(true);
+                        this.match.updateResult();
+                        this.syncMatch();
+
+                        Utils.updateGlobalRecords(dataFilesMap, this.match);
 
                         System.out.println("Go to match information.");
                         Intent intent = new Intent(this, MatchInformationActivity.class);
@@ -2368,11 +2438,14 @@ public class MatchScoreActivity extends AppCompatActivity {
             case "5":
                 System.out.println("Undo 5");
                 undoDone = undoFiveRuns();
+                break;
             case "6":
                 System.out.println("Undo 6");
                 undoDone = undoSixruns();
+                break;
             case "RotateStrike":
                 undoDone = undoRotateStrike();
+                break;
             default:
                 break;
         }
@@ -2424,6 +2497,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         System.out.println("Edit the current match players.");
         // Select new players -> cancellable
         String[] remainingPlayers = Utils.getRemainingPlayersList(nameToIdMap, this.match);
+        System.out.println("Remaining Players: " + Arrays.toString(remainingPlayers));
         boolean[] selectedPlayers = new boolean[remainingPlayers.length];
         ArrayList<Integer> playersList = new ArrayList<>();
 
@@ -2463,8 +2537,10 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             // distribute new players + common player -> if we have it
             if(!this.battingTeam.getCommonName().isEmpty()) {
-                // no common
+                System.out.println("Common player is there: " + this.battingTeam.getCommonName());
+                // add common player
                 temp.add(this.battingTeam.getCommonName());
+                System.out.println("Updated players options: " + temp);
             }
 
             boolean isEven = Utils.isEven(temp.size());
@@ -2492,7 +2568,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                         // Check condition
                         if(isChecked) {
                             // when this checkbox is selected, we will add this in our players list
-                            playerSelectedIndex.add(which);
+                            playerSelectedIndex.add(which1);
                             // we sort our array list
                             Collections.sort(playerSelectedIndex);
                         } else {
@@ -2522,7 +2598,10 @@ public class MatchScoreActivity extends AppCompatActivity {
                 }
 
                 if(isEven) {
+                    // we have balanced teams now.
                     this.rebalanceTeams(temp2, temp3, "");
+                    this.battingTeam.setCommonName("");
+                    this.bowlingTeam.setCommonName("");
                     Toast.makeText(this, "Teams have been rebalanced.",
                             Toast.LENGTH_LONG).show();
                 } else {
@@ -2538,10 +2617,6 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                     commonPlayerBuilder.setSingleChoiceItems(commonOptions, commonPlayerSelected[0],
                             (dialog3, which3) -> commonPlayerSelected[0] = which3);
-
-                    commonPlayerBuilder.setNeutralButton("Clear", (dialog3, which3) -> {
-                        commonPlayerSelected[0] = -1;
-                    });
 
                     commonPlayerBuilder.setPositiveButton("Ok", (dialog3, which3) -> {
                         if(commonPlayerSelected[0] == -1) {

@@ -5,14 +5,16 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class BowlingStats implements Serializable {
     private static final long serialVersionUID = 2462471862401256640L;
     private String playerId;
+    private int inningsBowled = 0;
     private int wickets = 0;
     private double economy = 0;
     private double average = 0;
-    private String bestBowling = "";
+    private String bestBowling = "0-0";
     private int twoFer = 0;
     private int threeFer = 0;
     private int fiveFer = 0;
@@ -22,6 +24,15 @@ public class BowlingStats implements Serializable {
 
     private int wides = 0;
     private int nos = 0;
+    private int numberOfOvers = 0;
+    private int extras = 0;
+    private int runs = 0;
+    private int deliveriesBowled = 0;
+    private int legalDeliveriesBowled = 0;
+    private int maidensBowled = 0;
+    private int bowledWickets = 0;
+
+    private HashMap<String, Boolean> matchesIncluded = new HashMap<>();
 
     public BowlingStats(String playerId) {
         this.playerId = playerId;
@@ -114,6 +125,14 @@ public class BowlingStats implements Serializable {
         this.sixes = sixes;
     }
 
+    public HashMap<String, Boolean> getMatchesIncluded() {
+        return matchesIncluded;
+    }
+
+    public void setMatchesIncluded(HashMap<String, Boolean> matchesIncluded) {
+        this.matchesIncluded = matchesIncluded;
+    }
+
     @SuppressLint("DefaultLocale")
     public String toJson() {
         return String.format("{\"playerId\":\"%s\",\"wickets\":%d,\"economy\":%f,\"average\":%f,\"bestBowling\":\"%s\",\"threeFer\":%d,\"fiveFer\":%d}", playerId, wickets, economy, average, bestBowling, threeFer, fiveFer);
@@ -153,5 +172,69 @@ public class BowlingStats implements Serializable {
                 ", wides=" + wides +
                 ", nos=" + nos +
                 '}';
+    }
+
+    public int getInningsBowled() {
+        return inningsBowled;
+    }
+
+    public void setInningsBowled(int inningsBowled) {
+        this.inningsBowled = inningsBowled;
+    }
+
+    public int getNumberOfOvers() {
+        return numberOfOvers;
+    }
+
+    public void setNumberOfOvers(int numberOfOvers) {
+        this.numberOfOvers = numberOfOvers;
+    }
+
+    public int getExtras() {
+        return extras;
+    }
+
+    public void setExtras(int extras) {
+        this.extras = extras;
+    }
+
+    public int getRuns() {
+        return runs;
+    }
+
+    public void setRuns(int runs) {
+        this.runs = runs;
+    }
+
+    public int getDeliveriesBowled() {
+        return deliveriesBowled;
+    }
+
+    public void setDeliveriesBowled(int deliveriesBowled) {
+        this.deliveriesBowled = deliveriesBowled;
+    }
+
+    public int getMaidensBowled() {
+        return maidensBowled;
+    }
+
+    public void setMaidensBowled(int maidensBowled) {
+        this.maidensBowled = maidensBowled;
+    }
+
+    public int getBowledWickets() {
+        return bowledWickets;
+    }
+
+    public void setBowledWickets(int bowledWickets) {
+        this.bowledWickets = bowledWickets;
+    }
+
+    public int getLegalDeliveriesBowled() {
+        return legalDeliveriesBowled;
+    }
+
+    public void setLegalDeliveriesBowled(int legalDeliveriesBowled) {
+        this.legalDeliveriesBowled = legalDeliveriesBowled;
     }
 }

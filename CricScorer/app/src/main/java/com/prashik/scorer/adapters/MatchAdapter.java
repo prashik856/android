@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prashik.scorer.R;
+import com.prashik.scorer.models.Match;
 
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder>{
 
@@ -17,6 +18,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder>{
     String[] statuses;
     String[] captains;
     String[] ids;
+    String[] results;
 
     @NonNull
     @Override
@@ -28,11 +30,8 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull MatchAdapter.ViewHolder viewHolder, int position) {
-        viewHolder.getTextView().setText(String.format("%s  |  %s  |  %s  \n%s",
-                dates[position],
-                teams[position],
-                statuses[position],
-                captains[position]));
+        viewHolder.getTextView().setText(String.format("%s  |  %s  |  %s  \n%s\n%s",
+                dates[position], teams[position], statuses[position], captains[position], results[position]));
         viewHolder.getTextView().setContentDescription(ids[position]);
     }
 
@@ -55,12 +54,13 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder>{
     }
 
     public MatchAdapter(String[] datesArray, String[] teamsArray, String[] matchStatusArray,
-                        String[] captainsArray, String[] idsArray) {
+                        String[] captainsArray, String[] idsArray, String[] resultsArray) {
         System.out.println("Creating match adapter object.");
         this.dates = datesArray;
         this.teams = teamsArray;
         this.statuses = matchStatusArray;
         this.captains = captainsArray;
         this.ids = idsArray;
+        this.results = resultsArray;
     }
 }

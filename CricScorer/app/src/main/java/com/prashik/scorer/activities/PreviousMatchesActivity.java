@@ -46,6 +46,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         ArrayList<String> statuses = new ArrayList<>();
         ArrayList<String> captains = new ArrayList<>();
         ArrayList<String> fileNames = new ArrayList<>();
+        ArrayList<String> results = new ArrayList<>();
         for(String matchfile: matchFiles) {
             String fileToRead = this.filesDirectory + "/" + matchfile;
             System.out.println("File to read: " + fileToRead);
@@ -55,8 +56,10 @@ public class PreviousMatchesActivity extends AppCompatActivity {
             String date = match.getDate();
             String team = String.format("%s VS %s", match.getTeamA().getName(), match.getTeamB().getName());
             String status = "Incomplete";
+            String result = "Match is still going on.";
             if(match.isCompleted()) {
                 status = "Completed";
+                result = match.getResult();
             }
             String captain = String.format("%s(C), %s(C)", match.getTeamA().getCaptainName(), match.getTeamB().getCaptainName());
             dates.add(date);
@@ -64,18 +67,21 @@ public class PreviousMatchesActivity extends AppCompatActivity {
             statuses.add(status);
             captains.add(captain);
             fileNames.add(matchfile);
+            results.add(result);
         }
         System.out.println("Dates: " + dates);
         System.out.println("Teams: " + teams);
         System.out.println("Status: " + statuses);
         System.out.println("Captains: " + captains);
         System.out.println("FileNames: " + fileNames);
+        System.out.println("Results: " + results);
 
         this.matchAdapter = new MatchAdapter(dates.toArray(new String[0]),
                 teams.toArray(new String[0]),
                 statuses.toArray(new String[0]),
                 captains.toArray(new String[0]),
-                fileNames.toArray(new String[0]));
+                fileNames.toArray(new String[0]),
+                results.toArray(new String[0]));
         System.out.println("Getting recycler view.");
         RecyclerView recyclerView = findViewById(R.id.all_matches_list);
         System.out.println("Setting layout manager.");
@@ -104,6 +110,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MatchInformationActivity.class);
         intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", match);
+        intent.putExtra("match_file_location", matchFileLocation);
         startActivity(intent);
     }
 }

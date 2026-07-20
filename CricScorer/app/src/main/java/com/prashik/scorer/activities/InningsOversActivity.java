@@ -39,7 +39,21 @@ public class InningsOversActivity extends AppCompatActivity {
 
         TextView inningsTitleView = findViewById(R.id.innings_title_overs);
         Team bowlingTeam;
-        bowlingTeam = this.match.getBowlingTeam();
+        if(innings == 1) {
+            if(this.match.isTeamABatFirst()) {
+                bowlingTeam = this.match.getTeamB();
+            } else {
+                bowlingTeam = this.match.getTeamA();
+            }
+        } else {
+            if(this.match.isTeamABatFirst()) {
+                bowlingTeam = this.match.getTeamA();
+            } else {
+                bowlingTeam = this.match.getTeamB();
+            }
+        }
+        String title = bowlingTeam.getName() + " Overs";
+        inningsTitleView.setText(title);
 
         ArrayList<String> temp = new ArrayList<>();
         for(int i=0; i<bowlingTeam.getOvers().size(); i++) {
@@ -47,7 +61,7 @@ public class InningsOversActivity extends AppCompatActivity {
         }
 
         String[] overList = temp.toArray(new String[0]);
-        this.matchOversAdapter = new MatchOversAdapter(overList, this.match);
+        this.matchOversAdapter = new MatchOversAdapter(overList, bowlingTeam);
         System.out.println("Getting recycler view.");
         RecyclerView recyclerView = findViewById(R.id.overs_list);
         System.out.println("Setting layout manager.");

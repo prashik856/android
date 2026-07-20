@@ -67,6 +67,9 @@ public class Team implements Serializable {
             MatchPlayer matchPlayer = this.teamPlayers.get(i);
             if(matchPlayer.getPlayerName().equals(player.getPlayerName())) {
                 this.teamPlayers.remove(i);
+                this.playerNames.remove(matchPlayer.getPlayerName());
+                this.teamSize = this.teamSize - 1;
+                this.maxWickets = this.maxWickets - 1;
                 break;
             }
         }
@@ -77,6 +80,7 @@ public class Team implements Serializable {
             this.playerNames.add(player.getPlayerName());
             this.teamPlayers.add(player);
             this.teamSize = this.teamSize + 1;
+            this.maxWickets = this.maxWickets + 1;
         }
     }
 

@@ -11,7 +11,6 @@ public class MatchStats implements Serializable {
     private String playerId;
     private int matchesPlayed = 0;
     private int catches = 0;
-
     private int runOuts = 0;
 
     public MatchStats(String playerId) {

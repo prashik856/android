@@ -23,7 +23,7 @@ public class MatchPlayerBowlingAdapter extends RecyclerView.Adapter<MatchPlayerB
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.text_row_item, viewGroup, false);
+                .inflate(R.layout.text_row_item_bowling, viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -56,7 +56,7 @@ public class MatchPlayerBowlingAdapter extends RecyclerView.Adapter<MatchPlayerB
         ArrayList<String> bowlingDetails = player.getMatchPlayerBowling().getBowlingDetails();
 
         StringBuilder maidenText = new StringBuilder();
-        maidenText.append("M:");
+        maidenText.append("Maiden:");
         maidenText.append(maidens);
         maidenText.append("\tBowledTo: ");
         for(int i=0; i<maidenOverTo.size(); i++) {
@@ -67,7 +67,7 @@ public class MatchPlayerBowlingAdapter extends RecyclerView.Adapter<MatchPlayerB
         StringBuilder matchOverBowledBuilder = new StringBuilder();
         matchOverBowledBuilder.append("Match Overs: ");
         for(int i=0; i<matchOverBowled.size(); i++) {
-            matchOverBowledBuilder.append(matchOverBowled.get(i));
+            matchOverBowledBuilder.append(matchOverBowled.get(i) + 1);
             matchOverBowledBuilder.append(" ");
         }
 
@@ -93,14 +93,14 @@ public class MatchPlayerBowlingAdapter extends RecyclerView.Adapter<MatchPlayerB
         bowlingDetailsBuilder.append("Every ball score - ");
         for(int i=0; i<bowlingDetails.size(); i++) {
             bowlingDetailsBuilder.append(bowlingDetails.get(i));
-            bowlingDetailsBuilder.append(" ");
+            bowlingDetailsBuilder.append("  ");
         }
 
         String text = String.format("%s\n" +
-                        "%d.%d\tR:%d\tW:%d\tECON:%.2f\n" +
+                        "Overs:%d.%d   Runs:%d   Wkts:%d   ECON:%.2f\n" +
                         "%s\n" +
-                        "WB:%d\tNB:%d\tExtras:%d\n" +
-                        "0s:%d\t4s:%d\t6s:%d\n" +
+                        "WB:%d    NB:%d    Extras:%d\n" +
+                        "0s:%d    4s:%d    6s:%d\n" +
                         "%s\n" +
                         "%s\n" +
                         "%s\n" +
@@ -131,7 +131,7 @@ public class MatchPlayerBowlingAdapter extends RecyclerView.Adapter<MatchPlayerB
 
         public ViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.single_player_text);
+            textView = view.findViewById(R.id.single_bowling_player);
         }
 
         public TextView getTextView() {
