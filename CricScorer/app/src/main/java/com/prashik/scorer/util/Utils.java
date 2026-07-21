@@ -9,6 +9,7 @@ import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchPlayerBatting;
 import com.prashik.scorer.models.MatchPlayerBowling;
+import com.prashik.scorer.models.MatchPlayerFielding;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Over;
 import com.prashik.scorer.models.Player;
@@ -424,9 +425,12 @@ public class Utils {
         for(MatchPlayer matchPlayer: match.getTeamA().getTeamPlayers()) {
             // update batting records
             updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId());
+
             // update bowling records
             updateGlobalBowlingRecords(allBowlingStats, matchPlayer, match.getId());
 
+            // update match records
+            updateGlobalMatchRecords(allMatchesStats, matchPlayer, match.getId());
         }
 
         for(String s: dataFilesMap.keySet()) {
@@ -444,6 +448,32 @@ public class Utils {
                     break;
             }
         }
+    }
+
+    public static void updateGlobalMatchRecords(HashMap<String, MatchStats> allMatchStats,
+                                                MatchPlayer matchPlayer, String matchId) {
+        MatchStats matchStats = allMatchStats.get(matchPlayer.getPlayer().getId());
+
+        assert matchStats != null;
+        if(matchStats.getMatchesIncluded().containsKey(matchId)) {
+            System.out.println("Match data is already included in Global Bowling Stats.");
+            return;
+        }
+
+        matchStats.getMatchesIncluded().put(matchId, true);
+        MatchPlayerFielding matchPlayerFielding = matchPlayer.getMatchPlayerFielding();
+
+        matchStats.setMatchesPlayed(
+                matchStats.getMatchesPlayed() + 1
+        );
+
+        matchStats.setCatches(
+                matchStats.getCatches() + matchPlayerFielding.getNoOfCatches()
+        );
+
+        matchStats.setRunOuts(
+                matchStats.getRunOuts() + matchPlayerFielding.getNoOfRunOuts()
+        );
     }
 
     public static void updateGlobalBowlingRecords(HashMap<String, BowlingStats> allBowlingStats,

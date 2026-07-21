@@ -69,89 +69,52 @@ public class PlayerInformationActivity extends AppCompatActivity {
         this.bowlingStats = this.allBowlingStats.get(this.playerId);
         this.matchStats = this.allMatchesStats.get(this.playerId);
 
-        // Player Info
-        TextView textView = findViewById(R.id.player_name_text);
-        textView.setText(String.format("Name: %s %s", this.player.getFirstName(), this.player.getLastName()));
+        // Player heading
+        TextView textView = findViewById(R.id.player_name_pi);
+        textView.setText(this.player.getFullName());
 
-        textView = findViewById(R.id.matches_played_text);
-        textView.setText(String.format("Matches: %d", this.matchStats.getMatchesPlayed()));
+        textView = findViewById(R.id.player_information_pi);
+        String playerInformation = String.format("First Name: %s    Last Name: %s\n" +
+                        "Matches Played: %d    Phone No: %s\n" +
+                "Email: %s\n",
+                this.player.getFirstName(), this.player.getLastName(),
+                this.matchStats.getMatchesPlayed(), this.player.getPhoneNumber(),
+                this.player.getEmail());
+        textView.setText(playerInformation);
 
-        textView = findViewById(R.id.email_text_pi);
-        textView.setText(String.format("Email: %s", this.player.getEmail()));
+        textView = findViewById(R.id.batting_statistics_pi);
+        String battingStatsText = String.format("Innings: %d    Runs: %d    Strike Rate: %.2f\n" +
+                        "Average: %.2f    Balls Played: %d\n" +
+                        "Best: %d    4s: %d    6s: %d    0s: %d\n" +
+                        "20s: %d    30s: %d    50s: %d    Out Count: %d",
+                this.battingStats.getInningsPlayed(), this.battingStats.getRuns(), this.battingStats.getStrikeRate(),
+                this.battingStats.getBattingAverage(), this.battingStats.getBallsPlayed(),
+                this.battingStats.getBestScore(), this.battingStats.getFours(), this.battingStats.getSixes(), this.battingStats.getDots(),
+                this.battingStats.getTwenties(), this.battingStats.getThirties(), this.battingStats.getFifties(), this.battingStats.getOutCount());
+        textView.setText(battingStatsText);
 
-        textView = findViewById(R.id.phone_text_pi);
-        textView.setText(String.format("No: %s", this.player.getPhoneNumber()));
 
-        // Batting info
-        textView = findViewById(R.id.runs_text);
-        textView.setText(String.format("Runs: %d", this.battingStats.getRuns()));
+        textView = findViewById(R.id.bowling_statistics_pi);
+        String bowlingStatsText = String.format("Innings Bowled: %d    Wickets: %d    Economy: %.2f\n" +
+                        "Average: %.2f    Best: %s    Runs Conceded: %d\n" +
+                        "Two Wickets: %d    Three Wickets: %d    Five Wickets: %d\n" +
+                        "Bowled Wickets: %d    Fours Conceded: %d    Six Conceded: %d\n" +
+                        "Dots Bowled: %d    Wides: %d    No Balls: %d\n" +
+                        "Extras Conceded: %d    Overs Bowled: %d    Maidens Overs: %d\n" +
+                        "Deliveries Bowled: %d    Legal Deliveries Bowled: %d",
+                this.bowlingStats.getInningsBowled(), this.bowlingStats.getWickets(), this.bowlingStats.getEconomy(),
+                this.bowlingStats.getAverage(), this.bowlingStats.getBestBowling(), this.bowlingStats.getRuns(),
+                this.bowlingStats.getTwoFer(), this.bowlingStats.getThreeFer(), this.bowlingStats.getFiveFer(),
+                this.bowlingStats.getBowledWickets(), this.bowlingStats.getFours(), this.bowlingStats.getSixes(),
+                this.bowlingStats.getDots(), this.bowlingStats.getWides(), this.bowlingStats.getNos(),
+                this.bowlingStats.getExtras(), this.bowlingStats.getNumberOfOvers(), this.bowlingStats.getMaidensBowled(),
+                this.bowlingStats.getDeliveriesBowled(), this.bowlingStats.getLegalDeliveriesBowled());
+        textView.setText(bowlingStatsText);
 
-        textView = findViewById(R.id.average_text);
-        textView.setText(String.format("Average: %f", this.battingStats.getBattingAverage()));
-
-        textView = findViewById(R.id.strike_rate_text);
-        textView.setText(String.format("Strike Rate: %f", this.battingStats.getStrikeRate()));
-
-        textView = findViewById(R.id.innings_text);
-        textView.setText(String.format("Innings: %d", this.battingStats.getInningsPlayed()));
-
-        textView = findViewById(R.id.best_score_text);
-        textView.setText(String.format("Best: %d", this.battingStats.getBestScore()));
-
-        textView = findViewById(R.id.fours_text);
-        textView.setText(String.format("Fours: %d", this.battingStats.getFours()));
-
-        textView = findViewById(R.id.sixes_text);
-        textView.setText(String.format("Sixes: %d", this.battingStats.getSixes()));
-
-        textView = findViewById(R.id.dots_text);
-        textView.setText(String.format("Dots: %d", this.battingStats.getDots()));
-
-        textView = findViewById(R.id.twenties_text);
-        textView.setText(String.format("Twenties: %d", this.battingStats.getTwenties()));
-
-        textView = findViewById(R.id.thirties_text);
-        textView.setText(String.format("Thirties: %d", this.battingStats.getThirties()));
-
-        textView = findViewById(R.id.fifties_text);
-        textView.setText(String.format("Fifties: %d", this.battingStats.getFifties()));
-
-        // Bowling info
-        textView = findViewById(R.id.wickets_text);
-        textView.setText(String.format("Wickets: %d", this.bowlingStats.getWickets()));
-
-        textView = findViewById(R.id.bowling_average_text_pi);
-        textView.setText(String.format("Average: %f", this.bowlingStats.getAverage()));
-
-        textView = findViewById(R.id.economy_text);
-        textView.setText(String.format("Economy: %f", this.bowlingStats.getEconomy()));
-
-        textView = findViewById(R.id.best_bowling_text);
-        textView.setText(String.format("Best: %s", this.bowlingStats.getBestBowling()));
-
-        textView = findViewById(R.id.twofer_text);
-        textView.setText(String.format("Twofer: %d", this.bowlingStats.getTwoFer()));
-
-        textView = findViewById(R.id.threefer_text);
-        textView.setText(String.format("Threefer: %d", this.bowlingStats.getThreeFer()));
-
-        textView = findViewById(R.id.fivefer_text);
-        textView.setText(String.format("Fivefer: %d", this.bowlingStats.getFiveFer()));
-
-        textView = findViewById(R.id.fours_text_pi);
-        textView.setText(String.format("Fours: %d", this.bowlingStats.getFours()));
-
-        textView = findViewById(R.id.sixes_text_pi);
-        textView.setText(String.format("Sixes: %d", this.bowlingStats.getSixes()));
-
-        textView = findViewById(R.id.dots_pi);
-        textView.setText(String.format("Dots: %d", this.bowlingStats.getDots()));
-
-        textView = findViewById(R.id.wides_text);
-        textView.setText(String.format("Wides: %d", this.bowlingStats.getWides()));
-
-        textView = findViewById(R.id.no_ball_text);
-        textView.setText(String.format("No Balls: %d", this.bowlingStats.getNos()));
+        textView = findViewById(R.id.fielding_statistics_pi);
+        String fieldingStatsText = String.format("Catches: %d    Run Outs: %d",
+                this.matchStats.getCatches(), this.matchStats.getRunOuts());
+        textView.setText(fieldingStatsText);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

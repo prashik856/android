@@ -5,7 +5,24 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".activities.PreviousMatchesActivity">
+
+    <Button
+        android:id="@+id/home_button3"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="cursive"
+        android:onClick="handleHomeClick"
+        android:text="Home"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading9"
+        app:layout_constraintHorizontal_bias="0.225"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view7" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_matches_list"
@@ -22,6 +39,7 @@
         android:layout_width="177dp"
         android:layout_height="41dp"
         android:layout_marginTop="16dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="All Matches"
         android:textAlignment="center"
@@ -36,6 +54,7 @@
         android:layout_width="214dp"
         android:layout_height="52dp"
         android:layout_marginTop="52dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/scorer_text_view"
         android:textAlignment="center"

@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".activities.PlayersSelectActivity">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_width="177dp"
         android:layout_height="41dp"
         android:layout_marginTop="28dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/players_playing_string"
         android:textAlignment="center"
@@ -26,6 +28,7 @@
         android:layout_width="214dp"
         android:layout_height="52dp"
         android:layout_marginTop="56dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/scorer_text_view"
         android:textAlignment="center"
@@ -44,8 +47,8 @@
         android:background="@android:drawable/editbox_background"
         android:drawableRight="@android:drawable/arrow_down_float"
         android:drawablePadding="16dp"
-        android:hint="Select Playing Players"
         android:fontFamily="sans-serif-medium"
+        android:hint="Select Playing Players"
         android:text=""
         android:textAlignment="viewStart"
         android:textSize="18sp"
@@ -59,6 +62,7 @@
         android:layout_width="287dp"
         android:layout_height="232dp"
         android:layout_marginTop="64dp"
+        android:background="#E7EBEF"
         android:fontFamily="sans-serif-medium"
         android:hint="@string/playing_players_hint_string"
         android:textAlignment="viewStart"

@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".activities.SelectTeamAPlayersActivity">
 
     <TextView
@@ -43,6 +44,7 @@
         android:layout_width="260dp"
         android:layout_height="41dp"
         android:layout_marginTop="20dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/players_playing_string"
         android:textAlignment="center"
@@ -57,6 +59,7 @@
         android:layout_width="214dp"
         android:layout_height="52dp"
         android:layout_marginTop="56dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/scorer_text_view"
         android:textAlignment="center"

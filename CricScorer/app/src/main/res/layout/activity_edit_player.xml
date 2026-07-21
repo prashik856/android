@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".activities.EditPlayerActivity">
 
     <EditText
@@ -74,6 +75,7 @@
         android:layout_width="212dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/edit_player_information_string"
         android:textAlignment="center"
@@ -88,6 +90,7 @@
         android:layout_width="214dp"
         android:layout_height="52dp"
         android:layout_marginTop="40dp"
+        android:background="#E7EBEF"
         android:fontFamily="cursive"
         android:text="@string/scorer_text_view"
         android:textAlignment="center"

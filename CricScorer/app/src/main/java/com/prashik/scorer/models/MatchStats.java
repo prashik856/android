@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class MatchStats implements Serializable {
     private static final long serialVersionUID = 2462471862401256640L;
@@ -12,6 +13,7 @@ public class MatchStats implements Serializable {
     private int matchesPlayed = 0;
     private int catches = 0;
     private int runOuts = 0;
+    private HashMap<String, Boolean> matchesIncluded = new HashMap<>();
 
     public MatchStats(String playerId) {
         this.playerId = playerId;
@@ -64,5 +66,13 @@ public class MatchStats implements Serializable {
                 ", catches=" + catches +
                 ", runOuts=" + runOuts +
                 '}';
+    }
+
+    public HashMap<String, Boolean> getMatchesIncluded() {
+        return matchesIncluded;
+    }
+
+    public void setMatchesIncluded(HashMap<String, Boolean> matchesIncluded) {
+        this.matchesIncluded = matchesIncluded;
     }
 }

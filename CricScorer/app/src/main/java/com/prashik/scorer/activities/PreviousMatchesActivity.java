@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prashik.scorer.MainActivity;
 import com.prashik.scorer.R;
 import com.prashik.scorer.adapters.MatchAdapter;
 import com.prashik.scorer.models.Match;
@@ -89,6 +92,15 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         System.out.println("Setting adapter.");
         recyclerView.setAdapter(this.matchAdapter);
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(PreviousMatchesActivity.this, "You cannot go back now. " +
+                        "Press home instead.", Toast.LENGTH_LONG).show();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(callback);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -111,6 +123,11 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", match);
         intent.putExtra("match_file_location", matchFileLocation);
+        startActivity(intent);
+    }
+
+    public void handleHomeClick(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
