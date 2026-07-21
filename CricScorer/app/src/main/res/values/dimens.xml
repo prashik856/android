@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_item_height">60dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="list_matches_height">90dp</dimen>
+    <dimen name="list_bowling_player_height">230dp</dimen>
+    <dimen name="list_batting_player_height">120dp</dimen>
+    <dimen name="list_over_item_height">160dp</dimen>
+</resources>

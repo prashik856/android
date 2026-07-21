@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".activities.SelectCommonPlayerActivity">
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="156dp"
+        android:onClick="handleClickNext"
+        android:text="@string/next_string"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_common_player_cp" />
+
+    <TextView
+        android:id="@+id/select_common_player_cp"
+        android:layout_width="287dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="100dp"
+        android:background="@android:drawable/editbox_background"
+        android:drawableRight="@android:drawable/arrow_down_float"
+        android:drawablePadding="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:hint="Select Common Player"
+        android:text=""
+        android:textAlignment="viewStart"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/team_a_name_stp2" />
+
+    <TextView
+        android:id="@+id/team_a_name_stp2"
+        android:layout_width="309dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="28dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="@string/select_common_player_string"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view14" />
+
+    <TextView
+        android:id="@+id/scorer_text_view14"
+        android:layout_width="214dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="56dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="@string/scorer_text_view"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

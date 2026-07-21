@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".activities.EditPlayerActivity">
+
+    <EditText
+        android:id="@+id/first_name_edit"
+        android:layout_width="226dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/first_name_string"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_info_heading3" />
+
+    <EditText
+        android:id="@+id/email_edit"
+        android:layout_width="223dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/email_string"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/last_name_edit" />
+
+    <Button
+        android:id="@+id/submit_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="handleSubmitClick"
+        android:text="@string/submit_display"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone_number_edit" />
+
+    <EditText
+        android:id="@+id/last_name_edit"
+        android:layout_width="224dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/last_name_string"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_edit" />
+
+    <EditText
+        android:id="@+id/phone_number_edit"
+        android:layout_width="222dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="@string/phone_number_string"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_edit" />
+
+    <TextView
+        android:id="@+id/player_info_heading3"
+        android:layout_width="212dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="@string/edit_player_information_string"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view9" />
+
+    <TextView
+        android:id="@+id/scorer_text_view9"
+        android:layout_width="214dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="40dp"
+        android:background="#E7EBEF"
+        android:fontFamily="cursive"
+        android:text="@string/scorer_text_view"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
