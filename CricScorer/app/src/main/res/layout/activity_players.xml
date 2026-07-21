@@ -8,6 +8,19 @@
     android:background="#FFFFFF"
     tools:context=".activities.PlayersActivity">
 
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:onClick="handleHomeClick"
+        android:text="Home"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@+id/player_info_heading4"
+        app:layout_constraintHorizontal_bias="0.216"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scorer_text_view6" />
+
     <TextView
         android:id="@+id/player_info_heading4"
         android:layout_width="177dp"

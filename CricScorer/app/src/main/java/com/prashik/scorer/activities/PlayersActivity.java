@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prashik.scorer.MainActivity;
 import com.prashik.scorer.R;
 import com.prashik.scorer.adapters.PlayersAdapter;
 import com.prashik.scorer.models.BattingStats;
@@ -52,6 +55,15 @@ public class PlayersActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.all_players_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(playersAdapter);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(PlayersActivity.this, "You cannot go back now. " +
+                        "Press home instead.", Toast.LENGTH_LONG).show();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(callback);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -106,5 +118,10 @@ public class PlayersActivity extends AppCompatActivity {
 //
 //            }
 //        }
+    }
+
+    public void handleHomeClick(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
