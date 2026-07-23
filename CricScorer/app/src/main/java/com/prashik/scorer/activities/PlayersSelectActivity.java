@@ -1,11 +1,9 @@
 package com.prashik.scorer.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,14 +15,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.prashik.scorer.R;
-import com.prashik.scorer.models.BattingStats;
-import com.prashik.scorer.models.BowlingStats;
 import com.prashik.scorer.models.Match;
-import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

@@ -20,7 +20,6 @@ import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class AddNewPlayerActivity extends AppCompatActivity {

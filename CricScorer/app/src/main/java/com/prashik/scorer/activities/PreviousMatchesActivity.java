@@ -23,7 +23,6 @@ import com.prashik.scorer.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class PreviousMatchesActivity extends AppCompatActivity {
@@ -47,7 +46,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         ArrayList<String> matchFiles = Utils.getMatchFiles(Utils.getAllFilesInDirectory(this.filesDirectory));
         System.out.println("All Match Files: " + matchFiles);
 
-        ArrayList<Long> dateIntegerArray = new ArrayList<>();
+        ArrayList<Long> dateInteger = new ArrayList<>();
         for(String matchfile: matchFiles) {
             String fileToRead = this.filesDirectory + "/" + matchfile;
             System.out.println("File to read: " + fileToRead);
@@ -55,12 +54,12 @@ public class PreviousMatchesActivity extends AppCompatActivity {
             Match match = Utils.readMatchFile(fileToRead);
             System.out.println("Current Match Object: " + match.toString());
 
-            dateIntegerArray.add(match.getStartTime());
+            dateInteger.add(match.getStartTime());
             idToFileNameMap.put(match.getStartTime(), fileToRead);
         }
 
-        // sort dateIntegerArray
-        Collections.sort(dateIntegerArray, Collections.reverseOrder());
+        // sort dateInteger
+        Collections.sort(dateInteger, Collections.reverseOrder());
         
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> teams = new ArrayList<>();
@@ -69,7 +68,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         ArrayList<String> fileNames = new ArrayList<>();
         ArrayList<String> results = new ArrayList<>();
         // go through all the sorted matches
-        for(Long dateValue: dateIntegerArray) {
+        for(Long dateValue: dateInteger) {
             String fileToRead = this.idToFileNameMap.get(dateValue);
             System.out.println("File to read: " + fileToRead);
             Match match = Utils.readMatchFile(fileToRead);

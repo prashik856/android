@@ -21,13 +21,10 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.adapters.PlayersAdapter;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
-import com.prashik.scorer.models.Match;
-import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 

@@ -1,10 +1,8 @@
 package com.prashik.scorer.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
-import com.prashik.scorer.models.Over;
 import com.prashik.scorer.models.Team;
 
 import java.util.ArrayList;
