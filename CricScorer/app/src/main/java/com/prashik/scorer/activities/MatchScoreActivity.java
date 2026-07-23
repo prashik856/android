@@ -283,7 +283,9 @@ public class MatchScoreActivity extends AppCompatActivity {
                 temp.add(matchPlayer.getPlayerName());
             }
         }
-        return temp.toArray(new String[0]);
+        String[] returnArray = temp.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public String[] getFieldingPlayers() {
@@ -294,7 +296,9 @@ public class MatchScoreActivity extends AppCompatActivity {
                 temp.add(this.match.getMatchPlayers().get(i));
             }
         }
-        return temp.toArray(new String[0]);
+        String[] returnArray = temp.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public boolean checkInningsCompletion() {

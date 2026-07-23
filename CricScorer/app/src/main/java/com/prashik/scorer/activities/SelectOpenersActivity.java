@@ -49,6 +49,9 @@ public class SelectOpenersActivity extends AppCompatActivity {
         this.playersOptions = this.match.getBattingTeam().getPlayerNames().toArray(new String[0]);
         this.bowlerOptions = this.match.getBowlingTeam().getPlayerNames().toArray(new String[0]);
 
+        Arrays.sort(this.playersOptions);
+        Arrays.sort(this.bowlerOptions);
+
         System.out.println("Players Options: " + Arrays.toString(this.playersOptions));
         System.out.println("Bowlers Options: " + Arrays.toString(this.bowlerOptions));
         this.playersSelected = new boolean[this.playersOptions.length];

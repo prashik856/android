@@ -24,6 +24,7 @@ import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -67,7 +68,9 @@ public class SelectTeamAPlayersActivity extends AppCompatActivity {
             }
             temp.add(player);
         }
-        playersWithoutCaptain = temp.toArray(new String[0]);
+        String[] tempSorted = temp.toArray(new String[0]);
+        Arrays.sort(tempSorted);
+        playersWithoutCaptain = tempSorted;
 
         String teamAName = this.match.getTeamA().getName();
 

@@ -138,6 +138,7 @@ public class PlayersSelectActivity extends AppCompatActivity {
         System.out.println("Match Players are: " + this.match.getMatchPlayers().toString());
 
         matchPlayers = temp.toArray(new String[0]);
+        Arrays.sort(matchPlayers);
         System.out.println("Match Players: " + Arrays.toString(matchPlayers));
         // Got my match players
         Intent intent = new Intent(this, SelectCaptainsActivity.class);

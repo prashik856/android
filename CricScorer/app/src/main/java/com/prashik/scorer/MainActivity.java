@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handlePlayersClick(View view) {
         Intent intent = new Intent(this, PlayersActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         startActivity(intent);
     }
 

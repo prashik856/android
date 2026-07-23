@@ -12,12 +12,14 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHolder> {
     HashMap<String, Player> allPlayers;
     HashMap<String, MatchStats> allMatchStats;
-
+    HashMap<String, String> nameToIdMap;
     String[] allPlayerNames;
     String[] allPlayersIds;
     int[] allPlayersMatchesPlayed;
@@ -32,9 +34,6 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-//        System.out.println("All Players position value: " + allPlayerNames[position]);
-//        System.out.println("View holder value: " + viewHolder);
-//        System.out.println("Text View value: " + viewHolder.getTextView());
         viewHolder.getTextView().setText(String.format("Name: %s | Matches Played: %d",
                 allPlayerNames[position],
                 allPlayersMatchesPlayed[position]));
@@ -59,17 +58,31 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         }
     }
 
-    public PlayersAdapter(HashMap<String, Player> allPlayers, HashMap<String, MatchStats> allMatchStats) {
+    public PlayersAdapter(HashMap<String, Player> allPlayers,
+                          HashMap<String, MatchStats> allMatchStats,
+                          HashMap<String, String> nameToIdMapObject) {
         this.allPlayers = allPlayers;
         this.allMatchStats = allMatchStats;
+        this.nameToIdMap = nameToIdMapObject;
         allPlayerNames = new String[allPlayers.size()];
         allPlayersMatchesPlayed = new int[allMatchStats.size()];
         allPlayersIds = new String[allPlayers.size()];
+
+        // Create all player names array and sort them
         int i=0;
         for(String key: this.allPlayers.keySet()) {
-            allPlayerNames[i] = allPlayers.get(key).getFirstName() + " " + allPlayers.get(key).getLastName();
-            allPlayersMatchesPlayed[i] = allMatchStats.get(key).getMatchesPlayed();
-            allPlayersIds[i] = key;
+            allPlayerNames[i] = Objects.requireNonNull(allPlayers.get(key)).getFullName();
+            i++;
+        }
+        Arrays.sort(allPlayerNames);
+
+        i=0;
+        for(String key: allPlayerNames) {
+            String id = this.nameToIdMap.get(key);
+            allPlayersMatchesPlayed[i] = Objects
+                    .requireNonNull(allMatchStats.get(id))
+                    .getMatchesPlayed();
+            allPlayersIds[i] = id;
             i++;
         }
     }

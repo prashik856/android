@@ -287,7 +287,9 @@ public class Utils {
     public static String[] getPlayersList(HashMap<String, String> allPlayers) {
         System.out.println("All players hashmap: " + allPlayers.toString());
         ArrayList<String> players = new ArrayList<>(allPlayers.keySet());
-        return players.toArray(new String[0]);
+        String[] returnArray = players.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public static String[] getRemainingPlayersList(HashMap<String, String> allPlayers, Match match) {
@@ -301,7 +303,9 @@ public class Utils {
                 temp.add(player);
             }
         }
-        return temp.toArray(new String[0]);
+        String[] returnArray = temp.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public static MatchPlayer getMatchPlayer(String name,
