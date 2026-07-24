@@ -2,9 +2,7 @@ package com.prashik.scorer.util;
 
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.prashik.scorer.activities.PlayersActivity;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
 import com.prashik.scorer.models.Match;
