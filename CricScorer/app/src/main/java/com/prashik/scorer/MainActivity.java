@@ -98,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        Utils.syncNameToIdMapping(allPlayers, nameToIdMap, dataFilesMap);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handlePlayersClick(View view) {
         Intent intent = new Intent(this, PlayersActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         startActivity(intent);
     }
 

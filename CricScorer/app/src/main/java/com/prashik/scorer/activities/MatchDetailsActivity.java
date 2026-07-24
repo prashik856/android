@@ -13,8 +13,6 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.Team;
 
-import java.util.HashMap;
-
 public class MatchDetailsActivity extends AppCompatActivity {
 
     Match match;

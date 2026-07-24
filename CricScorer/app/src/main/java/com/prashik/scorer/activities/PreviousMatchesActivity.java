@@ -22,6 +22,7 @@ import com.prashik.scorer.models.Match;
 import com.prashik.scorer.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class PreviousMatchesActivity extends AppCompatActivity {
@@ -29,6 +30,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
     HashMap<String, String> dataFilesMap;
     String filesDirectory;
     MatchAdapter matchAdapter;
+    HashMap<Long, String> idToFileNameMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +46,30 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         ArrayList<String> matchFiles = Utils.getMatchFiles(Utils.getAllFilesInDirectory(this.filesDirectory));
         System.out.println("All Match Files: " + matchFiles);
 
+        ArrayList<Long> dateInteger = new ArrayList<>();
+        for(String matchfile: matchFiles) {
+            String fileToRead = this.filesDirectory + "/" + matchfile;
+            System.out.println("File to read: " + fileToRead);
+
+            Match match = Utils.readMatchFile(fileToRead);
+            System.out.println("Current Match Object: " + match.toString());
+
+            dateInteger.add(match.getStartTime());
+            idToFileNameMap.put(match.getStartTime(), fileToRead);
+        }
+
+        // sort dateInteger
+        Collections.sort(dateInteger, Collections.reverseOrder());
+        
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> teams = new ArrayList<>();
         ArrayList<String> statuses = new ArrayList<>();
         ArrayList<String> captains = new ArrayList<>();
         ArrayList<String> fileNames = new ArrayList<>();
         ArrayList<String> results = new ArrayList<>();
-        for(String matchfile: matchFiles) {
-            String fileToRead = this.filesDirectory + "/" + matchfile;
+        // go through all the sorted matches
+        for(Long dateValue: dateInteger) {
+            String fileToRead = this.idToFileNameMap.get(dateValue);
             System.out.println("File to read: " + fileToRead);
             Match match = Utils.readMatchFile(fileToRead);
             System.out.println("Current Match Object: " + match.toString());
@@ -69,7 +87,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
             teams.add(team);
             statuses.add(status);
             captains.add(captain);
-            fileNames.add(matchfile);
+            fileNames.add(fileToRead);
             results.add(result);
         }
         System.out.println("Dates: " + dates);
@@ -112,9 +130,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         // read match file
         System.out.println("Clicked on match.");
         TextView textView = (TextView) view;
-        String matchFile = textView.getContentDescription().toString();
-        System.out.println("Match file: " + matchFile);
-        String matchFileLocation = this.filesDirectory + "/" + matchFile;
+        String matchFileLocation = textView.getContentDescription().toString();
         System.out.println("Match file location: " + matchFileLocation);
         Match match = Utils.readMatchFile(matchFileLocation);
 

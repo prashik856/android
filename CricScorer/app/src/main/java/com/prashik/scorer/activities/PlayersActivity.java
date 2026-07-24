@@ -2,6 +2,7 @@ package com.prashik.scorer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +21,10 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.adapters.PlayersAdapter;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
-import com.prashik.scorer.models.Match;
-import com.prashik.scorer.models.MatchPlayer;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -37,6 +35,7 @@ public class PlayersActivity extends AppCompatActivity {
     HashMap<String, BattingStats> allBattingStats;
     HashMap<String, BowlingStats> allBowlingStats;
     HashMap<String, MatchStats> allMatchesStats;
+    HashMap<String, String> nameToIdMap;
     PlayersAdapter playersAdapter;
 
     @Override
@@ -46,12 +45,29 @@ public class PlayersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_players);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
-        this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
-        this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
-        this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
+        for(String s: dataFilesMap.keySet()) {
+            String dataFile = dataFilesMap.get(s);
+            Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
+            switch (s) {
+                case "players_data_file_location":
+                    allPlayers = Utils.readPlayersFile(dataFile);
+                    break;
+                case "players_batting_data_file_location":
+                    allBattingStats = Utils.readBattingStatsFile(dataFile);
+                    break;
+                case "players_bowling_data_file_location":
+                    allBowlingStats = Utils.readBowlingStatsFile(dataFile);
+                    break;
+                case "players_matches_data_file_location":
+                    allMatchesStats = Utils.readMatchStatsFile(dataFile);
+                    break;
+                case "players_name_to_id_map_file_location":
+                    nameToIdMap = Utils.readNameToIdMapFile(dataFile);
+                    break;
+            }
+        }
 
-        this.playersAdapter = new PlayersAdapter(this.allPlayers, this.allMatchesStats);
+        this.playersAdapter = new PlayersAdapter(this.allPlayers, this.allMatchesStats, this.nameToIdMap);
         RecyclerView recyclerView = findViewById(R.id.all_players_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(playersAdapter);
@@ -83,41 +99,8 @@ public class PlayersActivity extends AppCompatActivity {
 
     public void handleSyncClick(View view) {
         System.out.println("Syncing name to id data.");
-        HashMap<String, String> nameToIdMap = new HashMap<>();
-        for(String playerId: allPlayers.keySet()) {
-            String playerName = Objects.requireNonNull(allPlayers.get(playerId)).getFullName();
-
-            if(nameToIdMap.get(playerName) == null) {
-                nameToIdMap.put(playerName, playerId);
-            } else {
-                System.out.println("Error syncning player " + playerName + ". Data already exists in naming map.");
-                throw new RuntimeException("Error. " + playerName + " already exists in map.");
-            }
-            String fileName = this.dataFilesMap.get("players_name_to_id_map_file_location");
-            Utils.syncNameToIdMapData(fileName, nameToIdMap);
-
-            System.out.println("Sync complete.");
-        }
-
-        // we can even sync player data here.
-        String filesDirectory = this.dataFilesMap.get("files_directory");
-//        ArrayList<String> matchFiles = Utils.getMatchFiles(Utils.getAllFilesInDirectory(filesDirectory));
-//
-//        for(String matchfile: matchFiles) {
-//            String fileToRead = filesDirectory + "/" + matchfile;
-//            System.out.println("File to read: " + fileToRead);
-//            Match match = Utils.readMatchFile(fileToRead);
-//
-//            // Go through all players
-//            for(MatchPlayer matchPlayer: match.getTeamA().getTeamPlayers()) {
-//
-//            }
-//
-//            // Go through all players
-//            for(MatchPlayer matchPlayer: match.getTeamB().getTeamPlayers()) {
-//
-//            }
-//        }
+        Utils.syncNameToIdMapping(allPlayers, nameToIdMap, dataFilesMap);
+        Toast.makeText(PlayersActivity.this, "Sync complete.", Toast.LENGTH_LONG).show();
     }
 
     public void handleHomeClick(View view) {

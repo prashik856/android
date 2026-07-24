@@ -287,7 +287,9 @@ public class Utils {
     public static String[] getPlayersList(HashMap<String, String> allPlayers) {
         System.out.println("All players hashmap: " + allPlayers.toString());
         ArrayList<String> players = new ArrayList<>(allPlayers.keySet());
-        return players.toArray(new String[0]);
+        String[] returnArray = players.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public static String[] getRemainingPlayersList(HashMap<String, String> allPlayers, Match match) {
@@ -301,7 +303,9 @@ public class Utils {
                 temp.add(player);
             }
         }
-        return temp.toArray(new String[0]);
+        String[] returnArray = temp.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public static MatchPlayer getMatchPlayer(String name,
@@ -668,7 +672,20 @@ public class Utils {
                 battingStats.setBestScore(matchPlayerBatting.getRunsScored());
             }
         }
+    }
 
+    public static void syncNameToIdMapping(HashMap<String, Player> allPlayers, HashMap<String, String> nameToIdMap,
+                                           HashMap<String, String> dataFilesMap) {
+        for(String playerId: allPlayers.keySet()) {
+            String playerName = Objects.requireNonNull(allPlayers.get(playerId)).getFullName();
 
+            if(nameToIdMap.get(playerName) == null) {
+                nameToIdMap.put(playerName, playerId);
+            } else {
+                System.out.println("Error syncning player " + playerName + ". Data already exists in naming map.");
+            }
+        }
+        String fileName = dataFilesMap.get("players_name_to_id_map_file_location");
+        Utils.syncNameToIdMapData(fileName, nameToIdMap);
     }
 }

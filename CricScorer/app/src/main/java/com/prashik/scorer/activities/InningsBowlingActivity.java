@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prashik.scorer.R;
-import com.prashik.scorer.adapters.MatchPlayerBattingAdapter;
 import com.prashik.scorer.adapters.MatchPlayerBowlingAdapter;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchPlayer;

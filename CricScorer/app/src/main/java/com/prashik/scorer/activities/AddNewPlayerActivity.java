@@ -20,7 +20,6 @@ import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class AddNewPlayerActivity extends AppCompatActivity {
@@ -29,6 +28,7 @@ public class AddNewPlayerActivity extends AppCompatActivity {
     HashMap<String, BattingStats> allBattingStats;
     HashMap<String, BowlingStats> allBowlingStats;
     HashMap<String, MatchStats> allMatchesStats;
+    HashMap<String, String> nameToIdMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,9 @@ public class AddNewPlayerActivity extends AppCompatActivity {
                     break;
                 case "players_matches_data_file_location":
                     this.allMatchesStats = Utils.readMatchStatsFile(dataFile);
+                    break;
+                case "players_name_to_id_map_file_location":
+                    nameToIdMap = Utils.readNameToIdMapFile(dataFile);
                     break;
             }
         }
@@ -109,17 +112,20 @@ public class AddNewPlayerActivity extends AppCompatActivity {
         allBattingStats.put(battingStats.getPlayerId(), battingStats);
         allBowlingStats.put(bowlingStats.getPlayerId(), bowlingStats);
         allMatchesStats.put(matchStats.getPlayerId(), matchStats);
+        nameToIdMap.put(player.getFullName(), player.getId());
 
         // Sync data in files
         Utils.syncPlayersData(dataFilesMap.get("players_data_file_location"), allPlayers);
         Utils.syncBattingStatsData(dataFilesMap.get("players_batting_data_file_location"), allBattingStats);
         Utils.syncBowlingStatsData(dataFilesMap.get("players_bowling_data_file_location"), allBowlingStats);
         Utils.syncMatchStatsData(dataFilesMap.get("players_matches_data_file_location"), allMatchesStats);
+        Utils.syncNameToIdMapData(dataFilesMap.get("players_name_to_id_map_file_location"), nameToIdMap);
 
         // Start player info activity
         Intent intent = new Intent(this, PlayerInformationActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         intent.putExtra("player_id", player.getId());
+        intent.putExtra("previous_activity", "add_new_player_activity");
         startActivity(intent);
     }
 }

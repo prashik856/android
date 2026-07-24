@@ -20,8 +20,6 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.util.Utils;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 
 public class MatchInformationActivity extends AppCompatActivity {

@@ -1,7 +1,6 @@
 package com.prashik.scorer.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -283,7 +282,9 @@ public class MatchScoreActivity extends AppCompatActivity {
                 temp.add(matchPlayer.getPlayerName());
             }
         }
-        return temp.toArray(new String[0]);
+        String[] returnArray = temp.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public String[] getFieldingPlayers() {
@@ -294,7 +295,9 @@ public class MatchScoreActivity extends AppCompatActivity {
                 temp.add(this.match.getMatchPlayers().get(i));
             }
         }
-        return temp.toArray(new String[0]);
+        String[] returnArray = temp.toArray(new String[0]);
+        Arrays.sort(returnArray);
+        return returnArray;
     }
 
     public boolean checkInningsCompletion() {

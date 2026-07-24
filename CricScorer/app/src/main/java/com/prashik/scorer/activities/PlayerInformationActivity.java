@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -69,6 +71,24 @@ public class PlayerInformationActivity extends AppCompatActivity {
         this.bowlingStats = this.allBowlingStats.get(this.playerId);
         this.matchStats = this.allMatchesStats.get(this.playerId);
 
+        String previousActivity = "";
+        if(getIntent().getStringExtra("previous_activity") != null) {
+            previousActivity = getIntent().getStringExtra("previous_activity");
+        }
+
+        assert previousActivity != null;
+        if(previousActivity.equals("edit_player_activity") || previousActivity.equals("add_new_player_activity")) {
+            OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Toast.makeText(PlayerInformationActivity.this, "You cannot go back now. " +
+                            "Press home instead.", Toast.LENGTH_LONG).show();
+                }
+            };
+            getOnBackPressedDispatcher().addCallback(callback);
+        }
+        System.out.println("Previous Activity : " + previousActivity);
+
         // Player heading
         TextView textView = findViewById(R.id.player_name_pi);
         textView.setText(this.player.getFullName());
@@ -126,7 +146,7 @@ public class PlayerInformationActivity extends AppCompatActivity {
     public void handleEditClick(View view) {
         Log.d("debug", "We will open Edit Player Activity here.");
         Intent intent = new Intent(this, EditPlayerActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         intent.putExtra("player_id", player.getId());
         startActivity(intent);
     }

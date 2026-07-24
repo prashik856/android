@@ -15,15 +15,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.prashik.scorer.R;
-import com.prashik.scorer.models.BattingStats;
-import com.prashik.scorer.models.BowlingStats;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchPlayer;
-import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -67,19 +65,23 @@ public class SelectTeamAPlayersActivity extends AppCompatActivity {
             }
             temp.add(player);
         }
-        playersWithoutCaptain = temp.toArray(new String[0]);
+        String[] tempSorted = temp.toArray(new String[0]);
+        Arrays.sort(tempSorted);
+        playersWithoutCaptain = tempSorted;
 
         String teamAName = this.match.getTeamA().getName();
 
         TextView textView = findViewById(R.id.team_a_name_stp);
-        textView.setText(String.format("Select %d players for %s team", this.teamMaxPlayers, teamAName));
+        textView.setText(String.format("Select %d players for %s team",
+                this.teamMaxPlayers - 1,
+                teamAName));
 
         selectedPlayers = new boolean[playersWithoutCaptain.length];
         TextView textView1 = findViewById(R.id.select_team_a_players);
         textView1.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(SelectTeamAPlayersActivity.this);
             TextView showAllTeamAPlayers = findViewById(R.id.show_all_team_a_players);
-            builder.setTitle("Select Team Players");
+            builder.setTitle(String.format("Select %d Players", this.teamMaxPlayers - 1));
             builder.setCancelable(false);
 
             builder.setMultiChoiceItems(playersWithoutCaptain, selectedPlayers,

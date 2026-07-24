@@ -1,10 +1,8 @@
 package com.prashik.scorer.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.prashik.scorer.R;
 import com.prashik.scorer.models.Match;
-import com.prashik.scorer.models.Over;
 import com.prashik.scorer.models.Team;
 
 import java.util.ArrayList;
@@ -48,6 +45,9 @@ public class SelectOpenersActivity extends AppCompatActivity {
         assert this.match != null;
         this.playersOptions = this.match.getBattingTeam().getPlayerNames().toArray(new String[0]);
         this.bowlerOptions = this.match.getBowlingTeam().getPlayerNames().toArray(new String[0]);
+
+        Arrays.sort(this.playersOptions);
+        Arrays.sort(this.bowlerOptions);
 
         System.out.println("Players Options: " + Arrays.toString(this.playersOptions));
         System.out.println("Bowlers Options: " + Arrays.toString(this.bowlerOptions));
