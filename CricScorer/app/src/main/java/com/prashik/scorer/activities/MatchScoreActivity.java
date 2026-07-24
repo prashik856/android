@@ -186,7 +186,8 @@ public class MatchScoreActivity extends AppCompatActivity {
     public void rebalanceTeams(ArrayList<String> team1, ArrayList<String> team2, String commonPlayer) {
         // Create new player objects
         System.out.println("Add players to match players.");
-        // team1 and team2 contains commonplayer + other player.
+        // team1 -> all players of batting team
+        // team2 -> all players of bowling team
         for(String player: team1) {
             this.match.addToMatchPlayers(player);
         }
@@ -195,74 +196,72 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.match.addToMatchPlayers(player);
         }
 
-        System.out.println("Handling previous common player.");
-        MatchPlayer previousCommonPlayer = null;
-        // remove previous common player if we have it
-        if(!this.battingTeam.getCommonName().isEmpty()) {
-            System.out.println("We already have a common player: " + this.battingTeam.getCommonName());
+        System.out.println("Removing common name.");
+        this.battingTeam.setCommonName("");
+        this.bowlingTeam.setCommonName("");
 
-            // not empty
-            previousCommonPlayer = this.battingTeam.getMatchPlayerFromName(
-                    this.battingTeam.getCommonName()
-            );
+        ArrayList<MatchPlayer> removedPlayers = new ArrayList<>();
+        System.out.println("Get batting team captain.");
+        MatchPlayer battingCaptain = this.battingTeam.getMatchPlayerFromName(this.battingTeam.getCaptainName());
+        System.out.println("Remove captain first");
+        this.battingTeam.removeFromTeamPlayers(battingCaptain);
 
-            // remove this player from both teams.
-            System.out.println("Removing previous common player " + previousCommonPlayer.getPlayerName() + " from both teams.");
-            this.battingTeam.removeFromTeamPlayers(previousCommonPlayer);
-            this.bowlingTeam.removeFromTeamPlayers(previousCommonPlayer);
-            this.battingTeam.setCommonName("");
-            this.bowlingTeam.setCommonName("");
-        }
+        System.out.println("Remove all players from " + this.battingTeam.getName());
+        removedPlayers.addAll(this.battingTeam.getTeamPlayers());
 
-        System.out.println("Updated teams after removing common player");
+        // clear arrays and remove everyone
+        this.battingTeam.getTeamPlayers().clear();
+        this.battingTeam.getPlayerNames().clear();
+
+        // add captain back
+        this.battingTeam.addToTeam(battingCaptain);
+
+        System.out.println("Remove all players from " + this.bowlingTeam.getName() + " except the captain.");
+        MatchPlayer bowlingCaptain = this.bowlingTeam.getMatchPlayerFromName(this.bowlingTeam.getCaptainName());
+        this.bowlingTeam.removeFromTeamPlayers(bowlingCaptain);
+
+        removedPlayers.addAll(this.bowlingTeam.getTeamPlayers());
+
+        this.bowlingTeam.getTeamPlayers().clear();
+        this.bowlingTeam.getPlayerNames().clear();
+
+        // add captain back
+        this.bowlingTeam.addToTeam(bowlingCaptain);
+
+        System.out.println("Updated team objects: ");
         System.out.println("Batting team: " + this.battingTeam.toString());
         System.out.println("Bowling team: " + this.bowlingTeam.toString());
+        System.out.println("All Removed players: " + removedPlayers);
 
-        System.out.println("Handling adding players to batting team.");
-        // add team1 to batting team
-        for(String player: team1) {
-            if(previousCommonPlayer != null && previousCommonPlayer.getPlayerName().equals(player)) {
-                System.out.println("Adding previous common player to batting team.");
-                // same player so, object already exists. No need to initialize
-                this.battingTeam.addToTeam(previousCommonPlayer);
-            } else {
-                // initialize a new player
-                String playerId = nameToIdMap.get(player);
-                Player playerObject = allPlayers.get(playerId);
-                MatchPlayer matchPlayer = new MatchPlayer(playerObject);
-                this.battingTeam.addToTeam(matchPlayer);
-            }
+        for(String playerName: team1) {
+            MatchPlayer matchPlayer = Utils.getMatchPlayersFromList(removedPlayers, playerName,
+                    nameToIdMap, allPlayers);
+            this.battingTeam.addToTeam(matchPlayer);
         }
 
-        // set common player
-        if(!commonPlayer.isEmpty()) {
-            System.out.println("Updating common player in batting team.");
-            this.battingTeam.setCommonName(commonPlayer);
-        }
-
-        System.out.println("Handling adding players to bowling team.");
-        // add team 2 to bowling team
-        for(String player: team2) {
-            if(previousCommonPlayer != null && previousCommonPlayer.getPlayerName().equals(player)) {
-                // same player so, object already exists. No need to initialize
-                System.out.println("Adding previous common player to bowling team.");
-                this.bowlingTeam.addToTeam(previousCommonPlayer);
-            }
-            // initialize a new player
-            String playerId = nameToIdMap.get(player);
-            Player playerObject = allPlayers.get(playerId);
-            MatchPlayer matchPlayer = new MatchPlayer(playerObject);
+        for(String playerName: team2) {
+            MatchPlayer matchPlayer = Utils.getMatchPlayersFromList(removedPlayers, playerName,
+                    nameToIdMap, allPlayers);
             this.bowlingTeam.addToTeam(matchPlayer);
         }
 
-        if(!commonPlayer.isEmpty()) {
-            System.out.println("Updating common player in batting team.");
-            this.bowlingTeam.setCommonName(commonPlayer);
-        }
-
-        System.out.println("Updated teams after adding new players");
+        System.out.println("Updated team objects after adding the new players");
         System.out.println("Batting team: " + this.battingTeam.toString());
         System.out.println("Bowling team: " + this.bowlingTeam.toString());
+        System.out.println("All Removed players: " + removedPlayers);
+        System.out.println("Removed players should now be empty.");
+
+        // set common player
+        if(!commonPlayer.isEmpty()) {
+            System.out.println("Updating common player in both teams.");
+            this.battingTeam.setCommonName(commonPlayer);
+            this.bowlingTeam.setCommonName(commonPlayer);
+
+            System.out.println("Batting team Common: " + this.battingTeam.getCommonName());
+            System.out.println("Bowling team Common: " + this.bowlingTeam.getCommonName());
+        } else {
+            System.out.println("No new common player.");
+        }
 
         if(this.battingTeam.getTeamSize() != this.bowlingTeam.getTeamSize()) {
             throw new RuntimeException("Team size not equal after rebalancing.");
@@ -2533,26 +2532,42 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             System.out.println("The new players selected are: " + stringBuilder);
 
+            // now we have selected new players
+
+            // for selecting the players for batting team show all the match players
+            // plus these new players
+
             ArrayList<String> temp = new ArrayList<>();
             for(int val: playersList) {
                 temp.add(remainingPlayers[val]);
             }
 
-            // distribute new players + common player -> if we have it
-            if(!this.battingTeam.getCommonName().isEmpty()) {
-                System.out.println("Common player is there: " + this.battingTeam.getCommonName());
-                // add common player
-                temp.add(this.battingTeam.getCommonName());
-                System.out.println("Updated players options: " + temp);
-            }
+            // temp only contains new players.
+            temp.addAll(this.match.getMatchPlayers());
+            temp.remove(this.battingTeam.getCaptainName());
+            temp.remove(this.bowlingTeam.getCaptainName());
+            Collections.sort(temp);
 
+            // now sorted temp contains all players which are playing the match.
             boolean isEven = Utils.isEven(temp.size());
             int maxPlayersToSelect = temp.size()/2;
 
+            // player options to select for batting team
             String[] playersOptionList = temp.toArray(new String[0]);
             boolean[] playersSelectedInTeam = new boolean[playersOptionList.length];
             ArrayList<Integer> playerSelectedIndex = new ArrayList<>();
 
+            // update playersSelectedInTeam
+            for(int i=0; i<playersOptionList.length; i++) {
+                String playerName = playersOptionList[i];
+                if(this.battingTeam.getPlayerNames().contains(playerName)) {
+                    System.out.println("Player " + playerName + " is already present in " + this.battingTeam.getName() + " team");
+                    playersSelectedInTeam[i] = true;
+                    playerSelectedIndex.add(i);
+                }
+            }
+
+            // Now, our updated boolean list and playerSelectedIndex contains all players which are in batting team.
             AlertDialog.Builder selectPlayersBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
             selectPlayersBuilder.setTitle("Select " + maxPlayersToSelect + " players for " + this.battingTeam.getName() + " team.");
             selectPlayersBuilder.setCancelable(false);
@@ -2590,7 +2605,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 for(int val: playerSelectedIndex) {
                     temp2.add(playersOptionList[val]);
                 }
-                System.out.println("the players selected are: " + temp2);
+                System.out.println("the players selected in " + this.battingTeam.getName() + " are : "  + temp2);
 
                 ArrayList<String> temp3 = new ArrayList<>();
                 for(String player: playersOptionList) {

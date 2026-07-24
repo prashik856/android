@@ -62,10 +62,12 @@ public class Team implements Serializable {
         this.teamPlayers = teamPlayers;
     }
 
-    public void removeFromTeamPlayers(MatchPlayer player) {
+    public MatchPlayer removeFromTeamPlayers(MatchPlayer player) {
+        MatchPlayer removedPlayer = null;
         for(int i=0; i<this.teamPlayers.size(); i++) {
             MatchPlayer matchPlayer = this.teamPlayers.get(i);
             if(matchPlayer.getPlayerName().equals(player.getPlayerName())) {
+                removedPlayer = this.teamPlayers.get(i);
                 this.teamPlayers.remove(i);
                 this.playerNames.remove(matchPlayer.getPlayerName());
                 this.teamSize = this.teamSize - 1;
@@ -73,6 +75,7 @@ public class Team implements Serializable {
                 break;
             }
         }
+        return removedPlayer;
     }
 
     public void addToTeam(MatchPlayer player) {
