@@ -75,13 +75,17 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
             i++;
         }
         Arrays.sort(allPlayerNames);
+        System.out.println("All player names: " + Arrays.toString(allPlayerNames));
+
+        System.out.println("All Match Stats: " + this.allMatchStats.toString());
+        System.out.println("Names to Id Map: " + this.nameToIdMap.toString());
 
         i=0;
         for(String key: allPlayerNames) {
             String id = this.nameToIdMap.get(key);
-            allPlayersMatchesPlayed[i] = Objects
-                    .requireNonNull(allMatchStats.get(id))
-                    .getMatchesPlayed();
+            System.out.println("player id: " + id);
+            allPlayersMatchesPlayed[i] = allMatchStats.get(id).getMatchesPlayed();
+                    ;
             allPlayersIds[i] = id;
             i++;
         }

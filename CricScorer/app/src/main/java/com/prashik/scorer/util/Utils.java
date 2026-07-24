@@ -2,7 +2,9 @@ package com.prashik.scorer.util;
 
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.prashik.scorer.activities.PlayersActivity;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
 import com.prashik.scorer.models.Match;
@@ -672,7 +674,20 @@ public class Utils {
                 battingStats.setBestScore(matchPlayerBatting.getRunsScored());
             }
         }
+    }
 
+    public static void syncNameToIdMapping(HashMap<String, Player> allPlayers, HashMap<String, String> nameToIdMap,
+                                           HashMap<String, String> dataFilesMap) {
+        for(String playerId: allPlayers.keySet()) {
+            String playerName = Objects.requireNonNull(allPlayers.get(playerId)).getFullName();
 
+            if(nameToIdMap.get(playerName) == null) {
+                nameToIdMap.put(playerName, playerId);
+            } else {
+                System.out.println("Error syncning player " + playerName + ". Data already exists in naming map.");
+            }
+        }
+        String fileName = dataFilesMap.get("players_name_to_id_map_file_location");
+        Utils.syncNameToIdMapData(fileName, nameToIdMap);
     }
 }

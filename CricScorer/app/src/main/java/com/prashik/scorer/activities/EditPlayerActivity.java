@@ -2,6 +2,7 @@ package com.prashik.scorer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class EditPlayerActivity extends AppCompatActivity {
     HashMap<String, BattingStats> allBattingStats;
     HashMap<String, BowlingStats> allBowlingStats;
     HashMap<String, MatchStats> allMatchesStats;
+    HashMap<String, String> nameToIdMap;
 
     String playerId;
     Player player;
@@ -39,10 +41,28 @@ public class EditPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_player);
 
         this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
-        this.allPlayers = (HashMap<String, Player>) getIntent().getSerializableExtra("all_players_hashmap");
-        this.allBattingStats = (HashMap<String, BattingStats>) getIntent().getSerializableExtra("all_batting_stats_hashmap");
-        this.allBowlingStats = (HashMap<String, BowlingStats>) getIntent().getSerializableExtra("all_bowling_stats_hashmap");
-        this.allMatchesStats = (HashMap<String, MatchStats>) getIntent().getSerializableExtra("all_matches_stats_hashmap");
+        for(String s: dataFilesMap.keySet()) {
+            String dataFile = dataFilesMap.get(s);
+            Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
+            switch (s) {
+                case "players_data_file_location":
+                    this.allPlayers = Utils.readPlayersFile(dataFile);
+                    break;
+                case "players_batting_data_file_location":
+                    this.allBattingStats = Utils.readBattingStatsFile(dataFile);
+                    break;
+                case "players_bowling_data_file_location":
+                    this.allBowlingStats = Utils.readBowlingStatsFile(dataFile);
+                    break;
+                case "players_matches_data_file_location":
+                    this.allMatchesStats = Utils.readMatchStatsFile(dataFile);
+                    break;
+                case "players_name_to_id_map_file_location":
+                    nameToIdMap = Utils.readNameToIdMapFile(dataFile);
+                    break;
+            }
+        }
+
         this.playerId = getIntent().getStringExtra("player_id");
         this.player = this.allPlayers.get(this.playerId);
 
@@ -108,14 +128,17 @@ public class EditPlayerActivity extends AppCompatActivity {
         // Sync the current hashset
         allPlayers.remove(player.getId());
         allPlayers.put(player.getId(), player);
+        nameToIdMap.put(player.getFullName(), player.getId());
 
         // Sync data in files
         Utils.syncPlayersData(dataFilesMap.get("players_data_file_location"), allPlayers);
+        Utils.syncNameToIdMapData(dataFilesMap.get("players_name_to_id_map_file_location"), nameToIdMap);
 
         // Start player info activity
         Intent intent = new Intent(this, PlayerInformationActivity.class);
-        intent = Utils.putDataFiles(intent, dataFilesMap, allPlayers, allBattingStats, allBowlingStats, allMatchesStats);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
         intent.putExtra("player_id", player.getId());
+        intent.putExtra("previous_activity", "edit_player_activity");
         startActivity(intent);
     }
 }

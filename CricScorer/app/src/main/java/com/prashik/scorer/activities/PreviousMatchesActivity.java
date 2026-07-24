@@ -130,9 +130,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         // read match file
         System.out.println("Clicked on match.");
         TextView textView = (TextView) view;
-        String matchFile = textView.getContentDescription().toString();
-        System.out.println("Match file: " + matchFile);
-        String matchFileLocation = this.filesDirectory + "/" + matchFile;
+        String matchFileLocation = textView.getContentDescription().toString();
         System.out.println("Match file location: " + matchFileLocation);
         Match match = Utils.readMatchFile(matchFileLocation);
 
