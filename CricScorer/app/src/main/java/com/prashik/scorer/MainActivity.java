@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public void handlePlayersClick(View view) {
         Intent intent = new Intent(this, PlayersActivity.class);
         intent.putExtra("data_files_hashmap", dataFilesMap);
+        intent.putExtra("previous_activity", "main_activity");
         startActivity(intent);
     }
 

@@ -688,4 +688,28 @@ public class Utils {
         String fileName = dataFilesMap.get("players_name_to_id_map_file_location");
         Utils.syncNameToIdMapData(fileName, nameToIdMap);
     }
+
+    public static MatchPlayer getMatchPlayersFromList(ArrayList<MatchPlayer> removedPlayers,
+                                                      String playerName,
+                                                      HashMap<String, String> nameToIdMap,
+                                                      HashMap<String, Player> allPlayersMap) {
+        MatchPlayer matchPlayer = null;
+        for(int i=0; i<removedPlayers.size(); i++) {
+            if(removedPlayers.get(i).getPlayerName().equals(playerName)) {
+                System.out.println("MatchPlayer object already exists. Returning that object.");
+                matchPlayer = removedPlayers.get(i);
+                removedPlayers.remove(i);
+                break;
+            }
+        }
+
+        if(matchPlayer == null) {
+            System.out.println("MatchPlayer Object doesn't exists in the existing teams. Returning new object.");
+            String playerId = nameToIdMap.get(playerName);
+            Player player = allPlayersMap.get(playerId);
+            matchPlayer = new MatchPlayer(player);
+        }
+
+        return matchPlayer;
+    }
 }

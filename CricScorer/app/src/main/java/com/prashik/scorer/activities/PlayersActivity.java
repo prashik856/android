@@ -72,14 +72,21 @@ public class PlayersActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(playersAdapter);
 
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Toast.makeText(PlayersActivity.this, "You cannot go back now. " +
-                        "Press home instead.", Toast.LENGTH_LONG).show();
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(callback);
+        String previousAcvitivy = "";
+        if(getIntent().getStringExtra("previous_activity") != null) {
+            previousAcvitivy = getIntent().getStringExtra("previous_activity");
+        }
+
+        if(!previousAcvitivy.equals("main_activity")) {
+            OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Toast.makeText(PlayersActivity.this, "You cannot go back now. " +
+                            "Press home instead.", Toast.LENGTH_LONG).show();
+                }
+            };
+            getOnBackPressedDispatcher().addCallback(callback);
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
