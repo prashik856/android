@@ -1216,6 +1216,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             // but he will play the balls
             this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
             this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
+            this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
             this.strikerBatsman.getMatchPlayerBatting().updateStrikeRate();
             this.strikerBatsman.getMatchPlayerBatting().updateRecords();
 
@@ -2555,7 +2556,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             // player options to select for batting team
             String[] playersOptionList = temp.toArray(new String[0]);
             boolean[] playersSelectedInTeam = new boolean[playersOptionList.length];
-            ArrayList<Integer> playerSelectedIndex = new ArrayList<>();
+            ArrayList<String> playerSelectedArray = new ArrayList<>();
 
             // update playersSelectedInTeam
             for(int i=0; i<playersOptionList.length; i++) {
@@ -2563,7 +2564,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 if(this.battingTeam.getPlayerNames().contains(playerName)) {
                     System.out.println("Player " + playerName + " is already present in " + this.battingTeam.getName() + " team");
                     playersSelectedInTeam[i] = true;
-                    playerSelectedIndex.add(i);
+                    playerSelectedArray.add(playerName);
                 }
             }
 
@@ -2578,7 +2579,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 for(int i=0; i<playersOptionList.length; i++) {
                     playersSelectedInTeam[i] = false;
                 }
-                playerSelectedIndex.clear();
+                playerSelectedArray.clear();
             });
 
             selectPlayersBuilder.setMultiChoiceItems(playersOptionList, playersSelectedInTeam,
@@ -2586,24 +2587,24 @@ public class MatchScoreActivity extends AppCompatActivity {
                         // Check condition
                         if(isChecked) {
                             // when this checkbox is selected, we will add this in our players list
-                            playerSelectedIndex.add(which1);
+                            playerSelectedArray.add(playersOptionList[which1]);
                             // we sort our array list
-                            Collections.sort(playerSelectedIndex);
+                            Collections.sort(playerSelectedArray);
                         } else {
                             // when unselected, remove position from our list
-                            playerSelectedIndex.remove(which1);
+                            playerSelectedArray.remove(playersOptionList[which1]);
                         }
                     });
 
             selectPlayersBuilder.setPositiveButton("OK", (dialog1, which1) -> {
-                if(playerSelectedIndex.size() > maxPlayersToSelect) {
+                if(playerSelectedArray.size() > maxPlayersToSelect) {
                     Toast.makeText(this, "You need to select only " + maxPlayersToSelect + " players.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 ArrayList<String> temp2 = new ArrayList<>();
-                for(int val: playerSelectedIndex) {
-                    temp2.add(playersOptionList[val]);
+                for(String val: playerSelectedArray) {
+                    temp2.add(val);
                 }
                 System.out.println("the players selected in " + this.battingTeam.getName() + " are : "  + temp2);
 
