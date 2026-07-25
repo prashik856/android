@@ -398,19 +398,13 @@ public class Utils {
     }
 
     public static void updateGlobalRecords(HashMap<String, String> dataFilesMap, Match match) {
-        HashMap<String, Player> allPlayers = new HashMap<>();
         HashMap<String, BattingStats> allBattingStats = new HashMap<>();
         HashMap<String, BowlingStats> allBowlingStats = new HashMap<>();
         HashMap<String, MatchStats> allMatchesStats = new HashMap<>();
-        HashMap<String, String> nameToIdMap = new HashMap<>();
-
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
             Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
             switch (s) {
-                case "players_data_file_location":
-                    allPlayers = Utils.readPlayersFile(dataFile);
-                    break;
                 case "players_batting_data_file_location":
                     allBattingStats = Utils.readBattingStatsFile(dataFile);
                     break;
@@ -420,21 +414,46 @@ public class Utils {
                 case "players_matches_data_file_location":
                     allMatchesStats = Utils.readMatchStatsFile(dataFile);
                     break;
-                case "players_name_to_id_map_file_location":
-                    nameToIdMap = Utils.readNameToIdMapFile(dataFile);
-                    break;
             }
         }
 
+
+
+        // how will it work for common player -> update record twice.
         for(MatchPlayer matchPlayer: match.getTeamA().getTeamPlayers()) {
+
+            // an extra iteration for the common player
+            if(matchPlayer.getPlayerName().equals(match.getTeamA().getCommonName())) {
+                // update batting records
+                updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId(), true);
+
+                // update bowling records
+                updateGlobalBowlingRecords(allBowlingStats, matchPlayer, match.getId(), true);
+
+                // update match records
+                updateGlobalMatchRecords(allMatchesStats, matchPlayer, match.getId(), true);
+                continue;
+            }
+
             // update batting records
-            updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId());
+            updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId(), false);
 
             // update bowling records
-            updateGlobalBowlingRecords(allBowlingStats, matchPlayer, match.getId());
+            updateGlobalBowlingRecords(allBowlingStats, matchPlayer, match.getId(), false);
 
             // update match records
-            updateGlobalMatchRecords(allMatchesStats, matchPlayer, match.getId());
+            updateGlobalMatchRecords(allMatchesStats, matchPlayer, match.getId(), false);
+        }
+
+        for(MatchPlayer matchPlayer: match.getTeamB().getTeamPlayers()) {
+            // update batting records
+            updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId(), false);
+
+            // update bowling records
+            updateGlobalBowlingRecords(allBowlingStats, matchPlayer, match.getId(), false);
+
+            // update match records
+            updateGlobalMatchRecords(allMatchesStats, matchPlayer, match.getId(), false);
         }
 
         for(String s: dataFilesMap.keySet()) {
@@ -455,7 +474,7 @@ public class Utils {
     }
 
     public static void updateGlobalMatchRecords(HashMap<String, MatchStats> allMatchStats,
-                                                MatchPlayer matchPlayer, String matchId) {
+                                                MatchPlayer matchPlayer, String matchId, boolean commonPlayer) {
         MatchStats matchStats = allMatchStats.get(matchPlayer.getPlayer().getId());
 
         assert matchStats != null;
@@ -464,12 +483,16 @@ public class Utils {
             return;
         }
 
-        matchStats.getMatchesIncluded().put(matchId, true);
+        if(!commonPlayer) {
+            matchStats.getMatchesIncluded().put(matchId, true);
+        }
         MatchPlayerFielding matchPlayerFielding = matchPlayer.getMatchPlayerFielding();
 
-        matchStats.setMatchesPlayed(
-                matchStats.getMatchesPlayed() + 1
-        );
+        if(!commonPlayer) {
+            matchStats.setMatchesPlayed(
+                    matchStats.getMatchesPlayed() + 1
+            );
+        }
 
         matchStats.setCatches(
                 matchStats.getCatches() + matchPlayerFielding.getNoOfCatches()
@@ -481,7 +504,7 @@ public class Utils {
     }
 
     public static void updateGlobalBowlingRecords(HashMap<String, BowlingStats> allBowlingStats,
-                                                  MatchPlayer matchPlayer, String matchId) {
+                                                  MatchPlayer matchPlayer, String matchId, boolean commonPlayer) {
         BowlingStats bowlingStats = allBowlingStats.get(matchPlayer.getPlayer().getId());
 
         assert bowlingStats != null;
@@ -490,7 +513,9 @@ public class Utils {
             return;
         }
 
-        bowlingStats.getMatchesIncluded().put(matchId, true);
+        if(!commonPlayer) {
+            bowlingStats.getMatchesIncluded().put(matchId, true);
+        }
         MatchPlayerBowling matchPlayerBowling = matchPlayer.getMatchPlayerBowling();
 
         if(matchPlayerBowling.isBowled()) {
@@ -592,7 +617,7 @@ public class Utils {
     }
 
     public static void updateGlobalBattingRecords(HashMap<String, BattingStats> allBattingStats,
-                                                  MatchPlayer matchPlayer, String matchId) {
+                                                  MatchPlayer matchPlayer, String matchId, boolean commonPlayer) {
         BattingStats battingStats = allBattingStats.get(matchPlayer.getPlayer().getId());
         assert battingStats != null;
 
@@ -601,8 +626,10 @@ public class Utils {
             return;
         }
 
-        // put match id
-        battingStats.getMatchesIncluded().put(matchId, true);
+        if(!commonPlayer) {
+            // put match id
+            battingStats.getMatchesIncluded().put(matchId, true);
+        }
         MatchPlayerBatting matchPlayerBatting = matchPlayer.getMatchPlayerBatting();
 
         if(matchPlayerBatting.isBatted()) {
@@ -664,7 +691,7 @@ public class Utils {
 
             double runningStrikeRate = 0;
             if(battingStats.getBallsPlayed() > 0) {
-                runningStrikeRate = (double)battingStats.getRuns()/battingStats.getBallsPlayed();
+                runningStrikeRate = ((double)battingStats.getRuns()/battingStats.getBallsPlayed()) * 100;
             }
             battingStats.setStrikeRate(runningStrikeRate);
 

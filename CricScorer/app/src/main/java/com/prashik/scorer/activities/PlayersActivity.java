@@ -21,10 +21,12 @@ import com.prashik.scorer.R;
 import com.prashik.scorer.adapters.PlayersAdapter;
 import com.prashik.scorer.models.BattingStats;
 import com.prashik.scorer.models.BowlingStats;
+import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.MatchStats;
 import com.prashik.scorer.models.Player;
 import com.prashik.scorer.util.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -107,7 +109,30 @@ public class PlayersActivity extends AppCompatActivity {
     public void handleSyncClick(View view) {
         System.out.println("Syncing name to id data.");
         Utils.syncNameToIdMapping(allPlayers, nameToIdMap, dataFilesMap);
+
+        System.out.println("Updating match data.");
+        String filesDirectory = this.dataFilesMap.get("files_directory");
+        System.out.println("Files directory: " + filesDirectory);
+        ArrayList<String> matchFiles = Utils.getMatchFiles(Utils.getAllFilesInDirectory(filesDirectory));
+        System.out.println("All Match Files: " + matchFiles);
+        for(String matchfile: matchFiles) {
+            String fileToRead = filesDirectory + "/" + matchfile;
+            System.out.println("File to read: " + fileToRead);
+
+            Match match = Utils.readMatchFile(fileToRead);
+            System.out.println("Current Match Object: " + match.toString());
+            if(match.isCompleted()) {
+                Utils.updateGlobalRecords(dataFilesMap, match);
+            }
+        }
+
         Toast.makeText(PlayersActivity.this, "Sync complete.", Toast.LENGTH_LONG).show();
+
+        System.out.println("Reopening activity to update the page.");
+        Intent intent = new Intent(this, PlayersActivity.class);
+        intent.putExtra("data_files_hashmap", dataFilesMap);
+        intent.putExtra("previous_activity", "main_activity");
+        startActivity(intent);
     }
 
     public void handleHomeClick(View view) {
