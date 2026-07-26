@@ -74,7 +74,7 @@ public class InningsBattingActivity extends AppCompatActivity {
         String[] battedPlayersList = temp.toArray(new String[0]);
         this.battingAdapter = new MatchPlayerBattingAdapter(battedPlayersList, this.match);
         System.out.println("Getting recycler view.");
-        RecyclerView recyclerView = findViewById(R.id.players_batting_list);
+        RecyclerView recyclerView = findViewById(R.id.match_activity_display);
         System.out.println("Setting layout manager.");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         System.out.println("Setting adapter.");

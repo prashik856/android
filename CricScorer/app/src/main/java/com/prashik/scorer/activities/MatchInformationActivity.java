@@ -95,14 +95,22 @@ public class MatchInformationActivity extends AppCompatActivity {
         TextView tossSummary = findViewById(R.id.toss_summary_mi);
         tossSummary.setText(this.match.getTossDecision());
 
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Toast.makeText(MatchInformationActivity.this, "You cannot go back now. " +
-                        "Press home instead.", Toast.LENGTH_LONG).show();
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(callback);
+        String previousActivity = null;
+        if(getIntent().getStringExtra("previous_activity") != null) {
+            previousActivity = getIntent().getStringExtra("previous_activity");
+        }
+
+        if(previousActivity == null) {
+            System.out.println("Creating on back press handle.");
+            OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Toast.makeText(MatchInformationActivity.this, "You cannot go back now. " +
+                            "Press home instead.", Toast.LENGTH_LONG).show();
+                }
+            };
+            getOnBackPressedDispatcher().addCallback(callback);
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

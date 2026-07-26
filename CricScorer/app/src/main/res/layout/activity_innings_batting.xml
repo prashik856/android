@@ -22,10 +22,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_batting_list" />
+        app:layout_constraintTop_toBottomOf="@+id/match_activity_display" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/players_batting_list"
+        android:id="@+id/match_activity_display"
         android:layout_width="399dp"
         android:layout_height="471dp"
         android:layout_marginTop="12dp"
