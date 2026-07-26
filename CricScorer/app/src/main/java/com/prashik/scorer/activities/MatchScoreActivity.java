@@ -1051,10 +1051,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(runsScoredOnBadDelivery[0] == -1) {
-            Toast.makeText(this, "You need to select runs scored on wide ball.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleNoBallClick(View view) {
@@ -1179,10 +1175,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(runsScoredOnBadDelivery[0] == -1) {
-            Toast.makeText(this, "You need to select runs scored on no ball.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleByeClick(View view) {
@@ -1226,6 +1218,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.currentOver.incrementLegalDeliveries();
             this.currentOver.setExtras(this.currentOver.getExtras() + runsScoredOnBye);
             this.currentOver.setRuns(this.currentOver.getRuns() + runsScoredOnBye);
+            this.currentOver.updateOverCompleted();
 
             // update bowler runs
             this.bowler.getMatchPlayerBowling().addToBowlingDetails(activityValue);
@@ -2196,8 +2189,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             return;
         }
 
-        String[] overIncreaseOptions = {"1", "2", "3", "-1", "-2", "-3"};
-        int[] overIncreaseSelected = {-1};
+        String[] overIncreaseOptions = {"0", "1", "2", "3", "-1", "-2", "-3"};
+        int[] overIncreaseSelected = {0};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
         builder.setTitle("Select the number of overs to increase or decrease?");
@@ -2212,7 +2205,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setPositiveButton("Ok", (dialog1, which1) -> {
+        builder.setPositiveButton("Ok", (dialog, which) -> {
             if(overIncreaseSelected[0] == -1) {
                 Toast.makeText(this, "You need to select the number of overs to increase.", Toast.LENGTH_LONG).show();
                 return;
@@ -2235,7 +2228,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.match.getTeamA().decrementMaxOvers(oversToIncrease);
                 this.match.getTeamB().decrementMaxOvers(oversToIncrease);
                 this.match.addToActivities("Over-Decrease-" + oversToIncrease);
-            } else {
+            } else if(oversToIncrease > 0) {
                 // Set match properties
                 this.match.setMaxOvers(
                         this.match.getMaxOvers() + oversToIncrease
@@ -2247,6 +2240,67 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             this.syncMatch();
             this.updateScore();
+
+            // edit bowler if no bowls are bowled in this over.
+            if(this.currentOver.getLegalDeliveries() == 0) {
+                AlertDialog.Builder newBowlerBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                newBowlerBuilder.setTitle("Update bowler bowling the current over?");
+                newBowlerBuilder.setCancelable(false);
+
+                String[] options = this.bowlingTeam.getPlayerNames().toArray(new String[0]);
+                Arrays.sort(options);
+                int[] newBowlerSelected = {-1};
+                for(int i=0; i<options.length; i++) {
+                    String player = options[i];
+                    if(this.currentOver.getPlayerName().equals(player)) {
+                        newBowlerSelected[0] = i;
+                        break;
+                    }
+                }
+
+                newBowlerBuilder.setSingleChoiceItems(options, newBowlerSelected[0],
+                        (dialog1, which1) -> newBowlerSelected[0] = which1);
+
+                newBowlerBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
+                    if(newBowlerSelected[0] == -1) {
+                        Toast.makeText(this, "You need to select the new bowler to bowl the over.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    String newBowler = options[newBowlerSelected[0]];
+                    System.out.println("The new bowler selected is: " + newBowler);
+
+                    if(newBowler.equals(this.bowler.getPlayerName())) {
+                        System.out.println("Same bowler. Returning.");
+                        return;
+                    }
+
+                    // update previous bowler
+                    if(this.bowler.getMatchPlayerBowling().getDeliveriesBowled() == 0) {
+                        this.bowler.getMatchPlayerBowling().setBowled(false);
+                    }
+                    this.bowler.getMatchPlayerBowling().removeFromOversBowled();
+                    String activity = this.bowler.getPlayerName() + "-Replaced";
+                    this.match.addToActivities(activity);
+
+                    // update new bowler
+                    this.match.setCurrentBowler(newBowler);
+                    int newBowlerIndex = this.bowlingTeam.getMatchPlayerIndex(newBowler);
+                    this.match.setCurrentBowlerIndex(newBowlerIndex);
+                    this.bowler = this.bowlingTeam.getTeamPlayers().get(newBowlerIndex);
+                    this.bowler.getMatchPlayerBowling().setBowled(true);
+                    this.bowler.getMatchPlayerBowling().addToOverBowled(this.bowlingTeam.getCurrentOverBowling());
+
+                    this.currentOver.setPlayerName(this.bowler.getPlayerName());
+                    activity = this.bowler.getPlayerName() + "-New-Bowler";
+                    this.match.addToActivities(activity);
+
+                    this.syncMatch();
+                    this.updateScore();
+                });
+
+                newBowlerBuilder.show();
+            }
         });
 
         builder.show();
