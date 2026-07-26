@@ -2190,7 +2190,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         }
 
         String[] overIncreaseOptions = {"0", "1", "2", "3", "-1", "-2", "-3"};
-        int[] overIncreaseSelected = {-1};
+        int[] overIncreaseSelected = {0};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
         builder.setTitle("Select the number of overs to increase or decrease?");
