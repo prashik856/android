@@ -324,6 +324,12 @@ public class MatchPlayerBowling implements Serializable {
     public void addToOverBowled(int index) {
         this.overBowled.add(index);
     }
+    public void removeFromOversBowled() {
+        int size = this.overBowled.size();
+        if(size - 1 >= 0) {
+            this.overBowled.remove(size - 1);
+        }
+    }
 
     public void setOverBowled(ArrayList<Integer> overBowled) {
         this.overBowled = overBowled;
