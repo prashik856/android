@@ -1,5 +1,6 @@
 package com.prashik.scorer.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -121,6 +122,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("DefaultLocale")
     public void updateScore() {
         TextView teamNameText = findViewById(R.id.team_name_ms);
         TextView runsAndWicketsText = findViewById(R.id.score_value_ms);
@@ -200,14 +202,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.battingTeam.setCommonName("");
         this.bowlingTeam.setCommonName("");
 
-        ArrayList<MatchPlayer> removedPlayers = new ArrayList<>();
         System.out.println("Get batting team captain.");
         MatchPlayer battingCaptain = this.battingTeam.getMatchPlayerFromName(this.battingTeam.getCaptainName());
         System.out.println("Remove captain first");
         this.battingTeam.removeFromTeamPlayers(battingCaptain);
 
         System.out.println("Remove all players from " + this.battingTeam.getName());
-        removedPlayers.addAll(this.battingTeam.getTeamPlayers());
+        ArrayList<MatchPlayer> removedPlayers = new ArrayList<>(this.battingTeam.getTeamPlayers());
 
         // clear arrays and remove everyone
         this.battingTeam.getTeamPlayers().clear();
@@ -1055,9 +1056,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            runsScoredOnBadDelivery[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> runsScoredOnBadDelivery[0] = -1);
 
         builder.show();
     }
@@ -1098,9 +1097,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             byeRunsBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
-            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
-                runsByeSelected[0] = -1;
-            });
+            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1) -> runsByeSelected[0] = -1);
 
             byeRunsBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(runsByeSelected[0] == -1) {
@@ -1180,9 +1177,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            runsScoredOnBadDelivery[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> runsScoredOnBadDelivery[0] = -1);
 
         builder.show();
     }
@@ -1214,8 +1209,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.battingTeam.incrementLegalDeliveriesPlayed();
             this.battingTeam.updateRunRate();
 
-            // bye runs will not go to the batsman
-            // but he will play the balls
+            // bye runs will not go to the batsman, but he will play the balls
             this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
             this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
             this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
@@ -1259,9 +1253,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            runsGivenOnBye[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> runsGivenOnBye[0] = -1);
 
         builder.show();
     }
@@ -1308,6 +1300,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         // update match activities
         String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Bowled";
         this.match.addToActivities(activity);
+        this.match.addToActivities(this.strikerBatsman.getPlayerName() + "-Out-Bowled");
 
         // check if match completed because before I select the new batsman, match might already
         // be over.
@@ -1363,11 +1356,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(optionSelected[0] == -1) {
-            System.out.println("This condition should never arrive.");
-            Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public boolean undoBowled(String lastPlayerName) {
@@ -1384,10 +1372,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.battingTeam.getMatchPlayerIndex(lastPlayerName)
         );
         // update striker batsman to last batsman
-        this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(lastPlayerName);
+        this.strikerBatsman = player;
 
-        // remove last batsman out activity
+        // remove last batsman out activity of batsman-out-bowled
         this.match.removeLastElementFromActivities();
+        this.match.removeLastElementFromActivities(); // remove bowler to batsman activity
 
         // update bowling record
         this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
@@ -1550,9 +1539,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.syncMatch();
             });
 
-            builder.setNeutralButton("Clear", (dialog1, which1) -> {
-                optionSelected[0] = -1;
-            });
+            builder.setNeutralButton("Clear", (dialog1, which1) -> optionSelected[0] = -1);
 
             builder.show();
 
@@ -1564,9 +1551,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         caughtBybuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        caughtBybuilder.setNeutralButton("Clear", (dialog, which) -> {
-            caughtBySelected[0] = -1;
-        });
+        caughtBybuilder.setNeutralButton("Clear", (dialog, which) -> caughtBySelected[0] = -1);
 
         caughtBybuilder.show();
 
@@ -1619,6 +1604,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         // update match activities
         String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Hit-Wicket";
         this.match.addToActivities(activity);
+        this.match.addToActivities(this.strikerBatsman.getPlayerName() + "-Out-Hit-Wicket");
 
         // check if match completed because before I select the new batsman, match might already
         // be over.
@@ -1673,11 +1659,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(optionSelected[0] == -1) {
-            System.out.println("Impossible condition.");
-            Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public boolean undoHitWicket(String lastBatsman) {
@@ -1696,6 +1677,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         // remove out reference
         this.match.removeLastElementFromActivities();
+        this.match.removeLastElementFromActivities(); // remove bowler to batsman activity
 
         // update bowling record
         this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
@@ -1769,9 +1751,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             runsScoredbuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
-            runsScoredbuilder.setNeutralButton("Clear", (dialog1, which1) -> {
-                runsScoredSelected[0] = -1;
-            });
+            runsScoredbuilder.setNeutralButton("Clear", (dialog1, which1) -> runsScoredSelected[0] = -1);
 
             runsScoredbuilder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(runsScoredSelected[0] == -1) {
@@ -1794,9 +1774,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 runsByeBuilder.setNegativeButton("Cancel", (dialog5, which5) -> dialog5.dismiss());
 
-                runsByeBuilder.setNeutralButton("Clear", (dialog5, which5) -> {
-                    runsByeSelected[0] = -1;
-                });
+                runsByeBuilder.setNeutralButton("Clear", (dialog5, which5) -> runsByeSelected[0] = -1);
 
                 runsByeBuilder.setPositiveButton("Ok", (dialog5, which5) -> {
                     if(runsByeSelected[0] == -1) {
@@ -1819,9 +1797,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                     ballTypeBuilder.setNegativeButton("Cancel", (dialog2, which2) -> dialog2.dismiss());
 
-                    ballTypeBuilder.setNeutralButton("Clear", (dialog2, which2) -> {
-                        ballTypeSelected[0] = -1;
-                    });
+                    ballTypeBuilder.setNeutralButton("Clear", (dialog2, which2) -> ballTypeSelected[0] = -1);
 
                     ballTypeBuilder.setPositiveButton("Ok", (dialog2, which2) -> {
                         if(ballTypeSelected[0] == -1) {
@@ -1846,9 +1822,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                         runOutBatsmanBuilder.setNegativeButton("Cancel", (dialog3, which3) -> dialog3.dismiss());
 
-                        runOutBatsmanBuilder.setNeutralButton("Clear", (dialog3, which3) -> {
-                            runOutBatsmanSelected[0] = -1;
-                        });
+                        runOutBatsmanBuilder.setNeutralButton("Clear", (dialog3, which3) -> runOutBatsmanSelected[0] = -1);
 
                         runOutBatsmanBuilder.setPositiveButton("Ok", (dialog3, which3) -> {
                             if(runOutBatsmanSelected[0] == -1) {
@@ -1978,7 +1952,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                             this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
                             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
                             this.bowler.getMatchPlayerBowling().updateRecords();
-                            this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
 
                             this.match.addToActivities(runOutBatsman + "-Runout");
 
@@ -2085,9 +2058,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         runOutBybuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        runOutBybuilder.setNeutralButton("Clear", (dialog, which) -> {
-            runOutBySelected[0] = -1;
-        });
+        runOutBybuilder.setNeutralButton("Clear", (dialog, which) -> runOutBySelected[0] = -1);
 
         runOutBybuilder.show();
 
@@ -2124,9 +2095,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(retireBatsmanOptions, retireBatsmanSelected[0],
                 (dialog, which) -> retireBatsmanSelected[0] = which);
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            retireBatsmanSelected[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> retireBatsmanSelected[0] = -1);
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
@@ -2182,9 +2151,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.syncMatch();
             });
 
-            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
-                optionSelected[0] = -1;
-            });
+            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1) -> optionSelected[0] = -1);
 
             newBatsmanBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
@@ -2219,9 +2186,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(overIncreaseOptions, overIncreaseSelected[0],
                 (dialog, which) -> overIncreaseSelected[0] = which);
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            overIncreaseSelected[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> overIncreaseSelected[0] = -1);
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
@@ -2378,9 +2343,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> {
-                    optionSelected[0] = -1;
-                });
+                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2426,9 +2389,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> {
-                    optionSelected[0] = -1;
-                });
+                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2471,9 +2432,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> {
-                    optionSelected[0] = -1;
-                });
+                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2686,10 +2645,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                     return;
                 }
 
-                ArrayList<String> temp2 = new ArrayList<>();
-                for(String val: playerSelectedArray) {
-                    temp2.add(val);
-                }
+                ArrayList<String> temp2 = new ArrayList<>(playerSelectedArray);
                 System.out.println("the players selected in " + this.battingTeam.getName() + " are : "  + temp2);
 
                 ArrayList<String> temp3 = new ArrayList<>();
