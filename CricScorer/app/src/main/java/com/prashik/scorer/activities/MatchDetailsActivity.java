@@ -1,6 +1,8 @@
 package com.prashik.scorer.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -8,8 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.prashik.scorer.MainActivity;
 import com.prashik.scorer.R;
+import com.prashik.scorer.adapters.MatchActivityAdapter;
 import com.prashik.scorer.models.Match;
 import com.prashik.scorer.models.Team;
 
@@ -37,15 +43,11 @@ public class MatchDetailsActivity extends AppCompatActivity {
         teamPlayers = findViewById(R.id.team_b_players_md);
         teamPlayers.setText(getTeamPlayerString(this.match.getTeamB()));
 
-        TextView matchActivities = findViewById(R.id.match_activities_md);
-        StringBuilder value = new StringBuilder();
-        for(int i=0; i<this.match.getActivities().size(); i++) {
-            value.append(this.match.getActivities().get(i));
-            if(!(i == this.match.getActivities().size() - 1)) {
-                value.append(",  ");
-            }
-        }
-        matchActivities.setText(value.toString());
+        MatchActivityAdapter matchActivityAdapter = new MatchActivityAdapter(this.match.getActivities().toArray(new String[0]));
+        RecyclerView recyclerView = findViewById(R.id.match_activity_display);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        System.out.println("Setting adapter.");
+        recyclerView.setAdapter(matchActivityAdapter);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -70,5 +72,10 @@ public class MatchDetailsActivity extends AppCompatActivity {
         }
 
         return teamPlayersBuilder.toString();
+    }
+
+    public void handleHomeClick(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

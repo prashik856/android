@@ -139,6 +139,7 @@ public class PreviousMatchesActivity extends AppCompatActivity {
         intent.putExtra("data_files_hashmap", this.dataFilesMap);
         intent.putExtra("match_object", match);
         intent.putExtra("match_file_location", matchFileLocation);
+        intent.putExtra("previous_activity", "previous_matches_activity");
         startActivity(intent);
     }
 

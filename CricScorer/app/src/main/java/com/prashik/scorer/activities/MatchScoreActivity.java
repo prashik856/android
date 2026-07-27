@@ -1,5 +1,6 @@
 package com.prashik.scorer.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -121,6 +122,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("DefaultLocale")
     public void updateScore() {
         TextView teamNameText = findViewById(R.id.team_name_ms);
         TextView runsAndWicketsText = findViewById(R.id.score_value_ms);
@@ -200,14 +202,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.battingTeam.setCommonName("");
         this.bowlingTeam.setCommonName("");
 
-        ArrayList<MatchPlayer> removedPlayers = new ArrayList<>();
         System.out.println("Get batting team captain.");
         MatchPlayer battingCaptain = this.battingTeam.getMatchPlayerFromName(this.battingTeam.getCaptainName());
         System.out.println("Remove captain first");
         this.battingTeam.removeFromTeamPlayers(battingCaptain);
 
         System.out.println("Remove all players from " + this.battingTeam.getName());
-        removedPlayers.addAll(this.battingTeam.getTeamPlayers());
+        ArrayList<MatchPlayer> removedPlayers = new ArrayList<>(this.battingTeam.getTeamPlayers());
 
         // clear arrays and remove everyone
         this.battingTeam.getTeamPlayers().clear();
@@ -381,7 +382,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        this.match.addToActivities("0");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 0 Run";
+        this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
@@ -451,8 +453,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 1 Run";
         this.rotateStrike();
-        this.match.addToActivities("1");
+        this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
@@ -525,7 +528,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        this.match.addToActivities("2");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 2 Runs";
+        this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
@@ -596,7 +600,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        this.match.addToActivities("3");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 3 Runs";
+        this.match.addToActivities(activity);
         this.rotateStrike();
         this.match.updateMatchCompleted();
         this.updateScore();
@@ -673,7 +678,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        this.match.addToActivities("4");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 4 Runs";
+        this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
@@ -746,7 +752,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        this.match.addToActivities("5");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 5 Runs";
+        this.match.addToActivities(activity);
         this.rotateStrike();
         this.match.updateMatchCompleted();
         this.updateScore();
@@ -821,7 +828,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        this.match.addToActivities("6");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 6 Runs";
+        this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
         this.syncMatch();
@@ -883,9 +891,14 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
                 this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
                         this.match.getStrikerBatsman());
+                String activity = "Maiden over bowled by " + this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName();
+                this.match.addToActivities(activity);
             }
             this.match.updateMatchCompleted();
         }
+
+        String activity = "Over " + this.battingTeam.getCurrentOverBatting() + " Completed";
+        this.match.addToActivities(activity);
 
         if(this.battingTeam.isBattingInningsCompleted()) {
             Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
@@ -940,7 +953,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             System.out.println("New Over Object: " + this.currentOver.toString());
 
             // add over complete to match activities
-            this.match.addToActivities("OverComplete");
+            this.match.addToActivities("New bowler bowled by " + this.bowler.getPlayerName());
 
             // rotate strike
             this.rotateStrike();
@@ -951,11 +964,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(bowlerSelected[0] == -1) {
-            System.out.println("Impossible condition");
-            Toast.makeText(this, "You need to select a new bowler.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleRotateStrikeClick(View view) {
@@ -966,7 +974,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         // basic
         rotateStrike();
-        this.match.addToActivities("RotateStrike");
+        String activity = "RotateStrike -> " + this.strikerBatsman.getPlayerName() + "*, " + this.nonStrikeBatsman.getPlayerName();
+        this.match.addToActivities(activity);
         this.updateScore();
         this.syncMatch();
     }
@@ -1034,7 +1043,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             }
             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-            this.match.addToActivities(activityValue);
+            String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
+            this.match.addToActivities(activity);
             if(runsScoredOnBadDelivery[0] % 2 == 1) {
                 rotateStrike();
             }
@@ -1046,9 +1056,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            runsScoredOnBadDelivery[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> runsScoredOnBadDelivery[0] = -1);
 
         builder.show();
     }
@@ -1089,9 +1097,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             byeRunsBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
-            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
-                runsByeSelected[0] = -1;
-            });
+            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1) -> runsByeSelected[0] = -1);
 
             byeRunsBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(runsByeSelected[0] == -1) {
@@ -1151,7 +1157,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                 );
                 this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-                this.match.addToActivities(activityValue);
+                String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
+                this.match.addToActivities(activity);
                 if(runsScoredOnBadDelivery[0] % 2 == 1) {
                     rotateStrike();
                 }
@@ -1170,9 +1177,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            runsScoredOnBadDelivery[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> runsScoredOnBadDelivery[0] = -1);
 
         builder.show();
     }
@@ -1204,8 +1209,7 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.battingTeam.incrementLegalDeliveriesPlayed();
             this.battingTeam.updateRunRate();
 
-            // bye runs will not go to the batsman
-            // but he will play the balls
+            // bye runs will not go to the batsman, but he will play the balls
             this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
             this.strikerBatsman.getMatchPlayerBatting().incrementDotsPlayed();
             this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
@@ -1237,7 +1241,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
 
-            this.match.addToActivities(activityValue);
+            String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
+            this.match.addToActivities(activity);
             if(runsScoredOnBye % 2 == 1) {
                 rotateStrike();
             }
@@ -1248,9 +1253,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            runsGivenOnBye[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> runsGivenOnBye[0] = -1);
 
         builder.show();
     }
@@ -1295,7 +1298,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
 
         // update match activities
-        this.match.addToActivities(this.match.getStrikerBatsman() + "-Out-Bowled");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Bowled";
+        this.match.addToActivities(activity);
+        this.match.addToActivities(this.strikerBatsman.getPlayerName() + "-Out-Bowled");
 
         // check if match completed because before I select the new batsman, match might already
         // be over.
@@ -1351,11 +1356,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(optionSelected[0] == -1) {
-            System.out.println("This condition should never arrive.");
-            Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public boolean undoBowled(String lastPlayerName) {
@@ -1372,10 +1372,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.battingTeam.getMatchPlayerIndex(lastPlayerName)
         );
         // update striker batsman to last batsman
-        this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(lastPlayerName);
+        this.strikerBatsman = player;
 
-        // remove last batsman out activity
+        // remove last batsman out activity of batsman-out-bowled
         this.match.removeLastElementFromActivities();
+        this.match.removeLastElementFromActivities(); // remove bowler to batsman activity
 
         // update bowling record
         this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
@@ -1479,7 +1480,10 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.match.getMatchPlayerObject(caughtBy).getMatchPlayerFielding().incrementNoOfCatches();
             this.match.getMatchPlayerObject(caughtBy).getMatchPlayerFielding().addToCaughtPlayers(this.match.getStrikerBatsman());
 
-            this.match.addToActivities(this.match.getStrikerBatsman() + "-Out-Caught");
+
+            String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Caught";
+            this.match.addToActivities(activity);
+            this.match.addToActivities("Catch by " + caughtBy);
 
             // update match
             this.match.updateMatchCompleted();
@@ -1535,9 +1539,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.syncMatch();
             });
 
-            builder.setNeutralButton("Clear", (dialog1, which1) -> {
-                optionSelected[0] = -1;
-            });
+            builder.setNeutralButton("Clear", (dialog1, which1) -> optionSelected[0] = -1);
 
             builder.show();
 
@@ -1549,9 +1551,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         caughtBybuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        caughtBybuilder.setNeutralButton("Clear", (dialog, which) -> {
-            caughtBySelected[0] = -1;
-        });
+        caughtBybuilder.setNeutralButton("Clear", (dialog, which) -> caughtBySelected[0] = -1);
 
         caughtBybuilder.show();
 
@@ -1602,7 +1602,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
 
         // update match activities
-        this.match.addToActivities(this.match.getStrikerBatsman() + "-Out-Hit-Wicket");
+        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Hit-Wicket";
+        this.match.addToActivities(activity);
+        this.match.addToActivities(this.strikerBatsman.getPlayerName() + "-Out-Hit-Wicket");
 
         // check if match completed because before I select the new batsman, match might already
         // be over.
@@ -1657,11 +1659,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(optionSelected[0] == -1) {
-            System.out.println("Impossible condition.");
-            Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public boolean undoHitWicket(String lastBatsman) {
@@ -1680,6 +1677,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         // remove out reference
         this.match.removeLastElementFromActivities();
+        this.match.removeLastElementFromActivities(); // remove bowler to batsman activity
 
         // update bowling record
         this.bowler.getMatchPlayerBowling().removeLastElementOfBowlingDetails();
@@ -1753,9 +1751,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             runsScoredbuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
-            runsScoredbuilder.setNeutralButton("Clear", (dialog1, which1) -> {
-                runsScoredSelected[0] = -1;
-            });
+            runsScoredbuilder.setNeutralButton("Clear", (dialog1, which1) -> runsScoredSelected[0] = -1);
 
             runsScoredbuilder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(runsScoredSelected[0] == -1) {
@@ -1778,9 +1774,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 runsByeBuilder.setNegativeButton("Cancel", (dialog5, which5) -> dialog5.dismiss());
 
-                runsByeBuilder.setNeutralButton("Clear", (dialog5, which5) -> {
-                    runsByeSelected[0] = -1;
-                });
+                runsByeBuilder.setNeutralButton("Clear", (dialog5, which5) -> runsByeSelected[0] = -1);
 
                 runsByeBuilder.setPositiveButton("Ok", (dialog5, which5) -> {
                     if(runsByeSelected[0] == -1) {
@@ -1803,9 +1797,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                     ballTypeBuilder.setNegativeButton("Cancel", (dialog2, which2) -> dialog2.dismiss());
 
-                    ballTypeBuilder.setNeutralButton("Clear", (dialog2, which2) -> {
-                        ballTypeSelected[0] = -1;
-                    });
+                    ballTypeBuilder.setNeutralButton("Clear", (dialog2, which2) -> ballTypeSelected[0] = -1);
 
                     ballTypeBuilder.setPositiveButton("Ok", (dialog2, which2) -> {
                         if(ballTypeSelected[0] == -1) {
@@ -1830,9 +1822,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                         runOutBatsmanBuilder.setNegativeButton("Cancel", (dialog3, which3) -> dialog3.dismiss());
 
-                        runOutBatsmanBuilder.setNeutralButton("Clear", (dialog3, which3) -> {
-                            runOutBatsmanSelected[0] = -1;
-                        });
+                        runOutBatsmanBuilder.setNeutralButton("Clear", (dialog3, which3) -> runOutBatsmanSelected[0] = -1);
 
                         runOutBatsmanBuilder.setPositiveButton("Ok", (dialog3, which3) -> {
                             if(runOutBatsmanSelected[0] == -1) {
@@ -1886,7 +1876,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 runOutPlayerObject.getMatchPlayerBatting().updateStrikeRate();
                                 runOutPlayerObject.getMatchPlayerBatting().updateRecords();
                                 this.currentOver.getOverSummary().add(totalRunsOnRunout + "-Runout");
-                                this.match.addToActivities(totalRunsOnRunout + "-Runout");
+                                this.match.addToActivities(this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + totalRunsOnRunout + "-Runout");
                             }
 
                             this.battingTeam.setRuns(this.battingTeam.getRuns() + totalRunsOnRunout);
@@ -1927,7 +1917,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 this.battingTeam.setExtras(this.battingTeam.getExtras() +
                                         ballExtraRun + batExtraRuns + batLegalRuns);
                                 this.currentOver.getOverSummary().add((totalRunsOnRunout - 1) + "-WD-Runout");
-                                this.match.addToActivities((totalRunsOnRunout - 1) + "-WD-Runout");
+
+                                this.match.addToActivities(this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + (totalRunsOnRunout - 1) + "-WD-Runout");
                             }
 
                             // update extras
@@ -1947,6 +1938,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                                         ballExtraRun + batExtraRuns + batLegalRuns);
                                 this.currentOver.getOverSummary().add((totalRunsOnRunout - 1) + "-NB-Runout");
                                 this.match.addToActivities((totalRunsOnRunout - 1) + "-NB-Runout");
+                                this.match.addToActivities(this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + (totalRunsOnRunout - 1) + "-NB-Runout");
                             }
 
                             // runs conceded
@@ -1960,7 +1952,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                             this.bowler.getMatchPlayerBowling().incrementDeliveriesBowled();
                             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
                             this.bowler.getMatchPlayerBowling().updateRecords();
-                            this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
 
                             this.match.addToActivities(runOutBatsman + "-Runout");
 
@@ -2067,9 +2058,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         runOutBybuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-        runOutBybuilder.setNeutralButton("Clear", (dialog, which) -> {
-            runOutBySelected[0] = -1;
-        });
+        runOutBybuilder.setNeutralButton("Clear", (dialog, which) -> runOutBySelected[0] = -1);
 
         runOutBybuilder.show();
 
@@ -2106,9 +2095,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(retireBatsmanOptions, retireBatsmanSelected[0],
                 (dialog, which) -> retireBatsmanSelected[0] = which);
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            retireBatsmanSelected[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> retireBatsmanSelected[0] = -1);
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
@@ -2139,6 +2126,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                 String newBatsman = notOutBatsman[optionSelected[0]];
                 System.out.println("New batsman is: " + newBatsman);
 
+                this.match.addToMatchPlayers(batsmanToRetire + " -Retired");
+
                 if(batsmanToRetire.equals(this.match.getStrikerBatsman())) {
                     // update the striker batsman
                     this.match.setStrikerBatsman(newBatsman);
@@ -2147,6 +2136,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                     );
                     this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
                     this.strikerBatsman.getMatchPlayerBatting().setBatted(true);
+                    this.match.addToActivities(newBatsman + " -In-On-Strike");
                 } else {
                     this.match.setNonStrikeBatsman(newBatsman);
                     this.match.setNonStrikerBatsmanIndex(
@@ -2154,17 +2144,14 @@ public class MatchScoreActivity extends AppCompatActivity {
                     );
                     this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
                     this.nonStrikeBatsman.getMatchPlayerBatting().setBatted(true);
+                    this.match.addToActivities(newBatsman + " -In-On-Non-Strike");
                 }
-                this.match.addToActivities(batsmanToRetire + "-Retired");
-                this.match.addToActivities(newBatsman + "-In");
 
                 this.updateScore();
                 this.syncMatch();
             });
 
-            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
-                optionSelected[0] = -1;
-            });
+            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1) -> optionSelected[0] = -1);
 
             newBatsmanBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
 
@@ -2199,9 +2186,7 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(overIncreaseOptions, overIncreaseSelected[0],
                 (dialog, which) -> overIncreaseSelected[0] = which);
 
-        builder.setNeutralButton("Clear", (dialog, which) -> {
-            overIncreaseSelected[0] = -1;
-        });
+        builder.setNeutralButton("Clear", (dialog, which) -> overIncreaseSelected[0] = -1);
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
@@ -2227,7 +2212,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 );
                 this.match.getTeamA().decrementMaxOvers(oversToIncrease);
                 this.match.getTeamB().decrementMaxOvers(oversToIncrease);
-                this.match.addToActivities("Over-Decrease-" + oversToIncrease);
+                this.match.addToActivities("Over-Decrease- " + oversToIncrease);
             } else if(oversToIncrease > 0) {
                 // Set match properties
                 this.match.setMaxOvers(
@@ -2235,7 +2220,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 );
                 this.match.getTeamA().incrementMaxOvers(oversToIncrease);
                 this.match.getTeamB().incrementMaxOvers(oversToIncrease);
-                this.match.addToActivities("Over-Increase-" + oversToIncrease);
+                this.match.addToActivities("Over-Increase- " + oversToIncrease);
             }
 
             this.syncMatch();
@@ -2338,8 +2323,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                     System.out.println("Option selected is: " + answer);
 
                     if(answer.equals("Yes")) {
+                        this.match.addToActivities("1st Innings End.");
+
                         // update innings
                         this.match.setInnings(2);
+                        this.match.addToActivities("2nd Innings Started.");
                         // update bowling and batting teams names
                         this.match.setBattingAndBowlingTeamNames();
                         this.syncMatch();
@@ -2355,9 +2343,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> {
-                    optionSelected[0] = -1;
-                });
+                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2384,11 +2370,14 @@ public class MatchScoreActivity extends AppCompatActivity {
                     System.out.println("Option selected is: " + answer);
 
                     if(answer.equals("Yes")) {
+                        this.match.addToActivities("Match Completed.");
+
                         this.match.setCompleted(true);
                         this.match.updateResult();
                         this.syncMatch();
 
                         Utils.updateGlobalRecords(dataFilesMap, this.match);
+                        this.match.addToActivities("Records Updated.");
 
                         System.out.println("Go to match information.");
                         Intent intent = new Intent(this, MatchInformationActivity.class);
@@ -2400,9 +2389,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> {
-                    optionSelected[0] = -1;
-                });
+                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2445,9 +2432,7 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> {
-                    optionSelected[0] = -1;
-                });
+                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2471,40 +2456,44 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         String activity = this.match.getActivities().get(size - 1);
 
-        switch (activity) {
-            case "0":
-                System.out.println("Undo 0");
-                undoDone = undoZeroRuns();
-                break;
-            case "1":
-                System.out.println("Undo 1");
-                undoDone = undoOneRun();
-                break;
-            case "2":
-                System.out.println("Undo 2");
-                undoDone = undoTwoRuns();
-                break;
-            case "3":
-                System.out.println("Undo 3");
-                undoDone = undoThreeRuns();
-                break;
-            case "4":
-                System.out.println("Undo 4");
-                undoDone = undoFourRuns();
-                break;
-            case "5":
-                System.out.println("Undo 5");
-                undoDone = undoFiveRuns();
-                break;
-            case "6":
-                System.out.println("Undo 6");
-                undoDone = undoSixruns();
-                break;
-            case "RotateStrike":
-                undoDone = undoRotateStrike();
-                break;
-            default:
-                break;
+        if(activity.contains(" - 0 Run")) {
+            System.out.println("Undo 0");
+            undoDone = undoZeroRuns();
+        }
+
+        if(activity.contains(" - 1 Run")) {
+            System.out.println("Undo 1");
+            undoDone = undoOneRun();
+        }
+
+        if(activity.contains(" - 2 Runs")) {
+            System.out.println("Undo 2");
+            undoDone = undoTwoRuns();
+        }
+
+        if(activity.contains(" - 3 Runs")) {
+            System.out.println("Undo 3");
+            undoDone = undoThreeRuns();
+        }
+
+        if(activity.contains(" - 4 Runs")) {
+            System.out.println("Undo 4");
+            undoDone = undoFourRuns();
+        }
+
+        if(activity.contains(" - 5 Runs")) {
+            System.out.println("Undo 5");
+            undoDone = undoFiveRuns();
+        }
+
+        if(activity.contains(" - 6 Runs")) {
+            System.out.println("Undo 6");
+            undoDone = undoSixruns();
+        }
+
+        if(activity.contains("RotateStrike -> ")) {
+            System.out.println("Undo Rotate Strike");
+            undoDone = undoRotateStrike();
         }
 
         // last wicket out bowled
@@ -2656,10 +2645,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                     return;
                 }
 
-                ArrayList<String> temp2 = new ArrayList<>();
-                for(String val: playerSelectedArray) {
-                    temp2.add(val);
-                }
+                ArrayList<String> temp2 = new ArrayList<>(playerSelectedArray);
                 System.out.println("the players selected in " + this.battingTeam.getName() + " are : "  + temp2);
 
                 ArrayList<String> temp3 = new ArrayList<>();
