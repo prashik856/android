@@ -601,7 +601,7 @@ public class Utils {
 
             double newAverage = 0;
             if(bowlingStats.getWickets() > 0) {
-                newAverage = (double) bowlingStats.getRuns() /bowlingStats.getWickets();
+                newAverage = (double) bowlingStats.getRuns()/bowlingStats.getWickets();
             }
             bowlingStats.setAverage(newAverage);
 
