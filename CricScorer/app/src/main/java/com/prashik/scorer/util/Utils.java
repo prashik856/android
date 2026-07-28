@@ -593,12 +593,15 @@ public class Utils {
                     bowlingStats.getBowledWickets() + matchPlayerBowling.getBowledPlayers().size()
             );
 
-            double newEconomy = (bowlingStats.getEconomy() + matchPlayerBowling.getEconomy())/bowlingStats.getInningsBowled();
+            int noOfOvers = bowlingStats.getLegalDeliveriesBowled() / 6;
+            int ballsLeft = bowlingStats.getLegalDeliveriesBowled() % 6;
+            double denominator = noOfOvers +  ((double)ballsLeft/6);
+            double newEconomy = bowlingStats.getRuns()/denominator;
             bowlingStats.setEconomy(newEconomy);
 
             double newAverage = 0;
             if(bowlingStats.getWickets() > 0) {
-                newAverage = (bowlingStats.getAverage() + matchPlayerBowling.getRunsConceded())/bowlingStats.getWickets();
+                newAverage = (double) bowlingStats.getRuns()/bowlingStats.getWickets();
             }
             bowlingStats.setAverage(newAverage);
 
