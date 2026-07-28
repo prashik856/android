@@ -54,7 +54,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_match_score);
 
         this.resumeMatch = getIntent().getSerializableExtra("resume_match") != null;
-        this.dataFilesMap = (HashMap<String, String>) getIntent().getSerializableExtra("data_files_hashmap");
+        this.dataFilesMap = (HashMap<String, String>) getIntent()
+                .getSerializableExtra("data_files_hashmap");
         this.match = (Match) getIntent().getSerializableExtra("match_object");
         this.filesDirectory = this.dataFilesMap.get("files_directory");
 
@@ -63,7 +64,9 @@ public class MatchScoreActivity extends AppCompatActivity {
             // Check if this match already exists
             boolean alreadyExists = Utils.isMatchAlreadyExists(this.filesDirectory, this.match);
             if(alreadyExists) {
-                Toast.makeText(this, "The match with similar details already exists. Please edit the existing match or delete that match first.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "The match with similar details already exists. "
+                        + "Please edit the existing match or delete that match first."
+                        , Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             } else {
@@ -82,7 +85,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         for(String s: dataFilesMap.keySet()) {
             String dataFile = dataFilesMap.get(s);
-            Log.d("debug", String.format("Data file location: key - %s, location - %s", s, dataFile));
+            Log.d("debug", String.format("Data file location: key - %s, location - %s"
+                    , s, dataFile));
             if (s.equals("players_data_file_location")) {
                 this.allPlayers = Utils.readPlayersFile(dataFile);
             }
@@ -97,8 +101,10 @@ public class MatchScoreActivity extends AppCompatActivity {
         System.out.println("Match Object: ");
         System.out.println(this.match);
 
-        this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getStrikerBatsman());
-        this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(this.match.getNonStrikeBatsman());
+        this.strikerBatsman = this.battingTeam
+                .getMatchPlayerFromName(this.match.getStrikerBatsman());
+        this.nonStrikeBatsman = this.battingTeam
+                .getMatchPlayerFromName(this.match.getNonStrikeBatsman());
         this.bowler = this.bowlingTeam.getMatchPlayerFromName(this.match.getCurrentBowler());
         this.currentOver = this.bowlingTeam.getCurrentOverObject();
 
@@ -115,7 +121,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         this.syncMatch();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main),
+                (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -156,16 +163,22 @@ public class MatchScoreActivity extends AppCompatActivity {
         // show striker
         TextView strikerName = findViewById(R.id.striker_name_ms);
         String[] strikePlayerSplit = this.match.getStrikerBatsman().split(" ");
-        String runsScored = Integer.toString(this.strikerBatsman.getMatchPlayerBatting().getRunsScored());
-        String ballsPlayed = Integer.toString(this.strikerBatsman.getMatchPlayerBatting().getBallsPlayed());
-        String strikerNameToDisplay = strikePlayerSplit[0] + " " + runsScored + "(" + ballsPlayed + ")";
+        String runsScored = Integer.toString(this.strikerBatsman.getMatchPlayerBatting()
+                .getRunsScored());
+        String ballsPlayed = Integer.toString(this.strikerBatsman.getMatchPlayerBatting()
+                .getBallsPlayed());
+        String strikerNameToDisplay = strikePlayerSplit[0] + " "
+                + runsScored + "(" + ballsPlayed + ")";
         strikerName.setText(strikerNameToDisplay);
 
         // show non striker
         String[] nonStrikePlayerSplit = this.match.getNonStrikeBatsman().split(" ");
-        runsScored = Integer.toString(this.nonStrikeBatsman.getMatchPlayerBatting().getRunsScored());
-        ballsPlayed = Integer.toString(this.nonStrikeBatsman.getMatchPlayerBatting().getBallsPlayed());
-        String nonStrikerNameToDisplay = nonStrikePlayerSplit[0] + " " + runsScored + "(" + ballsPlayed + ")";
+        runsScored = Integer.toString(this.nonStrikeBatsman.getMatchPlayerBatting()
+                .getRunsScored());
+        ballsPlayed = Integer.toString(this.nonStrikeBatsman.getMatchPlayerBatting()
+                .getBallsPlayed());
+        String nonStrikerNameToDisplay = nonStrikePlayerSplit[0] + " "
+                + runsScored + "(" + ballsPlayed + ")";
         TextView nonStrikerName = findViewById(R.id.non_striker_name_ms);
         nonStrikerName.setText(nonStrikerNameToDisplay);
 
@@ -173,10 +186,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         TextView bowlerNameText = findViewById(R.id.current_bowler_ms);
         String wickets = Integer.toString(this.bowler.getMatchPlayerBowling().getWicketsTaken());
         String runsGiven = Integer.toString(this.bowler.getMatchPlayerBowling().getRunsConceded());
-        String overBowled = Integer.toString(this.bowler.getMatchPlayerBowling().getLegalDeliveriesBowled()/6);
-        String ballsBowled = Integer.toString(this.bowler.getMatchPlayerBowling().getLegalDeliveriesBowled() % 6);
+        String overBowled = Integer.toString(this.bowler.getMatchPlayerBowling()
+                .getLegalDeliveriesBowled()/6);
+        String ballsBowled = Integer.toString(this.bowler.getMatchPlayerBowling()
+                .getLegalDeliveriesBowled() % 6);
 
-        String temp = String.format("%s \n%s-%s(%s.%s)", this.bowler.getPlayerName().split(" ")[0],
+        String temp = String.format("%s \n%s-%s(%s.%s)", this.bowler
+                        .getPlayerName().split(" ")[0],
                 wickets, runsGiven, overBowled, ballsBowled);
         bowlerNameText.setText(temp);
 
@@ -185,7 +201,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         overDetailsText.setText(overDetails);
     }
 
-    public void rebalanceTeams(ArrayList<String> team1, ArrayList<String> team2, String commonPlayer) {
+    public void rebalanceTeams(ArrayList<String> team1, ArrayList<String> team2
+            , String commonPlayer) {
         // Create new player objects
         System.out.println("Add players to match players.");
         // team1 -> all players of batting team
@@ -203,7 +220,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowlingTeam.setCommonName("");
 
         System.out.println("Get batting team captain.");
-        MatchPlayer battingCaptain = this.battingTeam.getMatchPlayerFromName(this.battingTeam.getCaptainName());
+        MatchPlayer battingCaptain = this.battingTeam
+                .getMatchPlayerFromName(this.battingTeam.getCaptainName());
         System.out.println("Remove captain first");
         this.battingTeam.removeFromTeamPlayers(battingCaptain);
 
@@ -217,8 +235,10 @@ public class MatchScoreActivity extends AppCompatActivity {
         // add captain back
         this.battingTeam.addToTeam(battingCaptain);
 
-        System.out.println("Remove all players from " + this.bowlingTeam.getName() + " except the captain.");
-        MatchPlayer bowlingCaptain = this.bowlingTeam.getMatchPlayerFromName(this.bowlingTeam.getCaptainName());
+        System.out.println("Remove all players from " + this.bowlingTeam.getName()
+                + " except the captain.");
+        MatchPlayer bowlingCaptain = this.bowlingTeam
+                .getMatchPlayerFromName(this.bowlingTeam.getCaptainName());
         this.bowlingTeam.removeFromTeamPlayers(bowlingCaptain);
 
         removedPlayers.addAll(this.bowlingTeam.getTeamPlayers());
@@ -291,7 +311,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         ArrayList<String> temp = new ArrayList<>();
         for(int i=0; i<this.match.getMatchPlayers().size(); i++) {
             if(!this.match.getMatchPlayers().get(i).equals(this.strikerBatsman.getPlayerName())
-                && !this.match.getMatchPlayers().get(i).equals(this.nonStrikeBatsman.getPlayerName())) {
+                && !this.match.getMatchPlayers()
+                    .get(i).equals(this.nonStrikeBatsman.getPlayerName())) {
                 temp.add(this.match.getMatchPlayers().get(i));
             }
         }
@@ -382,7 +403,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 0 Run";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 0 Run";
         this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
@@ -453,7 +476,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 1 Run";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 1 Run";
         this.rotateStrike();
         this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
@@ -528,7 +553,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 2 Runs";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 2 Runs";
         this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
@@ -600,7 +627,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 3 Runs";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 3 Runs";
         this.match.addToActivities(activity);
         this.rotateStrike();
         this.match.updateMatchCompleted();
@@ -678,7 +707,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 4 Runs";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 4 Runs";
         this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
@@ -752,7 +783,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 5 Runs";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 5 Runs";
         this.match.addToActivities(activity);
         this.rotateStrike();
         this.match.updateMatchCompleted();
@@ -828,7 +861,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " - 6 Runs";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " - 6 Runs";
         this.match.addToActivities(activity);
         this.match.updateMatchCompleted();
         this.updateScore();
@@ -874,7 +909,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
     public void handleOverCompleteClick(View view) {
         if(!this.currentOver.isOverCompleted()) {
-            Toast.makeText(this, "You cannot end the over without bowling 6 legal deliveries."
+            Toast.makeText(this,
+                    "You cannot end the over without bowling 6 legal deliveries."
                     , Toast.LENGTH_LONG).show();
             return;
         }
@@ -891,7 +927,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.bowler.getMatchPlayerBowling().incrementMaidenOverBowled();
                 this.bowler.getMatchPlayerBowling().addToMaidenOverBowledTo(
                         this.match.getStrikerBatsman());
-                String activity = "Maiden over bowled by " + this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName();
+                String activity = "Maiden over bowled by " + this.bowler.getPlayerName()
+                        + " to " + this.strikerBatsman.getPlayerName();
                 this.match.addToActivities(activity);
             }
             this.match.updateMatchCompleted();
@@ -933,7 +970,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(bowlerSelected[0] == -1) {
-                Toast.makeText(this, "You need to select a new bowler.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You need to select a new bowler."
+                        , Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -946,14 +984,15 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.match.setCurrentBowlerIndex(bowlerIndex);
             this.bowler = this.bowlingTeam.getTeamPlayers().get(bowlerIndex);
             this.bowler.getMatchPlayerBowling().setBowled(true);
-            this.bowler.getMatchPlayerBowling().addToOverBowled(this.bowlingTeam.getCurrentOverBowling());
+            this.bowler.getMatchPlayerBowling()
+                    .addToOverBowled(this.bowlingTeam.getCurrentOverBowling());
 
             this.currentOver = this.bowlingTeam.getCurrentOverObject();
             this.currentOver.setPlayerName(this.bowler.getPlayerName());
             System.out.println("New Over Object: " + this.currentOver.toString());
 
             // add over complete to match activities
-            this.match.addToActivities("New bowler bowled by " + this.bowler.getPlayerName());
+            this.match.addToActivities("New over bowled by " + this.bowler.getPlayerName());
 
             // rotate strike
             this.rotateStrike();
@@ -974,7 +1013,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         // basic
         rotateStrike();
-        String activity = "RotateStrike -> " + this.strikerBatsman.getPlayerName() + "*, " + this.nonStrikeBatsman.getPlayerName();
+        String activity = "RotateStrike -> " + this.strikerBatsman.getPlayerName()
+                + "*, " + this.nonStrikeBatsman.getPlayerName();
         this.match.addToActivities(activity);
         this.updateScore();
         this.syncMatch();
@@ -1002,11 +1042,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         int[] runsScoredOnBadDelivery = {-1};
 
         builder.setSingleChoiceItems(runsOptions, runsScoredOnBadDelivery[0],
-                (dialog, which) -> runsScoredOnBadDelivery[0] = Integer.parseInt(runsOptions[which]));
+                (dialog, which) ->
+                        runsScoredOnBadDelivery[0] = Integer.parseInt(runsOptions[which]));
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(runsScoredOnBadDelivery[0] == -1) {
-                Toast.makeText(this, "You need to select runs scored on wide ball.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select runs scored on wide ball.", Toast.LENGTH_LONG).show();
             }
             System.out.println("Runs scored on bad delivery: " + runsScoredOnBadDelivery[0]);
 
@@ -1043,7 +1085,9 @@ public class MatchScoreActivity extends AppCompatActivity {
             }
             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-            String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
+            String activity = this.battingTeam.getCurrentOverBatting() + "."
+                    + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                    + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
             this.match.addToActivities(activity);
             if(runsScoredOnBadDelivery[0] % 2 == 1) {
                 rotateStrike();
@@ -1054,9 +1098,11 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.syncMatch();
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> runsScoredOnBadDelivery[0] = -1);
+        builder.setNeutralButton("Clear", (dialog, which)
+                -> runsScoredOnBadDelivery[0] = -1);
 
         builder.show();
     }
@@ -1072,11 +1118,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         int[] runsScoredOnBadDelivery = {-1};
 
         builder.setSingleChoiceItems(runsOptions, runsScoredOnBadDelivery[0],
-                (dialog, which) -> runsScoredOnBadDelivery[0] = Integer.parseInt(runsOptions[which]));
+                (dialog, which)
+                        -> runsScoredOnBadDelivery[0] = Integer.parseInt(runsOptions[which]));
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(runsScoredOnBadDelivery[0] == -1) {
-                Toast.makeText(this, "You need to select runs scored on no ball.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select runs scored on no ball.", Toast.LENGTH_LONG).show();
                 return;
             }
             System.out.println("Runs scored on bad delivery: " + runsScoredOnBadDelivery[0]);
@@ -1088,20 +1136,25 @@ public class MatchScoreActivity extends AppCompatActivity {
             int[] runsByeSelected = {-1};
             String[] runsByeOptions = {"Legal Runs", "Bye Runs"};
 
-            AlertDialog.Builder byeRunsBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+            AlertDialog.Builder byeRunsBuilder = new AlertDialog
+                    .Builder(MatchScoreActivity.this);
             byeRunsBuilder.setTitle("Are runs scored bye runs?");
             byeRunsBuilder.setCancelable(false);
 
             byeRunsBuilder.setSingleChoiceItems(runsByeOptions, runsByeSelected[0],
                     (dialog1, which1) -> runsByeSelected[0] = which1);
 
-            byeRunsBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+            byeRunsBuilder.setNegativeButton("Cancel", (dialog1, which1)
+                    -> dialog1.dismiss());
 
-            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1) -> runsByeSelected[0] = -1);
+            byeRunsBuilder.setNeutralButton("Clear", (dialog1, which1)
+                    -> runsByeSelected[0] = -1);
 
             byeRunsBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(runsByeSelected[0] == -1) {
-                    Toast.makeText(this, "You need to select if the runs scored are bye runs.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,
+                            "You need to select if the runs scored are bye runs.",
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -1117,9 +1170,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.strikerBatsman.getMatchPlayerBatting().incrementBallsPlayed();
                 if(runsByeValue.equals("Legal Runs")) {
                     // no ball runs will go to the batsman
-                    this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails(batsmanActivity);
+                    this.strikerBatsman.getMatchPlayerBatting()
+                            .addToBattingDetails(batsmanActivity);
                     this.strikerBatsman.getMatchPlayerBatting().setRunsScored(
-                            this.strikerBatsman.getMatchPlayerBatting().getRunsScored() + runsScoredOnBadDelivery[0]
+                            this.strikerBatsman.getMatchPlayerBatting().getRunsScored()
+                                    + runsScoredOnBadDelivery[0]
                     );
                     if(runsScoredOnBadDelivery[0] == 4) {
                         this.strikerBatsman.getMatchPlayerBatting().incrementFoursScored();
@@ -1130,7 +1185,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                     this.strikerBatsman.getMatchPlayerBatting().updateRecords();
                 } else {
                     this.strikerBatsman.getMatchPlayerBatting().addToBattingDetails("0");
-                    this.currentOver.setByes(this.currentOver.getByes() + runsScoredOnBadDelivery[0]);
+                    this.currentOver.setByes(this.currentOver.getByes()
+                            + runsScoredOnBadDelivery[0]);
                 }
 
 
@@ -1157,7 +1213,10 @@ public class MatchScoreActivity extends AppCompatActivity {
                 );
                 this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
-                String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
+                String activity = this.battingTeam.getCurrentOverBatting() + "."
+                        + this.currentOver.getLegalDeliveries() + " -> "
+                        + this.bowler.getPlayerName() + " to "
+                        + this.strikerBatsman.getPlayerName() + " " + activityValue;
                 this.match.addToActivities(activity);
                 if(runsScoredOnBadDelivery[0] % 2 == 1) {
                     rotateStrike();
@@ -1171,13 +1230,17 @@ public class MatchScoreActivity extends AppCompatActivity {
             byeRunsBuilder.show();
 
             if(runsByeSelected[0] == -1) {
-                Toast.makeText(this, "You need to select if the runs scored are bye runs.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select if the runs scored are bye runs.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> runsScoredOnBadDelivery[0] = -1);
+        builder.setNeutralButton("Clear", (dialog, which)
+                -> runsScoredOnBadDelivery[0] = -1);
 
         builder.show();
     }
@@ -1193,11 +1256,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         int[] runsGivenOnBye = {-1};
 
         builder.setSingleChoiceItems(runsOptions, runsGivenOnBye[0],
-                (dialog, which) -> runsGivenOnBye[0] = Integer.parseInt(runsOptions[which]));
+                (dialog, which)
+                        -> runsGivenOnBye[0] = Integer.parseInt(runsOptions[which]));
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(runsGivenOnBye[0] == -1) {
-                Toast.makeText(this, "You need to select runs given on bye.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You need to select runs given on bye.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             int runsScoredOnBye = runsGivenOnBye[0];
@@ -1241,7 +1306,10 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
 
 
-            String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + activityValue;
+            String activity = this.battingTeam.getCurrentOverBatting() + "."
+                    + this.currentOver.getLegalDeliveries() + " -> "
+                    + this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName()
+                    + " " + activityValue;
             this.match.addToActivities(activity);
             if(runsScoredOnBye % 2 == 1) {
                 rotateStrike();
@@ -1251,9 +1319,11 @@ public class MatchScoreActivity extends AppCompatActivity {
             this.syncMatch();
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
-        builder.setNeutralButton("Clear", (dialog, which) -> runsGivenOnBye[0] = -1);
+        builder.setNeutralButton("Clear", (dialog, which)
+                -> runsGivenOnBye[0] = -1);
 
         builder.show();
     }
@@ -1298,7 +1368,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
 
         // update match activities
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Bowled";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " -Out-Bowled";
         this.match.addToActivities(activity);
         this.match.addToActivities(this.strikerBatsman.getPlayerName() + "-Out-Bowled");
 
@@ -1335,7 +1407,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(optionSelected[0] == -1) {
-                Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You need to select the new batsman.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             String newBatsman = notOutBatsman[optionSelected[0]];
@@ -1436,7 +1509,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         caughtBybuilder.setPositiveButton("Ok", (dialog, which) -> {
             if(caughtBySelected[0] == -1) {
-                Toast.makeText(this, "You need to select who caught the ball.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You need to select who caught the ball.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             String caughtBy = allMatchPlayers[caughtBySelected[0]];
@@ -1478,10 +1552,14 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             // update fielding record
             this.match.getMatchPlayerObject(caughtBy).getMatchPlayerFielding().incrementNoOfCatches();
-            this.match.getMatchPlayerObject(caughtBy).getMatchPlayerFielding().addToCaughtPlayers(this.match.getStrikerBatsman());
+            this.match.getMatchPlayerObject(caughtBy).getMatchPlayerFielding()
+                    .addToCaughtPlayers(this.match.getStrikerBatsman());
 
 
-            String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Caught";
+            String activity = this.battingTeam.getCurrentOverBatting() + "."
+                    + this.currentOver.getLegalDeliveries() + " -> "
+                    + this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName()
+                    + " -Out-Caught";
             this.match.addToActivities(activity);
             this.match.addToActivities("Catch by " + caughtBy);
 
@@ -1520,7 +1598,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             builder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(optionSelected[0] == -1) {
-                    Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You need to select the new batsman."
+                            , Toast.LENGTH_LONG).show();
                     return;
                 }
                 String newBatsman = notOutBatsman[optionSelected[0]];
@@ -1539,19 +1618,24 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.syncMatch();
             });
 
-            builder.setNeutralButton("Clear", (dialog1, which1) -> optionSelected[0] = -1);
+            builder.setNeutralButton("Clear", (dialog1, which1)
+                    -> optionSelected[0] = -1);
 
             builder.show();
 
             if(optionSelected[0] == -1) {
                 System.out.println("This condition should never arrive.");
-                Toast.makeText(this, "You need to select a new batsman after the wicket.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select a new batsman after the wicket.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
-        caughtBybuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        caughtBybuilder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
-        caughtBybuilder.setNeutralButton("Clear", (dialog, which) -> caughtBySelected[0] = -1);
+        caughtBybuilder.setNeutralButton("Clear", (dialog, which)
+                -> caughtBySelected[0] = -1);
 
         caughtBybuilder.show();
 
@@ -1599,10 +1683,13 @@ public class MatchScoreActivity extends AppCompatActivity {
         this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
         this.bowler.getMatchPlayerBowling().updateBowlingEconomy();
         this.bowler.getMatchPlayerBowling().updateRecords();
-        this.bowler.getMatchPlayerBowling().addToWicketsTakenPlayers(this.match.getStrikerBatsman());
+        this.bowler.getMatchPlayerBowling()
+                .addToWicketsTakenPlayers(this.match.getStrikerBatsman());
 
         // update match activities
-        String activity = this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " -Out-Hit-Wicket";
+        String activity = this.battingTeam.getCurrentOverBatting() + "."
+                + this.currentOver.getLegalDeliveries() + " -> " + this.bowler.getPlayerName()
+                + " to " + this.strikerBatsman.getPlayerName() + " -Out-Hit-Wicket";
         this.match.addToActivities(activity);
         this.match.addToActivities(this.strikerBatsman.getPlayerName() + "-Out-Hit-Wicket");
 
@@ -1639,7 +1726,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(optionSelected[0] == -1) {
-                Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You need to select the new batsman.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             String newBatsman = notOutBatsman[optionSelected[0]];
@@ -1725,7 +1813,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         int[] runOutBySelected = {-1};
         String[] allMatchPlayers = this.getFieldingPlayers();
 
-        AlertDialog.Builder runOutBybuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+        AlertDialog.Builder runOutBybuilder = new AlertDialog
+                .Builder(MatchScoreActivity.this);
         runOutBybuilder.setTitle("Run out by?");
         runOutBybuilder.setCancelable(false);
 
@@ -1734,7 +1823,9 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         runOutBybuilder.setPositiveButton("Ok", (dialog, which) -> {
             if(runOutBySelected[0] == -1) {
-                Toast.makeText(this, "You need to select the player who was responsible for runout.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select the player who was responsible for runout.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -1742,20 +1833,24 @@ public class MatchScoreActivity extends AppCompatActivity {
             System.out.println("The player responsible for runout is: " + runOutByPlayer);
 
             int[] runsScoredSelected = {-1};
-            AlertDialog.Builder runsScoredbuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+            AlertDialog.Builder runsScoredbuilder = new AlertDialog
+                    .Builder(MatchScoreActivity.this);
             runsScoredbuilder.setTitle("Runs scored on ball?");
             runsScoredbuilder.setCancelable(false);
 
             runsScoredbuilder.setSingleChoiceItems(runsOptions, runsScoredSelected[0],
                     (dialog1, which1) -> runsScoredSelected[0] = which1);
 
-            runsScoredbuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+            runsScoredbuilder.setNegativeButton("Cancel", (dialog1, which1)
+                    -> dialog1.dismiss());
 
-            runsScoredbuilder.setNeutralButton("Clear", (dialog1, which1) -> runsScoredSelected[0] = -1);
+            runsScoredbuilder.setNeutralButton("Clear", (dialog1, which1)
+                    -> runsScoredSelected[0] = -1);
 
             runsScoredbuilder.setPositiveButton("Ok", (dialog1, which1) -> {
                 if(runsScoredSelected[0] == -1) {
-                    Toast.makeText(this, "You need to select the runs scored on run out.",
+                    Toast.makeText(this,
+                            "You need to select the runs scored on run out.",
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -1765,20 +1860,24 @@ public class MatchScoreActivity extends AppCompatActivity {
                 int[] runsByeSelected = {-1};
                 String[] runsByeOptions = {"Legal Runs", "Bye Runs"};
 
-                AlertDialog.Builder runsByeBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                AlertDialog.Builder runsByeBuilder = new AlertDialog
+                        .Builder(MatchScoreActivity.this);
                 runsByeBuilder.setTitle("Are the runs scored extra runs?");
                 runsByeBuilder.setCancelable(false);
 
                 runsByeBuilder.setSingleChoiceItems(runsByeOptions, runsByeSelected[0],
                         (dialog5, which5) -> runsByeSelected[0] = which5);
 
-                runsByeBuilder.setNegativeButton("Cancel", (dialog5, which5) -> dialog5.dismiss());
+                runsByeBuilder.setNegativeButton("Cancel", (dialog5, which5)
+                        -> dialog5.dismiss());
 
-                runsByeBuilder.setNeutralButton("Clear", (dialog5, which5) -> runsByeSelected[0] = -1);
+                runsByeBuilder.setNeutralButton("Clear", (dialog5, which5)
+                        -> runsByeSelected[0] = -1);
 
                 runsByeBuilder.setPositiveButton("Ok", (dialog5, which5) -> {
                     if(runsByeSelected[0] == -1) {
-                        Toast.makeText(this, "You need to select if the runs scored are bye runs.",
+                        Toast.makeText(this,
+                                "You need to select if the runs scored are bye runs.",
                                 Toast.LENGTH_LONG).show();
                     }
 
@@ -1788,21 +1887,26 @@ public class MatchScoreActivity extends AppCompatActivity {
                     int[] ballTypeSelected = {-1};
                     String[] ballTypeOptions = {"Legal Delivery", "Wide Ball", "No Ball"};
 
-                    AlertDialog.Builder ballTypeBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                    AlertDialog.Builder ballTypeBuilder = new AlertDialog
+                            .Builder(MatchScoreActivity.this);
                     ballTypeBuilder.setTitle("Is it a legal delivery?");
                     ballTypeBuilder.setCancelable(false);
 
                     ballTypeBuilder.setSingleChoiceItems(ballTypeOptions, ballTypeSelected[0],
                             (dialog2, which2) -> ballTypeSelected[0] = which2);
 
-                    ballTypeBuilder.setNegativeButton("Cancel", (dialog2, which2) -> dialog2.dismiss());
+                    ballTypeBuilder.setNegativeButton("Cancel",
+                            (dialog2, which2) -> dialog2.dismiss());
 
-                    ballTypeBuilder.setNeutralButton("Clear", (dialog2, which2) -> ballTypeSelected[0] = -1);
+                    ballTypeBuilder.setNeutralButton("Clear",
+                            (dialog2, which2) -> ballTypeSelected[0] = -1);
 
-                    ballTypeBuilder.setPositiveButton("Ok", (dialog2, which2) -> {
-                        if(ballTypeSelected[0] == -1) {
-                            Toast.makeText(this, "You need to select the ball type bowled.",
-                                    Toast.LENGTH_LONG).show();
+                    ballTypeBuilder.setPositiveButton("Ok",
+                            (dialog2, which2) -> {
+                                if(ballTypeSelected[0] == -1) {
+                                    Toast.makeText(this,
+                                            "You need to select the ball type bowled.",
+                                        Toast.LENGTH_LONG).show();
                         }
 
                         String ballType = ballTypeOptions[ballTypeSelected[0]];
@@ -1813,27 +1917,36 @@ public class MatchScoreActivity extends AppCompatActivity {
                         String[] runOutBatsmanOptions = {this.strikerBatsman.getPlayerName(),
                                 this.nonStrikeBatsman.getPlayerName()};
 
-                        AlertDialog.Builder runOutBatsmanBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                        AlertDialog.Builder runOutBatsmanBuilder = new AlertDialog
+                                .Builder(MatchScoreActivity.this);
                         runOutBatsmanBuilder.setTitle("Select the batsman who is runout?");
                         runOutBatsmanBuilder.setCancelable(false);
 
-                        runOutBatsmanBuilder.setSingleChoiceItems(runOutBatsmanOptions, runOutBatsmanSelected[0],
-                                (dialog3, which3) -> runOutBatsmanSelected[0] = which3);
+                        runOutBatsmanBuilder.setSingleChoiceItems(runOutBatsmanOptions,
+                                runOutBatsmanSelected[0],
+                                (dialog3, which3)
+                                        -> runOutBatsmanSelected[0] = which3);
 
-                        runOutBatsmanBuilder.setNegativeButton("Cancel", (dialog3, which3) -> dialog3.dismiss());
+                        runOutBatsmanBuilder.setNegativeButton("Cancel",
+                                (dialog3, which3) -> dialog3.dismiss());
 
-                        runOutBatsmanBuilder.setNeutralButton("Clear", (dialog3, which3) -> runOutBatsmanSelected[0] = -1);
+                        runOutBatsmanBuilder.setNeutralButton("Clear",
+                                (dialog3, which3)
+                                        -> runOutBatsmanSelected[0] = -1);
 
-                        runOutBatsmanBuilder.setPositiveButton("Ok", (dialog3, which3) -> {
-                            if(runOutBatsmanSelected[0] == -1) {
-                                Toast.makeText(this, "You need to select the batsman who is run out.",
-                                        Toast.LENGTH_LONG).show();
+                        runOutBatsmanBuilder.setPositiveButton("Ok",
+                                (dialog3, which3) -> {
+                                    if(runOutBatsmanSelected[0] == -1) {
+                                        Toast.makeText(this,
+                                                "You need to select the batsman who is run out.",
+                                            Toast.LENGTH_LONG).show();
                             }
 
                             // Point of no return
 
                             String runOutBatsman = runOutBatsmanOptions[runOutBatsmanSelected[0]];
-                            MatchPlayer runOutPlayerObject = this.battingTeam.getMatchPlayerFromName(runOutBatsman);
+                            MatchPlayer runOutPlayerObject = this.battingTeam
+                                    .getMatchPlayerFromName(runOutBatsman);
                             System.out.println("The batsman who is runout is: " + runOutBatsman);
 
                             int ballExtraRun = 0;
@@ -1867,26 +1980,37 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 // legal delivery
                                 this.battingTeam.incrementLegalDeliveriesPlayed();
                                 this.currentOver.incrementLegalDeliveries();
-                                this.bowler.getMatchPlayerBowling().incrementLegalDeliveriesBowled();
+                                this.bowler.getMatchPlayerBowling()
+                                        .incrementLegalDeliveriesBowled();
                                 // a legal delivery
                                 runOutPlayerObject.getMatchPlayerBatting().incrementBallsPlayed();
                                 runOutPlayerObject.getMatchPlayerBatting().setRunsScored(
-                                        runOutPlayerObject.getMatchPlayerBatting().getRunsScored() + batLegalRuns
+                                        runOutPlayerObject.getMatchPlayerBatting()
+                                                .getRunsScored() + batLegalRuns
                                 );
                                 runOutPlayerObject.getMatchPlayerBatting().updateStrikeRate();
                                 runOutPlayerObject.getMatchPlayerBatting().updateRecords();
-                                this.currentOver.getOverSummary().add(totalRunsOnRunout + "-Runout");
-                                this.match.addToActivities(this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + totalRunsOnRunout + "-Runout");
+                                this.currentOver.getOverSummary()
+                                        .add(totalRunsOnRunout + "-Runout");
+                                this.match.addToActivities(
+                                        this.battingTeam.getCurrentOverBatting() + "."
+                                                + this.currentOver.getLegalDeliveries() + " -> "
+                                                + this.bowler.getPlayerName() + " to "
+                                                + this.strikerBatsman.getPlayerName() + " "
+                                                + totalRunsOnRunout + "-Runout");
                             }
 
-                            this.battingTeam.setRuns(this.battingTeam.getRuns() + totalRunsOnRunout);
+                            this.battingTeam.setRuns(this.battingTeam.getRuns()
+                                    + totalRunsOnRunout);
                             this.battingTeam.updateRunRate();
                             this.battingTeam.updateFallOfWickets();
 
                             // UPDATE BATSMAN RECORD
                             runOutPlayerObject.getMatchPlayerBatting().setOut(true);
-                            runOutPlayerObject.getMatchPlayerBatting().addToBattingDetails(batLegalRuns + "-Out-Runout");
-                            runOutPlayerObject.getMatchPlayerBatting().setWicketBy(this.bowler.getPlayerName());
+                            runOutPlayerObject.getMatchPlayerBatting()
+                                    .addToBattingDetails(batLegalRuns + "-Out-Runout");
+                            runOutPlayerObject.getMatchPlayerBatting()
+                                    .setWicketBy(this.bowler.getPlayerName());
                             runOutPlayerObject.getMatchPlayerBatting().setRunOutBy(runOutByPlayer);
 
                             // update over
@@ -1916,9 +2040,15 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                                 this.battingTeam.setExtras(this.battingTeam.getExtras() +
                                         ballExtraRun + batExtraRuns + batLegalRuns);
-                                this.currentOver.getOverSummary().add((totalRunsOnRunout - 1) + "-WD-Runout");
+                                this.currentOver.getOverSummary().add((totalRunsOnRunout - 1)
+                                        + "-WD-Runout");
 
-                                this.match.addToActivities(this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + (totalRunsOnRunout - 1) + "-WD-Runout");
+                                this.match.addToActivities(
+                                        this.battingTeam.getCurrentOverBatting() + "."
+                                                + this.currentOver.getLegalDeliveries() + " -> "
+                                                + this.bowler.getPlayerName() + " to "
+                                                + this.strikerBatsman.getPlayerName() + " "
+                                                + (totalRunsOnRunout - 1) + "-WD-Runout");
                             }
 
                             // update extras
@@ -1936,9 +2066,16 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                                 this.battingTeam.setExtras(this.battingTeam.getExtras() +
                                         ballExtraRun + batExtraRuns + batLegalRuns);
-                                this.currentOver.getOverSummary().add((totalRunsOnRunout - 1) + "-NB-Runout");
-                                this.match.addToActivities((totalRunsOnRunout - 1) + "-NB-Runout");
-                                this.match.addToActivities(this.bowler.getPlayerName() + " to " + this.strikerBatsman.getPlayerName() + " " + (totalRunsOnRunout - 1) + "-NB-Runout");
+                                this.currentOver.getOverSummary().add((totalRunsOnRunout - 1)
+                                        + "-NB-Runout");
+                                this.match.addToActivities((totalRunsOnRunout - 1)
+                                        + "-NB-Runout");
+                                this.match.addToActivities(
+                                        this.battingTeam.getCurrentOverBatting() + "."
+                                                + this.currentOver.getLegalDeliveries() + " -> "
+                                                + this.bowler.getPlayerName() + " to "
+                                                + this.strikerBatsman.getPlayerName() + " "
+                                                + (totalRunsOnRunout - 1) + "-NB-Runout");
                             }
 
                             // runs conceded
@@ -1963,8 +2100,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                             if(this.battingTeam.isBattingInningsCompleted()) {
                                 this.updateScore();
                                 this.syncMatch();
-                                Toast.makeText(this, this.match.getInnings() + " Innings is completed. " +
-                                                "Please start a new innings.",
+                                Toast.makeText(this, this.match.getInnings() +
+                                                " Innings is completed. Please start a new innings.",
                                         Toast.LENGTH_LONG).show();
                                 return;
                             }
@@ -1972,7 +2109,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                             if(this.match.isCompleted()) {
                                 this.updateScore();
                                 this.syncMatch();
-                                Toast.makeText(this, "Match is completed. Please end the innings.",
+                                Toast.makeText(this,
+                                        "Match is completed. Please end the innings.",
                                         Toast.LENGTH_LONG).show();
                                 return;
                             }
@@ -1981,17 +2119,22 @@ public class MatchScoreActivity extends AppCompatActivity {
                             String[] notOutBatsman = this.getNotOutBatsMan();
                             int[] optionSelected = {-1};
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog
+                                    .Builder(MatchScoreActivity.this);
                             builder.setTitle("Select new Batsman?");
                             builder.setCancelable(false);
 
                             builder.setSingleChoiceItems(notOutBatsman, optionSelected[0],
-                                    (dialog6, which6) -> optionSelected[0] = which6);
+                                    (dialog6, which6)
+                                            -> optionSelected[0] = which6);
 
-                            builder.setPositiveButton("Ok", (dialog6, which6) -> {
-                                if(optionSelected[0] == -1) {
-                                    Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
-                                    return;
+                            builder.setPositiveButton("Ok", (dialog6, which6)
+                                    -> {
+                                    if(optionSelected[0] == -1) {
+                                        Toast.makeText(this,
+                                                "You need to select the new batsman.",
+                                                Toast.LENGTH_LONG).show();
+                                        return;
                                 }
                                 String newBatsman = notOutBatsman[optionSelected[0]];
                                 System.out.println("New batsman is: " + newBatsman);
@@ -2003,7 +2146,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                                     this.match.setStrikerBatsmanIndex(
                                             this.battingTeam.getMatchPlayerIndex(newBatsman)
                                     );
-                                    this.strikerBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
+                                    this.strikerBatsman = this.battingTeam
+                                            .getMatchPlayerFromName(newBatsman);
                                     this.strikerBatsman.getMatchPlayerBatting().setBatted(true);
                                     this.match.addToActivities(newBatsman + "-In");
                                 } else {
@@ -2012,7 +2156,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                                     this.match.setNonStrikerBatsmanIndex(
                                             this.battingTeam.getMatchPlayerIndex(newBatsman)
                                     );
-                                    this.nonStrikeBatsman = this.battingTeam.getMatchPlayerFromName(newBatsman);
+                                    this.nonStrikeBatsman = this.battingTeam
+                                            .getMatchPlayerFromName(newBatsman);
                                     this.nonStrikeBatsman.getMatchPlayerBatting().setBatted(true);
                                     this.match.addToActivities(newBatsman + "-In");
                                 }
@@ -2027,14 +2172,16 @@ public class MatchScoreActivity extends AppCompatActivity {
                         runOutBatsmanBuilder.show();
 
                         if(runOutBatsmanSelected[0] == -1) {
-                            Toast.makeText(this, "You need to select the batsman which is run out.",
+                            Toast.makeText(this,
+                                    "You need to select the batsman which is run out.",
                                     Toast.LENGTH_LONG).show();
                         }
                     });
 
                     ballTypeBuilder.show();
                     if(ballTypeSelected[0] == -1) {
-                        Toast.makeText(this, "You need to select the ball type on run out.",
+                        Toast.makeText(this,
+                                "You need to select the ball type on run out.",
                                 Toast.LENGTH_LONG).show();
                     }
 
@@ -2043,7 +2190,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                 runsByeBuilder.show();
 
                 if(runsByeSelected[0] == -1) {
-                    Toast.makeText(this, "You need to select if the runs scored are bye runs.",
+                    Toast.makeText(this,
+                            "You need to select if the runs scored are bye runs.",
                             Toast.LENGTH_LONG).show();
                 }
             });
@@ -2056,9 +2204,11 @@ public class MatchScoreActivity extends AppCompatActivity {
             }
         });
 
-        runOutBybuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        runOutBybuilder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
-        runOutBybuilder.setNeutralButton("Clear", (dialog, which) -> runOutBySelected[0] = -1);
+        runOutBybuilder.setNeutralButton("Clear", (dialog, which)
+                -> runOutBySelected[0] = -1);
 
         runOutBybuilder.show();
 
@@ -2076,7 +2226,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         }
 
         if(this.getNotOutBatsMan().length == 0) {
-            Toast.makeText(this, "This is last wicket. You cannot retire player now.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,
+                    "This is last wicket. You cannot retire player now.",
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -2095,13 +2247,17 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(retireBatsmanOptions, retireBatsmanSelected[0],
                 (dialog, which) -> retireBatsmanSelected[0] = which);
 
-        builder.setNeutralButton("Clear", (dialog, which) -> retireBatsmanSelected[0] = -1);
+        builder.setNeutralButton("Clear", (dialog, which)
+                -> retireBatsmanSelected[0] = -1);
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(retireBatsmanSelected[0] == -1) {
-                Toast.makeText(this, "You need to select the batsman who is going to retire.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select the batsman who is going to retire.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -2111,17 +2267,21 @@ public class MatchScoreActivity extends AppCompatActivity {
             // Get list of not out Batsman
             String[] notOutBatsman = this.getNotOutBatsMan();
             int[] optionSelected = {-1};
-            AlertDialog.Builder newBatsmanBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+            AlertDialog.Builder newBatsmanBuilder = new AlertDialog
+                    .Builder(MatchScoreActivity.this);
             newBatsmanBuilder.setTitle("Select new Batsman?");
             newBatsmanBuilder.setCancelable(false);
 
             newBatsmanBuilder.setSingleChoiceItems(notOutBatsman, optionSelected[0],
                     (dialog1, which1) -> optionSelected[0] = which1);
 
-            newBatsmanBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
-                if(optionSelected[0] == -1) {
-                    Toast.makeText(this, "You need to select the new batsman.", Toast.LENGTH_LONG).show();
-                    return;
+            newBatsmanBuilder.setPositiveButton("Ok", (dialog1, which1)
+                    -> {
+                    if(optionSelected[0] == -1) {
+                        Toast.makeText(this,
+                                "You need to select the new batsman.",
+                                Toast.LENGTH_LONG).show();
+                        return;
                 }
                 String newBatsman = notOutBatsman[optionSelected[0]];
                 System.out.println("New batsman is: " + newBatsman);
@@ -2151,22 +2311,22 @@ public class MatchScoreActivity extends AppCompatActivity {
                 this.syncMatch();
             });
 
-            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1) -> optionSelected[0] = -1);
+            newBatsmanBuilder.setNeutralButton("Clear", (dialog1, which1)
+                    -> optionSelected[0] = -1);
 
-            newBatsmanBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+            newBatsmanBuilder.setNegativeButton("Cancel", (dialog1, which1)
+                    -> dialog1.dismiss());
 
             newBatsmanBuilder.show();
 
             if(optionSelected[0] == -1) {
-                Toast.makeText(this, "You need to select the new batsman after a wicket.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select the new batsman after a wicket.",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
         builder.show();
-
-        if(retireBatsmanSelected[0] == -1) {
-            Toast.makeText(this, "You need to select the batsman who is going to retire.", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleEditOversClick(View view) {
@@ -2186,13 +2346,17 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(overIncreaseOptions, overIncreaseSelected[0],
                 (dialog, which) -> overIncreaseSelected[0] = which);
 
-        builder.setNeutralButton("Clear", (dialog, which) -> overIncreaseSelected[0] = -1);
+        builder.setNeutralButton("Clear", (dialog, which)
+                -> overIncreaseSelected[0] = -1);
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel", (dialog, which)
+                -> dialog.dismiss());
 
         builder.setPositiveButton("Ok", (dialog, which) -> {
             if(overIncreaseSelected[0] == -1) {
-                Toast.makeText(this, "You need to select the number of overs to increase.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "You need to select the number of overs to increase.",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -2203,7 +2367,9 @@ public class MatchScoreActivity extends AppCompatActivity {
                 int currentOverPlayed = this.battingTeam.getCurrentOverBatting();
                 int maxOvers = this.match.getMaxOvers();
                 if(maxOvers + oversToIncrease <= currentOverPlayed) {
-                    Toast.makeText(this, "Invalid selection of overs." + currentOverPlayed + " overs are already completed.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Invalid selection of overs."
+                            + currentOverPlayed + " overs are already completed.",
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -2228,7 +2394,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
             // edit bowler if no bowls are bowled in this over.
             if(this.currentOver.getLegalDeliveries() == 0) {
-                AlertDialog.Builder newBowlerBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                AlertDialog.Builder newBowlerBuilder = new AlertDialog
+                        .Builder(MatchScoreActivity.this);
                 newBowlerBuilder.setTitle("Update bowler bowling the current over?");
                 newBowlerBuilder.setCancelable(false);
 
@@ -2246,10 +2413,13 @@ public class MatchScoreActivity extends AppCompatActivity {
                 newBowlerBuilder.setSingleChoiceItems(options, newBowlerSelected[0],
                         (dialog1, which1) -> newBowlerSelected[0] = which1);
 
-                newBowlerBuilder.setPositiveButton("Ok", (dialog1, which1) -> {
-                    if(newBowlerSelected[0] == -1) {
-                        Toast.makeText(this, "You need to select the new bowler to bowl the over.", Toast.LENGTH_LONG).show();
-                        return;
+                newBowlerBuilder.setPositiveButton("Ok", (dialog1, which1)
+                        -> {
+                        if(newBowlerSelected[0] == -1) {
+                            Toast.makeText(this,
+                                    "You need to select the new bowler to bowl the over.",
+                                    Toast.LENGTH_LONG).show();
+                            return;
                     }
 
                     String newBowler = options[newBowlerSelected[0]];
@@ -2274,7 +2444,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                     this.match.setCurrentBowlerIndex(newBowlerIndex);
                     this.bowler = this.bowlingTeam.getTeamPlayers().get(newBowlerIndex);
                     this.bowler.getMatchPlayerBowling().setBowled(true);
-                    this.bowler.getMatchPlayerBowling().addToOverBowled(this.bowlingTeam.getCurrentOverBowling());
+                    this.bowler.getMatchPlayerBowling().addToOverBowled(this.bowlingTeam
+                            .getCurrentOverBowling());
 
                     this.currentOver.setPlayerName(this.bowler.getPlayerName());
                     activity = this.bowler.getPlayerName() + "-New-Bowler";
@@ -2291,7 +2462,8 @@ public class MatchScoreActivity extends AppCompatActivity {
         builder.show();
 
         if(overIncreaseSelected[0] == -1) {
-            Toast.makeText(this, "You need to select the number of overs to increase.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You need to select the number of overs to increase.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -2304,7 +2476,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                 System.out.println("First Innings Completed. Start the second innings now.");
 
                 // Open a new dialogue box here to ask to start second innings.
-                AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                AlertDialog.Builder builder = new AlertDialog
+                        .Builder(MatchScoreActivity.this);
                 builder.setTitle("Start second innings?");
                 builder.setCancelable(false);
 
@@ -2316,7 +2489,9 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setPositiveButton("Ok", (dialog, which) -> {
                     if(optionSelected[0] == -1) {
-                        Toast.makeText(this, "Select Yes to start a the new innings.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this,
+                                "Select Yes to start a the new innings.",
+                                Toast.LENGTH_LONG).show();
                         return;
                     }
                     String answer = options[optionSelected[0]];
@@ -2332,7 +2507,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                         this.match.setBattingAndBowlingTeamNames();
                         this.syncMatch();
 
-                        System.out.println("Go to the screen to select the new openors for second innings.");
+                        System.out.println("Go to the screen to select the new openors "
+                                + "for second innings.");
                         System.out.println("Opening Select Openers Activity");
                         Intent intent = new Intent(this, SelectOpenersActivity.class);
                         intent.putExtra("data_files_hashmap", this.dataFilesMap);
@@ -2341,9 +2517,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                     }
                 });
 
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                builder.setNegativeButton("Cancel", (dialog, which)
+                        -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
+                builder.setNeutralButton("Clear", (dialog, which)
+                        -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2351,7 +2529,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             if(this.match.getInnings() == 2) {
                 System.out.println("Second Innings Completed. Match is finished.");
                 // Open a new dialogue box here to ask to end the match.
-                AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                AlertDialog.Builder builder = new AlertDialog
+                        .Builder(MatchScoreActivity.this);
                 builder.setTitle("End the match?");
                 builder.setCancelable(false);
 
@@ -2363,7 +2542,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setPositiveButton("Ok", (dialog, which) -> {
                     if(optionSelected[0] == -1) {
-                        Toast.makeText(this, "Select Yes to end the match.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Select Yes to end the match.",
+                                Toast.LENGTH_LONG).show();
                         return;
                     }
                     String answer = options[optionSelected[0]];
@@ -2380,16 +2560,19 @@ public class MatchScoreActivity extends AppCompatActivity {
                         this.match.addToActivities("Records Updated.");
 
                         System.out.println("Go to match information.");
-                        Intent intent = new Intent(this, MatchInformationActivity.class);
+                        Intent intent = new Intent(this,
+                                MatchInformationActivity.class);
                         intent.putExtra("data_files_hashmap", this.dataFilesMap);
                         intent.putExtra("match_object", match);
                         startActivity(intent);
                     }
                 });
 
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                builder.setNegativeButton("Cancel", (dialog, which)
+                        -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
+                builder.setNeutralButton("Clear", (dialog, which)
+                        -> optionSelected[0] = -1);
 
                 builder.show();
             }
@@ -2397,7 +2580,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             if (this.match.getInnings() == 2) {
                 System.out.println("Second Innings Completed. Match is finished.");
                 // Open a new dialogue box here to ask to end the match.
-                AlertDialog.Builder builder = new AlertDialog.Builder(MatchScoreActivity.this);
+                AlertDialog.Builder builder = new AlertDialog
+                        .Builder(MatchScoreActivity.this);
                 builder.setTitle("End the match?");
                 builder.setCancelable(false);
 
@@ -2409,7 +2593,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                 builder.setPositiveButton("Ok", (dialog, which) -> {
                     if (optionSelected[0] == -1) {
-                        Toast.makeText(this, "Select Yes to end the match.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Select Yes to end the match.",
+                                Toast.LENGTH_LONG).show();
                         return;
                     }
                     String answer = options[optionSelected[0]];
@@ -2423,21 +2608,25 @@ public class MatchScoreActivity extends AppCompatActivity {
                         Utils.updateGlobalRecords(dataFilesMap, this.match);
 
                         System.out.println("Go to match information.");
-                        Intent intent = new Intent(this, MatchInformationActivity.class);
+                        Intent intent = new Intent(this,
+                                MatchInformationActivity.class);
                         intent.putExtra("data_files_hashmap", this.dataFilesMap);
                         intent.putExtra("match_object", match);
                         startActivity(intent);
                     }
                 });
 
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                builder.setNegativeButton("Cancel", (dialog, which)
+                        -> dialog.dismiss());
 
-                builder.setNeutralButton("Clear", (dialog, which) -> optionSelected[0] = -1);
+                builder.setNeutralButton("Clear", (dialog, which)
+                        -> optionSelected[0] = -1);
 
                 builder.show();
             }
         } else {
-            Toast.makeText(this, "You cannot end the innings yet.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You cannot end the innings yet.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -2520,7 +2709,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                 undoDone = undoBowled(playerName);
             } else if(previousActivity.contains("-Out-Hit-Wicket")) {
                 System.out.println("Undo hit wicket");
-                String playerName = previousActivity.replace("-Out-Hit-Wicket", "");
+                String playerName = previousActivity
+                        .replace("-Out-Hit-Wicket", "");
                 undoDone = undoHitWicket(playerName);
             }
         }
@@ -2605,18 +2795,22 @@ public class MatchScoreActivity extends AppCompatActivity {
             for(int i=0; i<playersOptionList.length; i++) {
                 String playerName = playersOptionList[i];
                 if(this.battingTeam.getPlayerNames().contains(playerName)) {
-                    System.out.println("Player " + playerName + " is already present in " + this.battingTeam.getName() + " team");
+                    System.out.println("Player " + playerName + " is already present in "
+                            + this.battingTeam.getName() + " team");
                     playersSelectedInTeam[i] = true;
                     playerSelectedArray.add(playerName);
                 }
             }
 
             // Now, our updated boolean list and playerSelectedIndex contains all players which are in batting team.
-            AlertDialog.Builder selectPlayersBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
-            selectPlayersBuilder.setTitle("Select " + maxPlayersToSelect + " players for " + this.battingTeam.getName() + " team.");
+            AlertDialog.Builder selectPlayersBuilder = new AlertDialog
+                    .Builder(MatchScoreActivity.this);
+            selectPlayersBuilder.setTitle("Select " + maxPlayersToSelect + " players for "
+                    + this.battingTeam.getName() + " team.");
             selectPlayersBuilder.setCancelable(false);
 
-            selectPlayersBuilder.setNegativeButton("Cancel", (dialog1, which1) -> dialog1.dismiss());
+            selectPlayersBuilder.setNegativeButton("Cancel",
+                    (dialog1, which1) -> dialog1.dismiss());
 
             selectPlayersBuilder.setNeutralButton("Clear", (dialog1, which1) -> {
                 for(int i=0; i<playersOptionList.length; i++) {
@@ -2639,14 +2833,18 @@ public class MatchScoreActivity extends AppCompatActivity {
                         }
                     });
 
-            selectPlayersBuilder.setPositiveButton("OK", (dialog1, which1) -> {
-                if(playerSelectedArray.size() > maxPlayersToSelect) {
-                    Toast.makeText(this, "You need to select only " + maxPlayersToSelect + " players.", Toast.LENGTH_LONG).show();
-                    return;
+            selectPlayersBuilder.setPositiveButton("OK",
+                    (dialog1, which1) -> {
+                    if(playerSelectedArray.size() > maxPlayersToSelect) {
+                        Toast.makeText(this,
+                                "You need to select only " + maxPlayersToSelect + " players.",
+                                Toast.LENGTH_LONG).show();
+                        return;
                 }
 
                 ArrayList<String> temp2 = new ArrayList<>(playerSelectedArray);
-                System.out.println("the players selected in " + this.battingTeam.getName() + " are : "  + temp2);
+                System.out.println("the players selected in " + this.battingTeam.getName()
+                        + " are : "  + temp2);
 
                 ArrayList<String> temp3 = new ArrayList<>();
                 for(String player: playersOptionList) {
@@ -2670,17 +2868,20 @@ public class MatchScoreActivity extends AppCompatActivity {
                     String[] commonOptions = temp3.toArray(new String[0]);
                     int[] commonPlayerSelected = {-1};
 
-                    AlertDialog.Builder commonPlayerBuilder = new AlertDialog.Builder(MatchScoreActivity.this);
+                    AlertDialog.Builder commonPlayerBuilder = new AlertDialog
+                            .Builder(MatchScoreActivity.this);
                     commonPlayerBuilder.setTitle("Please select common player");
                     commonPlayerBuilder.setCancelable(false);
 
                     commonPlayerBuilder.setSingleChoiceItems(commonOptions, commonPlayerSelected[0],
                             (dialog3, which3) -> commonPlayerSelected[0] = which3);
 
-                    commonPlayerBuilder.setPositiveButton("Ok", (dialog3, which3) -> {
-                        if(commonPlayerSelected[0] == -1) {
-                            Toast.makeText(this, "You need to select the common player.",
-                                    Toast.LENGTH_LONG).show();
+                    commonPlayerBuilder.setPositiveButton("Ok",
+                            (dialog3, which3) -> {
+                            if(commonPlayerSelected[0] == -1) {
+                                Toast.makeText(this,
+                                        "You need to select the common player.",
+                                        Toast.LENGTH_LONG).show();
                         }
 
                         String commonPlayer = commonOptions[commonPlayerSelected[0]];
@@ -2709,7 +2910,8 @@ public class MatchScoreActivity extends AppCompatActivity {
             selectPlayersBuilder.show();
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Cancel",
+                (dialog, which) -> dialog.dismiss());
 
         builder.setNeutralButton("Clear All", (dialog, which) -> {
             Arrays.fill(selectedPlayers, false);
@@ -2718,7 +2920,9 @@ public class MatchScoreActivity extends AppCompatActivity {
 
         builder.show();
 
-        Toast.makeText(this, "You need to select the new players.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this,
+                "You need to select the new players.",
+                Toast.LENGTH_LONG).show();
     }
 
 }
