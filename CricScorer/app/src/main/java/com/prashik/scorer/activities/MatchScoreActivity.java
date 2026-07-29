@@ -2286,7 +2286,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                 String newBatsman = notOutBatsman[optionSelected[0]];
                 System.out.println("New batsman is: " + newBatsman);
 
-                this.match.addToMatchPlayers(batsmanToRetire + " -Retired");
+                this.match.addToActivities(batsmanToRetire + " -Retired");
 
                 if(batsmanToRetire.equals(this.match.getStrikerBatsman())) {
                     // update the striker batsman
