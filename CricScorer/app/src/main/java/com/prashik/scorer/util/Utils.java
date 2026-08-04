@@ -421,20 +421,6 @@ public class Utils {
 
         // how will it work for common player -> update record twice.
         for(MatchPlayer matchPlayer: match.getTeamA().getTeamPlayers()) {
-
-            // an extra iteration for the common player
-            if(matchPlayer.getPlayerName().equals(match.getTeamA().getCommonName())) {
-                // update batting records
-                updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId(), true);
-
-                // update bowling records
-                updateGlobalBowlingRecords(allBowlingStats, matchPlayer, match.getId(), true);
-
-                // update match records
-                updateGlobalMatchRecords(allMatchesStats, matchPlayer, match.getId(), true);
-                continue;
-            }
-
             // update batting records
             updateGlobalBattingRecords(allBattingStats, matchPlayer, match.getId(), false);
 

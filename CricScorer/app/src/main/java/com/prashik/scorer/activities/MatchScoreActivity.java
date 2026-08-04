@@ -1982,6 +1982,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                                 this.currentOver.incrementLegalDeliveries();
                                 this.bowler.getMatchPlayerBowling()
                                         .incrementLegalDeliveriesBowled();
+                                this.bowler.getMatchPlayerBowling().addToBowlingDetails(totalRunsOnRunout + "-Runout");
                                 // a legal delivery
                                 runOutPlayerObject.getMatchPlayerBatting().incrementBallsPlayed();
                                 runOutPlayerObject.getMatchPlayerBatting().setRunsScored(
@@ -2042,6 +2043,8 @@ public class MatchScoreActivity extends AppCompatActivity {
                                         ballExtraRun + batExtraRuns + batLegalRuns);
                                 this.currentOver.getOverSummary().add((totalRunsOnRunout - 1)
                                         + "-WD-Runout");
+                                this.bowler.getMatchPlayerBowling().addToBowlingDetails((totalRunsOnRunout - 1)
+                                        + "-WD-Runout");
 
                                 this.match.addToActivities(
                                         this.battingTeam.getCurrentOverBatting() + "."
@@ -2066,6 +2069,8 @@ public class MatchScoreActivity extends AppCompatActivity {
 
                                 this.battingTeam.setExtras(this.battingTeam.getExtras() +
                                         ballExtraRun + batExtraRuns + batLegalRuns);
+                                this.bowler.getMatchPlayerBowling().addToBowlingDetails((totalRunsOnRunout - 1)
+                                        + "-NB-Runout");
                                 this.currentOver.getOverSummary().add((totalRunsOnRunout - 1)
                                         + "-NB-Runout");
                                 this.match.addToActivities((totalRunsOnRunout - 1)
@@ -2507,7 +2512,7 @@ public class MatchScoreActivity extends AppCompatActivity {
                         this.match.setBattingAndBowlingTeamNames();
                         this.syncMatch();
 
-                        System.out.println("Go to the screen to select the new openors "
+                        System.out.println("Go to the screen to select the new openers "
                                 + "for second innings.");
                         System.out.println("Opening Select Openers Activity");
                         Intent intent = new Intent(this, SelectOpenersActivity.class);
