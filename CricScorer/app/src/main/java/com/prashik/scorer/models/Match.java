@@ -267,6 +267,7 @@ public class Match implements Serializable {
             // tied
             if(this.teamA.getRuns() == this.teamB.getRuns()) {
                 this.result = "Match Tied";
+                return;
             }
 
             // team a bat first
