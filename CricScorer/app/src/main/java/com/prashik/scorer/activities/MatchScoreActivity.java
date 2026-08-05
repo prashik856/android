@@ -229,8 +229,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         ArrayList<MatchPlayer> removedPlayers = new ArrayList<>(this.battingTeam.getTeamPlayers());
 
         // clear arrays and remove everyone
-        this.battingTeam.getTeamPlayers().clear();
-        this.battingTeam.getPlayerNames().clear();
+        for(MatchPlayer player: removedPlayers) {
+            this.battingTeam.removeFromTeamPlayers(player);
+        }
 
         // add captain back
         this.battingTeam.addToTeam(battingCaptain);
@@ -241,10 +242,11 @@ public class MatchScoreActivity extends AppCompatActivity {
                 .getMatchPlayerFromName(this.bowlingTeam.getCaptainName());
         this.bowlingTeam.removeFromTeamPlayers(bowlingCaptain);
 
-        removedPlayers.addAll(this.bowlingTeam.getTeamPlayers());
-
-        this.bowlingTeam.getTeamPlayers().clear();
-        this.bowlingTeam.getPlayerNames().clear();
+        ArrayList<MatchPlayer> tempPlayers = new ArrayList<>(this.bowlingTeam.getTeamPlayers());
+        for(MatchPlayer player: tempPlayers) {
+            this.bowlingTeam.removeFromTeamPlayers(player);
+        }
+        removedPlayers.addAll(tempPlayers);
 
         // add captain back
         this.bowlingTeam.addToTeam(bowlingCaptain);
@@ -287,6 +289,9 @@ public class MatchScoreActivity extends AppCompatActivity {
         if(this.battingTeam.getTeamSize() != this.bowlingTeam.getTeamSize()) {
             throw new RuntimeException("Team size not equal after rebalancing.");
         }
+
+        System.out.println("Batting team max wickets: " + this.battingTeam.getMaxWickets());
+        System.out.println("Bowling team max wickets: " + this.bowlingTeam.getMaxWickets());
 
         System.out.println("Rebalancing complete. Syncing match.");
         this.syncMatch();
