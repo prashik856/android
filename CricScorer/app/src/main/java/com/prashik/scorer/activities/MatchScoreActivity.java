@@ -1233,12 +1233,6 @@ public class MatchScoreActivity extends AppCompatActivity {
             });
 
             byeRunsBuilder.show();
-
-            if(runsByeSelected[0] == -1) {
-                Toast.makeText(this,
-                        "You need to select if the runs scored are bye runs.",
-                        Toast.LENGTH_LONG).show();
-            }
         });
 
         builder.setNegativeButton("Cancel", (dialog, which)
@@ -1627,13 +1621,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                     -> optionSelected[0] = -1);
 
             builder.show();
-
-            if(optionSelected[0] == -1) {
-                System.out.println("This condition should never arrive.");
-                Toast.makeText(this,
-                        "You need to select a new batsman after the wicket.",
-                        Toast.LENGTH_LONG).show();
-            }
         });
 
         caughtBybuilder.setNegativeButton("Cancel", (dialog, which)
@@ -1643,12 +1630,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                 -> caughtBySelected[0] = -1);
 
         caughtBybuilder.show();
-
-
-        if(caughtBySelected[0] == -1) {
-            Toast.makeText(this, "You need to select who caught the ball.",
-                    Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleHitWicketClick(View view) {
@@ -2180,38 +2161,15 @@ public class MatchScoreActivity extends AppCompatActivity {
                         });
 
                         runOutBatsmanBuilder.show();
-
-                        if(runOutBatsmanSelected[0] == -1) {
-                            Toast.makeText(this,
-                                    "You need to select the batsman which is run out.",
-                                    Toast.LENGTH_LONG).show();
-                        }
                     });
 
                     ballTypeBuilder.show();
-                    if(ballTypeSelected[0] == -1) {
-                        Toast.makeText(this,
-                                "You need to select the ball type on run out.",
-                                Toast.LENGTH_LONG).show();
-                    }
-
                 });
 
                 runsByeBuilder.show();
-
-                if(runsByeSelected[0] == -1) {
-                    Toast.makeText(this,
-                            "You need to select if the runs scored are bye runs.",
-                            Toast.LENGTH_LONG).show();
-                }
             });
 
             runsScoredbuilder.show();
-
-            if(runsScoredSelected[0] == -1) {
-                Toast.makeText(this, "You need to select the runs scored on run out.",
-                        Toast.LENGTH_LONG).show();
-            }
         });
 
         runOutBybuilder.setNegativeButton("Cancel", (dialog, which)
@@ -2221,11 +2179,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                 -> runOutBySelected[0] = -1);
 
         runOutBybuilder.show();
-
-        if(runOutBySelected[0] == -1) {
-            Toast.makeText(this, "You need to select who caught the ball.",
-                    Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleRetireClick(View view) {
@@ -2328,12 +2281,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                     -> dialog1.dismiss());
 
             newBatsmanBuilder.show();
-
-            if(optionSelected[0] == -1) {
-                Toast.makeText(this,
-                        "You need to select the new batsman after a wicket.",
-                        Toast.LENGTH_LONG).show();
-            }
         });
 
         builder.show();
@@ -2470,11 +2417,6 @@ public class MatchScoreActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        if(overIncreaseSelected[0] == -1) {
-            Toast.makeText(this, "You need to select the number of overs to increase.",
-                    Toast.LENGTH_LONG).show();
-        }
     }
 
     public void handleInningsEndClick(View view) {
@@ -2908,12 +2850,6 @@ public class MatchScoreActivity extends AppCompatActivity {
                     });
 
                     commonPlayerBuilder.show();
-
-                    if(commonPlayerSelected[0] == -1) {
-                        System.out.println("Impossible condition.");
-                        Toast.makeText(this, "You need to select the common player.",
-                                Toast.LENGTH_LONG).show();
-                    }
                 }
             });
 
